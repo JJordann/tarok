@@ -3,13 +3,14 @@
 
     &:hover {
         cursor: pointer;
-        z-index: 1337;
     }
 
     .card {
+        filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+        transition: all .1s ease-in-out;
         &:hover {
-            transform-origin: bottom center;
-            transform: scale(1.2);
+            transform-origin: bottom right;
+            transform: scale(1.25);
         }
     }
     
