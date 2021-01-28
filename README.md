@@ -5,7 +5,7 @@ http://www.slovenski-tarok.si/pravila.html
 Bash
 `$ export FLASK_APP=server.py`
 PowerShell
-`PS C:\...\src> $env:FLASK_APP = "server.py"`
+`PS C:\...\src\api> $env:FLASK_APP = "server.py"`
 
 `python -m flask run`
 
