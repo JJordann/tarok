@@ -13,7 +13,7 @@ export default class Flask extends React.Component {
     }
 
     fetchData() {
-        axios.get(`${this.url}/first`)
+        axios.get(`/api/first`)
             .then((res: any) => this.setState(res.data))
     }
 
