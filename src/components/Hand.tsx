@@ -1,6 +1,8 @@
 import React from 'react';
 import Card from './Card';
 
+import handStyles from "../style/hand.module.scss"
+
 const Hand = (props: any) => {
   const cards: JSX.Element[] = [];
   for(let i = 0; i < props.size; i++) {
@@ -8,7 +10,7 @@ const Hand = (props: any) => {
   }
 
   return (
-    <div>
+    <div className={handStyles.hand}>
       {cards}
     </div>
   )
