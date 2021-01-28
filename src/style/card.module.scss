@@ -1,0 +1,8 @@
+.card {
+    position: absolute;
+
+    &:hover {
+        z-index: 1337;
+        transform: scale(1.2);
+    }
+}
