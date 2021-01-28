@@ -1,6 +1,16 @@
-.card {
+.cardWrapper {
+    position: relative;
+
     &:hover {
+        cursor: pointer;
         z-index: 1337;
-        transform: scale(1.2);
     }
+
+    .card {
+        &:hover {
+            transform-origin: bottom center;
+            transform: scale(1.2);
+        }
+    }
+    
 }

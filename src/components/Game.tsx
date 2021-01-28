@@ -10,8 +10,6 @@ const Game = () => {
   return (
     <div>
       <Hand size={values.length} values={values} />
-      <br />
-      <Link to="/test">TEST --&gt;</Link>
     </div>
   )
 }
