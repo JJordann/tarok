@@ -1,11 +1,17 @@
 import React from 'react';
 import Game from './components/Game';
+import { BrowserRouter, Switch, Route } from "react-router-dom"
+
+import Flask from './components/Flask'
 
 function App() {
   return (
-    <div className="App">
-      <Game />
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={Game} />
+        <Route path="/test" exact component={Flask} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
