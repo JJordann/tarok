@@ -3,19 +3,26 @@ import { Link } from 'react-router-dom';
 
 import landingPageStyles from '../style/landingpage.module.scss';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCoffee, faPlayCircle } from '@fortawesome/free-solid-svg-icons';
+
 const LandingPage = () => {
 
   return (
     <div className={landingPageStyles.container}>
       <div className={landingPageStyles.header}>
-        <nav className={landingPageStyles.navbarContainer}>
-          <ul className={landingPageStyles.navbar}>
-            <li><Link to="/game">Prijava</Link></li>
-            <li><Link to="#">Pravila</Link></li>
-            <li><a href="https://valat.si/tarok" target="blank">Valat.si</a></li>
-          </ul>
-        </nav>
-        <h1>Berač.si</h1>
+        <div>
+          <h1>Berač.si</h1>
+          <p><span>Brez omejitev.</span> Enostavno Tarok.</p>
+        </div>
+      </div>
+      <div className={landingPageStyles.content}>
+        <Link to="/game">
+          <div className={landingPageStyles.startButton}>
+            <FontAwesomeIcon icon={faPlayCircle} />
+            <span>Začni</span>
+          </div>
+        </Link>        
       </div>
     </div>
   )
