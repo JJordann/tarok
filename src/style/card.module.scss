@@ -1,6 +1,17 @@
-.card {
+.cardWrapper {
+    position: relative;
+
     &:hover {
-        z-index: 1337;
-        transform: scale(1.2);
+        cursor: pointer;
     }
+
+    .card {
+        filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+        transition: all .1s ease-in-out;
+        &:hover {
+            transform-origin: bottom right;
+            transform: scale(1.25);
+        }
+    }
+    
 }

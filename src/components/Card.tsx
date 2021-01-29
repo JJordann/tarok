@@ -7,7 +7,7 @@ const Card = (props: any) => {
   let imgsrc = `${process.env.PUBLIC_URL}/cards/fmf/${props.value}.png`
 
   return (
-    <div className={cardStyles.cardWrapper}>
+    <div className={cardStyles.cardWrapper} style={{transform: `rotate(${props.rotation}deg)`}}>
       <img src={imgsrc} className={cardStyles.card} alt={props.value} />
     </div>
   )

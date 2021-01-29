@@ -4,14 +4,12 @@ import Hand from './Hand';
 import { Link } from "react-router-dom"
 
 const Game = () => {
-  const values = ['srce_kraljica', 'srce_kralj', 'pik_8', 'pik_9', 'pik_10', 
-                  'pik_poba', 'pik_kralj', 'kriz_kaval', '1', '4', '12', '21'];
+  const values = ['srce_kraljica', 'srce_kralj', 'kara_kralj', 'pik_kralj',
+                    'kriz_kralj', '1', '16', '19','18', '20', '21', '22'];
 
   return (
     <div>
       <Hand size={values.length} values={values} />
-      <br />
-      <Link to="/test">TEST --&gt;</Link>
     </div>
   )
 }
