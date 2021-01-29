@@ -118,7 +118,7 @@ def handleJoin(msg):
     connected.append({"name": msg, 
                       "sid": request.sid,
                       "ready": False})
-    socketIo.emit("join", allPlayerNames(connected), namespace="/joined")   
+    socketIo.emit("join", allPlayerNames(connected), namespace="/joined" broadcast=True)   
     print(connected)
 
 @socketIo.on("ready", namespace="/joined")
@@ -142,6 +142,7 @@ def handleLeave():
     print(request.sid + " left")
     global connected
     connected = [u for u in connected if u["sid"] != request.sid]
+    socketIo.emit("join", allPlayerNames(connected), namespace="/joined" broadcast=True)   
     print(connected)
 
 
