@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 
-import { UserContext } from "./UserContext"
 
 import getSocket from "./global"
 
@@ -11,7 +10,6 @@ const Flask = () => {
 
     const connect = () => {
 
-        //socket.connect(`${endpoint}/joined`)
         socket.emit("join", name)
     }
 
