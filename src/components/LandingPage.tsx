@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import landingPageStyles from '../style/landingpage.module.scss';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCoffee, faPlayCircle } from '@fortawesome/free-solid-svg-icons';
+import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 
 const LandingPage = () => {
 
