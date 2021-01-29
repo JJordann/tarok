@@ -1,41 +1,22 @@
-import React, { useEffect, useState } from "react"
-import io from "socket.io-client"
+import React, { useContext, useState } from "react"
+
+import { UserContext } from "./UserContext"
+
+import getSocket from "./global"
 
 
 const Flask = () => {
 
-    const url = `/api`
-    const endpoint = "http://127.0.0.1:5000"
-
-    interface IState {
-        socket: SocketIOClient.Socket | null
-    }
-
-    const [state, setState] = useState({socket: null})
-
-
-    //useEffect(
-        //() => {
-            //const newsocket = io.connect(endpoint)
-
-            //newsocket.on("message", (msg) => {
-                //console.log(msg)
-            //})
-
-
-            //setState({socket: newsocket})
-
-            //return () => state.socket.disconnect()
-        //}, [] // eslint-disable-line react-hooks/exhaustive-deps
-    //)
-
+    let socket = getSocket();
 
     const connect = () => {
 
-        let newsocket = io.connect(`${endpoint}/joined`)
-        newsocket.emit("join", name)
+        //socket.connect(`${endpoint}/joined`)
+        socket.emit("join", name)
+    }
 
-        setState({socket: newsocket})
+    const ready = () => {
+        socket.emit("ready", "ready")
     }
 
     const [name, setName] = useState("")
@@ -44,11 +25,13 @@ const Flask = () => {
         console.log(name)
         setName(event.target.value)
     }
+    
 
     return (
         <div>
             <input type="text" value={name} onChange={handleChange} />
             <button onClick={connect}>connect</button>
+            {socket != null ? <button onClick={ready}>ready</button> : null }
         </div>
     )
 }

@@ -26,8 +26,25 @@ def handleConnect():
 @socketIo.on("join", namespace="/joined")
 def handleJoin(msg):
     print("JOIN: #### " + msg + " ####" + request.sid + "####")
-    connected.append({"name": msg, "sid": request.sid})
+    connected.append({"name": msg, 
+                      "sid": request.sid,
+                      "ready": False})
     print(connected)
+
+@socketIo.on("ready", namespace="/joined")
+def handleReady(msg):
+    global connected
+    for u in connected:
+        if u["sid"] == request.sid:
+            u["ready"] = True
+            print(connected)
+            print("ALL READY: " + str(allReady(connected)))
+            return None
+    
+
+def allReady(connected):
+    return all(map(lambda x: x["ready"], connected))
+
 
 
 @socketIo.on("disconnect", namespace="/joined")
