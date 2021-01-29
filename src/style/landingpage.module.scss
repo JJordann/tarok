@@ -6,7 +6,6 @@
   margin: 0 auto;
   min-height: 100vh;
   background-color: $white;
-  font-family: 'Lato', sans-serif;
 
   .header {
     position: relative;
@@ -54,7 +53,7 @@
       font-size: 2em;
       color: $white;
       text-align: center;
-      font-family: 'Roboto Slab', serif;
+      font-family: $roboto;
 
       span {
         color: $red;
@@ -82,7 +81,7 @@
       box-shadow: inset 0 0 1px #E9170C;
 
       span {
-        font-family: 'Roboto Slab', serif;
+        font-family: $roboto;
         margin-left: 8px;
         color: white;
       }
