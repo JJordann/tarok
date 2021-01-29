@@ -14,9 +14,15 @@ def handleMessage(msg):
     print(msg)
     send(msg, broadcast=True)
 
+
 @socketIo.on("connect")
 def handleConnect():
-    print("---- CONNECTED ----")
+    print("++++ CONNECTED ++++")
+
+
+@socketIo.on("disconnect")
+def handleDisconnect():
+    print(" ---- DISCONNECTED ----")
 
 
 if __name__ == '__main__':
