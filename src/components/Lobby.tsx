@@ -22,6 +22,10 @@ const Lobby = (props: any) => {
       setPlayerList(players)
     })
 
+    socket.on("dealCards", msg => { 
+      console.log("dealt cards: " + msg)
+    })
+
     return () => {
       // unregister event listeners here
       console.log("unregistered")

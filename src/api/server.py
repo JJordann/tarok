@@ -70,8 +70,26 @@ deck = [
 ]
 
 
-connected = []
+def cardValue(card):
+    if "kraljica" in card:
+        return 4
+    if "kralj" in card or card in ["tarok_22", "tarok_1", "tarok_21"]:
+        return 5
+    if "konj" in card:
+        return 3
+    if "poba" in card:
+        return 2
+    else:
+        return 1
+        
 
+#for card in deck:
+    #print(card + ": " + str(cardValue(card)))
+
+
+
+
+connected = []
 
 def dealCards(deck, connected):
     random.shuffle(deck)
@@ -86,6 +104,64 @@ def dealCards(deck, connected):
 
     return (talon, hands)
 
+
+
+if False: """
+GameState:
+    talon
+    players:
+        name
+        sid
+        hand
+        cardsWon
+        turn
+"""
+
+def initGame(connected):
+    (talon, hands) = dealCards(deck, connected)
+    return {
+        "talon": talon,
+        "players": [
+            {
+                "name": user["name"],
+                "sid": user["sid"],
+                "hand": hands[i],
+                "cardsWon": [],
+                "turn": (i == 0)
+            } for (i, user) in enumerate(connected)
+        ]
+
+    }
+
+mockCon = [
+    {
+        "name": "Prvyyy",
+        "sid": "1111111111",
+        "ready": True
+    },
+    {
+        "name": "Drugyy",
+        "sid": "2222222222",
+        "ready": True
+    },
+    {
+        "name": "Tretyyy",
+        "sid": "3333333333",
+        "ready": True
+    },
+    {
+        "name": "Czetrtyyy",
+        "sid": "4444444444",
+        "ready": True
+    }
+]
+
+#gameState = initGame(mockCon)
+#print(gameState)
+
+
+
+
 #(talon, hands) = dealCards(deck, [1, 2, 3, 4])
 
 #print("TALON: " + str(talon) + "\n")
@@ -93,6 +169,11 @@ def dealCards(deck, connected):
 #for h in hands:
     #print(str(h) + "\n")
 
+
+def startGame(connected):
+    (talon, hands) = dealCards(deck, connected)
+    for i in range(0, len(connected)):
+        socketIo.emit("dealCards", hands[i], room=connected[i]["sid"])
 
 
 def connectedPlayers(connected):
@@ -126,7 +207,9 @@ def allReady(connected):
 
 
 def handleAllReady():
+    global connected
     print("****** ALL READY ****** ")
+    startGame(connected)
 
 
 @socketIo.on("getUsers")
