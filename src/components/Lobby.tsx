@@ -22,8 +22,8 @@ const Lobby = (props: any) => {
       console.log(players);
     })
 
-    socket.on("dealCards", msg => { 
-      console.log("dealt cards: " + msg);
+    socket.on('dealCards', msg => { 
+      console.log('dealt cards: ' + msg);
     })
 
     return () => {
