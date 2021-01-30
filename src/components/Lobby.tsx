@@ -3,11 +3,13 @@ import getSocket from './global';
 import lobbyStyles from '../style/lobby.module.scss';
 import Toggle from './elements/Toggle';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const Lobby = (props: any) => {
   
   const socket = getSocket();
+
+  const history = useHistory();
 
   const [playerList, setPlayerList] = useState([]);
   const [playerName, setPlayerName] = useState('');
@@ -19,12 +21,15 @@ const Lobby = (props: any) => {
     // register event listeners here
     socket.on('getUsers', players => {
       setPlayerList(players);
-      console.log(players);
-    })
+    });
 
     socket.on('dealCards', msg => { 
       console.log('dealt cards: ' + msg);
-    })
+    });
+
+    socket.on('allReady', () => {
+      history.push('/game');
+    });
 
     return () => {
       // unregister event listeners here
