@@ -209,7 +209,8 @@ def allReady(connected):
 def handleAllReady():
     global connected
     print("****** ALL READY ****** ")
-    startGame(connected)
+    socketIo.emit("allReady", broadcast=True)
+    # startGame(connected)
 
 
 @socketIo.on("getUsers")
