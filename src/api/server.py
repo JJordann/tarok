@@ -114,7 +114,7 @@ def handleReady(msg):
     global connected
     for u in connected:
         if u["sid"] == request.sid:
-            u["ready"] = True
+            u["ready"] = True if (msg == "true") else False
             if allReady(connected) == True:
                 handleAllReady()
     socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)

@@ -11,7 +11,6 @@ const Lobby = (props: any) => {
 
   const [playerList, setPlayerList] = useState([]);
   const [playerName, setPlayerName] = useState('');
-  const [checked, setChecked] = useState('false');
 
   useEffect(() => {
     // fetch connected users immediately after first render
@@ -20,6 +19,7 @@ const Lobby = (props: any) => {
     // register event listeners here
     socket.on('getUsers', players => {
       setPlayerList(players);
+      console.log(players);
     })
 
     return () => {
@@ -38,13 +38,12 @@ const Lobby = (props: any) => {
     socket.emit('join', playerName);
   }
 
-  const ready = () => {
-    socket.emit('ready', 'ready');
+  const ready = (value) => {
+    socket.emit('ready', String(value));
   }
 
   const onToggleChange = (value) => {
-    setChecked(value);
-    ready();
+    ready(value);
   }
 
 
