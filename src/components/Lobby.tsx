@@ -83,7 +83,6 @@ const Lobby = (props: any) => {
           onChange={onPlayerNameInputChange} />
         <button onClick={connect}>Connect</button>
       </div>
-      <Link to="/">go hom</Link>
     </div>
     
   );
