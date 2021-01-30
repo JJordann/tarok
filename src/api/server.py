@@ -95,61 +95,54 @@ def dealCards(deck, connected):
 
 
 
-@socketIo.on('message')
-def handleMessage(msg):
-    print(msg)
-    send(msg, broadcast=True)
+def connectedPlayers(connected):
+    return [[u["name"], u["ready"]] for u in connected]
 
 
-@socketIo.on("connect")
-def handleConnect():
-    print("++++ CONNECTED ++++")
-    print("SID: " + request.sid)
-    print(connected)
-
-
-def allPlayerNames(connected):
-    return [c["name"] for c in connected]
-
-
-@socketIo.on("join", namespace="/joined")
+@socketIo.on("join")
 def handleJoin(msg):
     print("JOIN: #### " + msg + " ####" + request.sid + "####")
     connected.append({"name": msg, 
                       "sid": request.sid,
                       "ready": False})
-    socketIo.emit("join", allPlayerNames(connected), namespace="/joined", broadcast=True)   
+    socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
     print(connected)
 
-@socketIo.on("ready", namespace="/joined")
+
+@socketIo.on("ready")
 def handleReady(msg):
     global connected
     for u in connected:
         if u["sid"] == request.sid:
             u["ready"] = True
-            print(connected)
-            print("ALL READY: " + str(allReady(connected)))
-            return None
+            if allReady(connected) == True:
+                handleAllReady()
+    socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)
+    return None
     
 
 def allReady(connected):
     return all(map(lambda x: x["ready"], connected))
 
 
+def handleAllReady():
+    print("****** ALL READY ****** ")
 
-@socketIo.on("disconnect", namespace="/joined")
+
+@socketIo.on("getUsers")
+def getUsers():
+    global connected
+    socketIo.emit("getUsers", connectedPlayers(connected))
+
+
+@socketIo.on("disconnect")
 def handleLeave():
     print(request.sid + " left")
     global connected
     connected = [u for u in connected if u["sid"] != request.sid]
-    socketIo.emit("join", allPlayerNames(connected), namespace="/joined", broadcast=True)   
+    socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
     print(connected)
 
-
-@socketIo.on("disconnect")
-def handleDisconnect():
-    print(" ---- DISCONNECTED ----")
-    print("SID" + request.sid)
 
 
 if __name__ == '__main__':

@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import getSocket from "./global"
-
 import lobbyStyles from '../style/lobby.module.scss';
-
 import Toggle from './elements/Toggle';
+
+import { Link } from "react-router-dom"
 
 const Lobby = (props: any) => {
   
@@ -13,14 +12,27 @@ const Lobby = (props: any) => {
   const [playerList, setPlayerList] = useState([]);
   const [playerName, setPlayerName] = useState('');
   const [checked, setChecked] = useState('false');
+
+  useEffect(() => {
+    // fetch connected users immediately after first render
+    socket.emit("getUsers")
+
+    // register event listeners here
+    socket.on("getUsers", players => {
+      setPlayerList(players)
+    })
+
+    return () => {
+      // unregister event listeners here
+      console.log("unregistered")
+      socket.off("getUsers")
+    }
+
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
   
   const onPlayerNameInputChange = (event) => {
     setPlayerName(event.target.value);
   }
-
-  socket.on('join', players => {
-    setPlayerList(players);
-  });
 
   const connect = () => {
     socket.emit('join', playerName);
@@ -33,26 +45,29 @@ const Lobby = (props: any) => {
   const onToggleChange = (value) => {
     setChecked(value);
     ready();
-    console.log(value);
   }
+
+
+  let playerBoxes = 
+      playerList.map((player, i) =>
+        <span className={lobbyStyles.player} key={i}>
+          <div className={lobbyStyles.content}>
+            <div className={lobbyStyles.top}>
+              <p>{player[0]}</p>
+            </div>
+
+            <div className={lobbyStyles.bottom}>
+              <Toggle name={`${player}-switch-${i}`} checked={player[1]}
+                onChange={onToggleChange} className={lobbyStyles.checkbox} />
+            </div>
+          </div> 
+        </span>
+      )
 
   return (
     <div className={lobbyStyles.lobbyContainer}>
       <div className={lobbyStyles.lobby}>
-        {playerList.map((player, i) =>
-          <span className={lobbyStyles.player} key={i}>
-            <div className={lobbyStyles.content}>
-              <div className={lobbyStyles.top}>
-                <p>{player}</p>
-              </div>
-
-              <div className={lobbyStyles.bottom}>
-                <Toggle name={`${player}-switch-${i}`} checked={checked}
-                  onChange={onToggleChange} className={lobbyStyles.checkbox} />
-              </div>
-            </div> 
-          </span>
-        )}
+         { playerBoxes }
       </div>
 
       <div className={lobbyStyles.input}>
@@ -60,6 +75,7 @@ const Lobby = (props: any) => {
           onChange={onPlayerNameInputChange} />
         <button onClick={connect}>Connect</button>
       </div>
+      <Link to="/">go hom</Link>
     </div>
     
   );
