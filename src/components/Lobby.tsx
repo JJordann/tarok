@@ -14,7 +14,7 @@ const Lobby = (props: any) => {
 
   useEffect(() => {
     // fetch connected users immediately after first render
-    socket.emit('getUsers')
+    socket.emit('getUsers');
 
     // register event listeners here
     socket.on('getUsers', players => {
@@ -23,7 +23,7 @@ const Lobby = (props: any) => {
     })
 
     socket.on("dealCards", msg => { 
-      console.log("dealt cards: " + msg)
+      console.log("dealt cards: " + msg);
     })
 
     return () => {
