@@ -1,0 +1,157 @@
+@import 'variables';
+
+.lobbyContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+
+  .lobby {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 32vh;
+  
+    span.player {
+      display: block;
+      cursor: pointer;
+      width: 20vh;
+      border: 1px solid $black;
+      box-shadow: 0 0 0 $black;
+      border-radius: 10px;
+      margin-right: 10px;
+      background: $white;
+      transition: all 0.1s ease-in-out;
+      overflow: hidden;
+
+      &:hover {
+        box-shadow: 0 0 5px $black;
+      }
+
+      .content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        border-radius: inherit;
+
+        &::before, &::after {
+          position: absolute;
+          font-size: 3em;
+          font-family: $roboto;
+          padding: 0 12px;
+          margin: 0;
+          letter-spacing: -5px;
+        }
+
+        &::before {
+          top: 0;
+          left: 0;
+        }
+
+        &::after {
+          bottom: 0;
+          right: 0;
+          padding: 0 17px;
+          /* For some reason there's smaller padding in after tag, Firefox 84.0.2 */
+        }
+
+        .top {
+          position: relative;
+          width: 100%;
+          height: 50%;
+          background:rgba(0, 0, 0, 0.1);
+          border-bottom: 1px solid $black;
+  
+          p {
+            position: absolute;
+            padding: 5px 15px;
+            margin: 0;
+            bottom: 0;
+            font-size: 2em;
+            font-family: $roboto;
+          }
+        }
+
+        .bottom {
+          position: relative;
+          width: calc(100% - 30px);
+          height: 50%;
+          padding: 15px;
+
+          >div {
+            float: right;
+          }
+        }
+      }
+
+      /* THIS CAN PROBABLY BE REFACTORED */
+      &:nth-of-type(1) {
+        .content {
+          &::before, &::after {
+            content: 'I';
+          }
+        }
+      }
+      &:nth-of-type(2) {
+        .content {
+          &::before, &::after {
+            content: 'II';
+          }
+        }
+      }
+      &:nth-of-type(3) {
+        .content {
+          &::before, &::after {
+            content: 'III';
+          }
+        }
+      }
+      &:nth-of-type(4) {
+        .content {
+          &::before, &::after {
+            content: 'IIII';
+          }
+        }
+      }
+    }
+  }
+}
+
+.input {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  input {
+    box-sizing: border-box;
+    width: 200px;
+    margin: 0;
+    padding: 5px 10px;
+    border: 2px solid $yellow;
+    border-right: 0;
+    font-size: 2em;
+    color: $green;
+  }
+
+  button {
+    box-sizing: border-box;
+    width: 140px;
+    padding: 5px 10px;
+    outline: none;
+    border: 2px solid $yellow;
+    font-size: 2em;
+    cursor: pointer;
+    background: $yellow;
+    color: white;
+
+    &:hover {
+      background: $green;
+      border: 2px solid $green;
+    }
+  }
+}
