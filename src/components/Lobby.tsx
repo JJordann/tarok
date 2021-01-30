@@ -11,19 +11,19 @@ const Lobby = (props: any) => {
 
   const [playerList, setPlayerList] = useState([]);
   const [playerName, setPlayerName] = useState('');
-  const [checked, setChecked] = useState('false');
 
   useEffect(() => {
     // fetch connected users immediately after first render
-    socket.emit('getUsers')
+    socket.emit('getUsers');
 
     // register event listeners here
     socket.on('getUsers', players => {
       setPlayerList(players);
+      console.log(players);
     })
 
-    socket.on("dealCards", msg => { 
-      console.log("dealt cards: " + msg)
+    socket.on('dealCards', msg => { 
+      console.log('dealt cards: ' + msg);
     })
 
     return () => {
@@ -32,7 +32,7 @@ const Lobby = (props: any) => {
       socket.off('getUsers');
     }
 
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
   const onPlayerNameInputChange = (event) => {
     setPlayerName(event.target.value);
@@ -42,13 +42,12 @@ const Lobby = (props: any) => {
     socket.emit('join', playerName);
   }
 
-  const ready = () => {
-    socket.emit('ready', 'ready');
+  const ready = (value) => {
+    socket.emit('ready', String(value));
   }
 
   const onToggleChange = (value) => {
-    setChecked(value);
-    ready();
+    ready(value);
   }
 
 
