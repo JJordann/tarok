@@ -32,7 +32,7 @@ const Lobby = (props: any) => {
       socket.off('getUsers');
     }
 
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
   const onPlayerNameInputChange = (event) => {
     setPlayerName(event.target.value);
