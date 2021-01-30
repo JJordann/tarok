@@ -7,7 +7,7 @@ const Toggle = (props: any) => {
     <div className={toggleStyles.toggle}>
       <input type="checkbox" name={props.name} id={props.name}
         className={toggleStyles.checkbox}
-          onChange={e => props.onChange(e.target.checked)} />
+          onChange={e => props.onChange(e.target.checked)} checked={props.checked} />
       <label className={toggleStyles.label} htmlFor={props.name}>
         <span className={toggleStyles.inner} />
         <span className={toggleStyles.switch} />

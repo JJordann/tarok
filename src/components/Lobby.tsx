@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import getSocket from "./global"
+import getSocket from './global';
 import lobbyStyles from '../style/lobby.module.scss';
 import Toggle from './elements/Toggle';
 
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 
 const Lobby = (props: any) => {
   
@@ -15,11 +15,11 @@ const Lobby = (props: any) => {
 
   useEffect(() => {
     // fetch connected users immediately after first render
-    socket.emit("getUsers")
+    socket.emit('getUsers')
 
     // register event listeners here
-    socket.on("getUsers", players => {
-      setPlayerList(players)
+    socket.on('getUsers', players => {
+      setPlayerList(players);
     })
 
     socket.on("dealCards", msg => { 
@@ -28,8 +28,8 @@ const Lobby = (props: any) => {
 
     return () => {
       // unregister event listeners here
-      console.log("unregistered")
-      socket.off("getUsers")
+      console.log('unregistered');
+      socket.off('getUsers');
     }
 
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
