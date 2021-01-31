@@ -3,7 +3,7 @@ import Card from './Card';
 
 import handStyles from "../style/hand.module.scss"
 
-const Hand = ({ cards }) => {
+const Hand = ({ cards, playable }) => {
   const cardsOrdered = [
     'srce_4', 'srce_3', 'srce_2', 'srce_1',
     'srce_poba', 'srce_konj', 'srce_kraljica', 'srce_kralj',
@@ -29,23 +29,22 @@ const Hand = ({ cards }) => {
 
   const sortedCards = cards.sort(compareCardOrder);
 
+  const isCardPlayable = (card => {
+    console.log(cards.indexOf(card) + 1);
+    return cards.indexOf(card) + 1; // starting index is 0, not found is -1
+  })
+
   const cardPack = 'fmf';
 
   let Cards = sortedCards.map((card, index) => 
-  <Card 
+  <Card
+    playable={isCardPlayable(card)}
     value={card} 
     rotation={ -15 + (30 / cards.length) * index } 
     cardPack={cardPack} 
     id={index} 
     key={index}
   />)
-
-  //for(let i = 0; i < props.values.length; i++) {
-    //// Rotate cards from -15deg to +15deg
-    //let rotation = -15 + (30 / props.size) * i;
-    //cards.push(<Card value={props.values[i]} rotation={rotation}
-                            //cardPack={cardPack} id={i} key={i} />);
-  //}
 
   return (
     <div className={handStyles.hand}>

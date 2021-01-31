@@ -2,11 +2,19 @@
     position: relative;
     flex: 1;
 
+    &.disabled {
+
+        .card {
+            filter: brightness(90%);
+        }
+    }
+
     &:hover {
         cursor: pointer;
     }
 
     .card {
+        z-index: 1;
         width: 100%;
         filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
         transition: all .1s ease-in-out;

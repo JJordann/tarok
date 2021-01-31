@@ -16,10 +16,6 @@ const Game = () => {
     turn: false    // is it my turn?
   })
 
-  const values = ['srce_kraljica', 'srce_kralj', 'kara_kralj', 'pik_kralj',
-                    'kriz_kralj', 'tarok_1', 'tarok_16', 'tarok_18', 'tarok_19',
-                      'tarok_20', 'tarok_21', 'tarok_22'];
-
   useEffect(() => {
     // fetch connected users immediately after first render
     socket.emit('getState');
@@ -37,7 +33,7 @@ const Game = () => {
   
   return (
     <div>
-      <Hand cards={state.hand} />
+      <Hand cards={state.hand} playable={state.playable} />
     </div>
   )
 }
