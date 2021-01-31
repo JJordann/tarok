@@ -1,6 +1,6 @@
 import random
 from deck import *
-from functools import reduce
+from functools import reduce, cmp_to_key
 
 
 
@@ -116,8 +116,8 @@ tests = [
 
 
 
-for table in tests: 
-    print(table, " -> ", table[takes(table)])
+#for table in tests: 
+    #print(table, " -> ", table[takes(table)])
 
 
 
@@ -157,12 +157,16 @@ def playCard(gameState, card, player):
 
         # transfer table to winner
         gameState["players"][takesPlayer]["cardsWon"] += gameState["table"]
-        gameState["table"] = []
 
         # a player has no cards at the end of round, game is over
         if any(len(p["hand"]) == 0 for p in gameState["players"]):
+            if "tarok_1" in gameState["table"]:
+                # pagat ultimo happened
+                pagatIndex = gameState["table"].index("tarok_1")
+
             return concludeGame(gameState)
 
+        gameState["table"] = []
     # transfer turn to next starting player
     gameState["players"][turnIndex]["turn"] = False
     gameState["players"][(turnIndex + 2) % nPlayers]["turn"] = True
@@ -207,8 +211,67 @@ def initGame(deck, connected):
     }
     
 
+def keyRed(card):
+    if cardValue(card) == 1:
+        return -int(rank(card))
+    else:
+        return cardValue(card)
+
+def keyBlack(card):
+    if cardValue(card) == 1:
+        return int(rank(card))
+    else:
+        return 10 + cardValue(card)
+
+def orderHand(cards):
+    return (sorted([c for c in cards if suit(c) == "kara"], key=keyRed)
+    + sorted([c for c in cards if suit(c) == "srce"], key=keyRed)
+    + sorted([c for c in cards if suit(c) ==  "pik"], key=keyBlack)
+    + sorted([c for c in cards if suit(c) == "kriz"], key=keyBlack)
+    + sorted([c for c in cards if suit(c) == "tarok"], key=rank))
+
+
+#random.shuffle(deck)
+#print(orderHand(deck))
 
 
 
 
+
+def pagatUltimo(cards):
+    return None
+
+
+def trula(cards):
+    return "tarok_1" in cards and "tarok_21" in cards and "tarok_22" in cards
+
+
+def trulapagat(cards):
+    return trula(cards) and pagatUltimo(cards)
+
+
+def kralji(cards):
+    return len([card for card in cards if rank(card) == "kralj"]) == 4
+
+
+def valat(cards):
+    return len(cards) == 48
+
+
+def contractBonus(cards):
+    bonus = []
+    if valat(cards): 
+        bonus.append({"bonus": "Valat", "value": 250})
+
+    if trulapagat(cards):
+        bonus.append({"bonus": "Trulapagat", "value": 35})
+    elif pagatUltimo(cards):
+        bonus.append({"bonus": "Pagat Ultimo", "value": 25})
+    elif trula(cards):
+        bonus.append({"bonus": "Trula", "value": 10})
+
+    if kralji(cards):
+        bonus.append({"bonus": "Kralji", "value": 10})
+
+    return bonus
 
