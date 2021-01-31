@@ -1,14 +1,19 @@
 
 .hand {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
     position: absolute;
     bottom: -50px;
 
+    .container {
+        margin: 0 auto;
+        width: 90%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+    }
+    
     // Prevent selection of cards aka that blue overlay thing
     -webkit-touch-callout: none;
     -webkit-user-select: none;
