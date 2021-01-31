@@ -72,7 +72,7 @@ def handleGetCards():
         "turn": sender["turn"]
     }
     print(playerState)
-    socketIo.emit("getState", json.dumps(playerState))
+    socketIo.emit("getState", json.dumps(playerState), room=request.sid)
 
 
 
