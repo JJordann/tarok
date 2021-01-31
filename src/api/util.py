@@ -4,9 +4,6 @@ from functools import reduce
 
 
 
-# gameState, card, playerSID -> gameState
-def playCard(gameState, card, player):
-    return None
 
 
 # ce si prvi na vrsti, lahko vrzes katerokoli
@@ -103,7 +100,7 @@ def takes(table):
     else:
         candidates = table
 
-    # return maximum for the takesOrder ordering among candidates
+    # maximum for the takesOrder ordering among candidates
     highest = reduce(lambda a, b: a if takesOrder(a, b) else b, candidates)
     return table.index(highest)
 
@@ -113,19 +110,66 @@ tests = [
     ["kara_1", "pik_kralj", "srce_kralj", "kara_poba"],
     ["kara_dama", "tarok_1", "kara_kralj", "pik_kralj"],
     ["pik_konj", "srce_kralj", "kara_kralj", "pik_7"],
-    ["tarok_1", "tarok_2", "tarok_12", "tarok_3"]
+    ["tarok_1", "tarok_2", "tarok_12", "tarok_3"],
+    ["kara_1", "pik_kralj", "pik_poba", "pik_kraljica"]
 ]
+
+
 
 for table in tests: 
     print(table, " -> ", table[takes(table)])
 
 
 
-#table = ["tarok_1"]
-#hand = ["srce_kralj", "pik_kralj", "kriz_kralj", "kara_kralj"]
+def score(cards):
+    return sum(map(cardValue, cards)) - 2 * int(len(cards) / 3)
 
-#p = playable(table, hand)
-#print(p)
+
+
+def concludeGame(gameState):
+    print("---- GAME OVER ----")
+    ranked = sorted(gameState["players"], key=lambda p: score(p["cardsWon"]), reverse=True)
+    return [
+        {
+            "name": player["name"],
+            "place": index,
+            "score": score(player["cardsWon"]),
+            "cardsWon": player["cardsWon"]
+        } for index, player in enumerate(ranked)
+    ]
+
+
+
+
+# gameState, card, playerSID -> gameState
+def playCard(gameState, card, player):
+    # TODO: check if play is valid
+    nPlayers = len(gameState["players"])
+    turnIndex = next(p for p in gameState["players"] if p["turn"] == True)
+
+    # transfer played card from hand to table
+    gameState["table"].append(card)
+    gameState["players"][turnIndex]["hand"].remove(card)
+
+    if len(gameState["table"]) == nPlayers:
+        # last card of the round was played
+        takesPlayer = (turnIndex + takes(gameState["table"])) % nPlayers
+
+        # transfer table to winner
+        gameState["players"][takesPlayer]["cardsWon"] += gameState["table"]
+        gameState["table"] = []
+
+        # a player has no cards at the end of round, game is over
+        if any(len(p["hand"]) == 0 for p in gameState["players"]):
+            return concludeGame(gameState)
+
+    # transfer turn to next starting player
+    gameState["players"][turnIndex]["turn"] = False
+    gameState["players"][(turnIndex + 2) % nPlayers]["turn"] = True
+    return gameState
+
+
+
 
 
 
@@ -166,7 +210,5 @@ def initGame(deck, connected):
 
 
 
-def score(cards):
-    return sum(map(cardValue, cards)) - 2 * int(len(cards) / 3)
 
 
