@@ -7,7 +7,14 @@ import getSocket from './global';
 const Game = () => {
   const socket = getSocket();
 
-  const [state, setState] = useState({})
+  const [state, setState] = useState({
+    table: [],     // cards on table
+    players: [],   // players in room
+    hand: [],      // cards in hand
+    playable: [],  // playable cards in hand
+    cardsWon: [], 
+    turn: false    // is it my turn?
+  })
 
   const values = ['srce_kraljica', 'srce_kralj', 'kara_kralj', 'pik_kralj',
                     'kriz_kralj', 'tarok_1', 'tarok_16', 'tarok_18', 'tarok_19',
@@ -18,7 +25,6 @@ const Game = () => {
     socket.emit('getState');
 
     socket.on('getState', s => {
-      console.log(s);
       console.log(JSON.parse(s))
       setState(JSON.parse(s))
     });
@@ -31,7 +37,7 @@ const Game = () => {
   
   return (
     <div>
-      <Hand cards={values} />
+      <Hand cards={state.hand} />
     </div>
   )
 }

@@ -1,6 +1,14 @@
 import random
 
 
+
+
+def playable(hand):
+    return hand
+
+
+
+
 def dealCards(deck, connected):
     random.shuffle(deck)
     talon = deck[0:6]
@@ -13,6 +21,8 @@ def dealCards(deck, connected):
         hands.append(deck[start:end])
 
     return (talon, hands)
+
+
 
 
 def initGame(deck, connected):
@@ -44,3 +54,10 @@ def cardValue(card):
         return 2
     else:
         return 1
+
+
+
+def score(cards):
+    return sum(map(cardValue, cards)) - 2 * int(len(cards) / 3)
+
+
