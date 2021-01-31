@@ -1,11 +1,13 @@
 .cardWrapper {
     position: relative;
+    flex: 1;
 
     &:hover {
         cursor: pointer;
     }
 
     .card {
+        width: 100%;
         filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
         transition: all .1s ease-in-out;
         &:hover {

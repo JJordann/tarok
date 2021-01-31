@@ -25,7 +25,9 @@ const Hand = ({ cards }) => {
 
   return (
     <div className={handStyles.hand}>
-      {Cards}
+      <div className={handStyles.container}>
+        {Cards}
+      </div>
     </div>
   )
 }
