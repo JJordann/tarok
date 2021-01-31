@@ -9,6 +9,14 @@
     position: absolute;
     bottom: -50px;
 
+    // Prevent selection of cards aka that blue overlay thing
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
     div:not(:first-child) {
         margin-left: -40px;
     }
