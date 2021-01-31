@@ -1,114 +1,20 @@
 from flask import Flask, request
 from flask_socketio import SocketIO, send, join_room, leave_room
 import json
-import random
 import logging
+
+from deck import *
+from util import *
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sekret'
-
-log = logging.getLogger('werkzeug')
-log.disabled = True
-
-
+logging.getLogger('werkzeug').disabled = True
 socketIo = SocketIO(app, cors_allowed_origins="*")
-
-deck = [
-    'srce_kralj',
-    'srce_kraljica',
-    'srce_konj',
-    'srce_poba',
-    'srce_1',
-    'srce_2',
-    'srce_3',
-    'srce_4',
-
-    'kara_kralj',
-    'kara_kraljica',
-    'kara_konj',
-    'kara_poba',
-    'kara_1',
-    'kara_2',
-    'kara_3',
-    'kara_4',
-
-    'pik_kralj',
-    'pik_kraljica',
-    'pik_konj',
-    'pik_poba',
-    'pik_10',
-    'pik_9',
-    'pik_8',
-    'pik_7',
-
-    'kriz_kralj',
-    'kriz_kraljica',
-    'kriz_konj',
-    'kriz_poba',
-    'kriz_10',
-    'kriz_9',
-    'kriz_8',
-    'kriz_7',
-
-    'tarok_1',
-    'tarok_2',
-    'tarok_3',
-    'tarok_4',
-    'tarok_5',
-    'tarok_6',
-    'tarok_7',
-    'tarok_8',
-    'tarok_9',
-    'tarok_10',
-    'tarok_11',
-    'tarok_12',
-    'tarok_13',
-    'tarok_14',
-    'tarok_15',
-    'tarok_16',
-    'tarok_17',
-    'tarok_18',
-    'tarok_19',
-    'tarok_20',
-    'tarok_21',
-    'tarok_22'
-]
-
-
-def cardValue(card):
-    if "kraljica" in card:
-        return 4
-    if "kralj" in card or card in ["tarok_22", "tarok_1", "tarok_21"]:
-        return 5
-    if "konj" in card:
-        return 3
-    if "poba" in card:
-        return 2
-    else:
-        return 1
-        
-
-#for card in deck:
-    #print(card + ": " + str(cardValue(card)))
-
-
 
 
 connected = []
 
-def dealCards(deck, connected):
-    random.shuffle(deck)
-    talon = deck[0:6]
-    nPlayers = len(connected)
-    handSize = round(48 / nPlayers)
-    hands = []
-    for i in range(0, nPlayers):
-        start = 6 + i * handSize
-        end = start + handSize
-        hands.append(deck[start:end])
-
-    return (talon, hands)
 
 
 
@@ -123,21 +29,6 @@ GameState:
         turn
 """
 
-def initGame(connected):
-    (talon, hands) = dealCards(deck, connected)
-    return {
-        "talon": talon,
-        "players": [
-            {
-                "name": user["name"],
-                "sid": user["sid"],
-                "hand": hands[i],
-                "cardsWon": [],
-                "turn": (i == 0)
-            } for (i, user) in enumerate(connected)
-        ]
-
-    }
 
 mockCon = [
     {
@@ -162,19 +53,6 @@ mockCon = [
     }
 ]
 
-#gameState = initGame(mockCon)
-#print(gameState)
-
-
-
-
-#(talon, hands) = dealCards(deck, [1, 2, 3, 4])
-
-#print("TALON: " + str(talon) + "\n")
-#print("HANDS: \n")
-#for h in hands:
-    #print(str(h) + "\n")
-
 
 def sendUnicasts(connected):
     msg = [[u["name"], u["ready"], False] for u in connected]
@@ -190,17 +68,12 @@ def startGame(connected):
         socketIo.emit("dealCards", hands[i], room=connected[i]["sid"])
 
 
-#def connectedPlayers(connected):
-    #return [[u["name"], u["ready"]] for u in connected]
-
-
 @socketIo.on("join")
 def handleJoin(msg):
     print("JOIN: #### " + msg + " ####" + request.sid + "####")
     connected.append({"name": msg, 
                       "sid": request.sid,
                       "ready": False})
-    #socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
     sendUnicasts(connected)
     join_room("joined")
     print(connected)
@@ -214,7 +87,6 @@ def handleReady(msg):
             u["ready"] = True if (msg == "true") else False
             if allReady(connected) == True:
                 handleAllReady()
-    #socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)
     sendUnicasts(connected)
     return None
     
@@ -233,7 +105,6 @@ def handleAllReady():
 @socketIo.on("getUsers")
 def getUsers():
     global connected
-    #socketIo.emit("getUsers", connectedPlayers(connected))
     sendUnicasts(connected)
 
 
@@ -242,12 +113,12 @@ def handleLeave():
     print(request.sid + " left")
     global connected
     connected = [u for u in connected if u["sid"] != request.sid]
-    #socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
     sendUnicasts(connected)
     leave_room("joined")
     print(connected)
 
 
-
 if __name__ == '__main__':
     socketIo.run(app)
+
+
