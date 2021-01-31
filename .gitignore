@@ -3,6 +3,7 @@
 # environment
 .vscode/
 .eslintcache
+/src/api/__pycache__/
 
 # dependencies
 /node_modules
