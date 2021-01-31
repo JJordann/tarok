@@ -35,6 +35,8 @@ const Lobby = (props: any) => {
       // unregister event listeners here
       console.log('unregistered');
       socket.off('getUsers');
+      socket.off('dealCards')
+      socket.off('allReady')
     }
 
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -72,17 +74,35 @@ const Lobby = (props: any) => {
         </span>
       )
 
+
+  const clientIsJoined = () => playerList.some(p => p[2])
+
+  const clientIsReady = () => clientIsJoined() ? 
+        playerList.find(p => p[2])[1] : false
+
+
+  let Ready = 
+    <div className={lobbyStyles.input}>
+      <button onClick={() => ready(true)}> READY </button>
+    </div> 
+
+  let Connect = 
+    <div className={lobbyStyles.input}>
+      <input type="text" placeholder="Vnesi ime" value={playerName}
+        onChange={onPlayerNameInputChange} />
+      <button onClick={connect}>Connect</button>
+    </div>
+
   return (
     <div className={lobbyStyles.lobbyContainer}>
       <div className={lobbyStyles.lobby}>
          { playerBoxes }
       </div>
-
-      <div className={lobbyStyles.input}>
-        <input type="text" placeholder="Vnesi ime" value={playerName}
-          onChange={onPlayerNameInputChange} />
-        <button onClick={connect}>Connect</button>
-      </div>
+        { clientIsJoined() ? Ready : Connect}
+        <br />
+        { clientIsJoined() ? "JOINED": "NOT JOINED"}
+        <br />
+        { clientIsReady() ? "READY": "NOT READY"}
     </div>
     
   );

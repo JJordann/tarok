@@ -1,10 +1,16 @@
 from flask import Flask, request
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, join_room, leave_room
 import json
 import random
+import logging
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sekret'
+
+log = logging.getLogger('werkzeug')
+log.disabled = True
+
 
 socketIo = SocketIO(app, cors_allowed_origins="*")
 
@@ -170,14 +176,22 @@ mockCon = [
     #print(str(h) + "\n")
 
 
+def sendUnicasts(connected):
+    msg = [[u["name"], u["ready"], False] for u in connected]
+    for i in range(0, len(connected)):
+        msg[i][2] = True
+        socketIo.emit("getUsers", msg, room=connected[i]["sid"])
+        print(msg)
+        msg[i][2] = False
+
 def startGame(connected):
     (talon, hands) = dealCards(deck, connected)
     for i in range(0, len(connected)):
         socketIo.emit("dealCards", hands[i], room=connected[i]["sid"])
 
 
-def connectedPlayers(connected):
-    return [[u["name"], u["ready"]] for u in connected]
+#def connectedPlayers(connected):
+    #return [[u["name"], u["ready"]] for u in connected]
 
 
 @socketIo.on("join")
@@ -186,7 +200,9 @@ def handleJoin(msg):
     connected.append({"name": msg, 
                       "sid": request.sid,
                       "ready": False})
-    socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
+    #socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
+    sendUnicasts(connected)
+    join_room("joined")
     print(connected)
 
 
@@ -198,7 +214,8 @@ def handleReady(msg):
             u["ready"] = True if (msg == "true") else False
             if allReady(connected) == True:
                 handleAllReady()
-    socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)
+    #socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)
+    sendUnicasts(connected)
     return None
     
 
@@ -209,14 +226,15 @@ def allReady(connected):
 def handleAllReady():
     global connected
     print("****** ALL READY ****** ")
-    socketIo.emit("allReady", broadcast=True)
+    socketIo.emit("allReady", room="joined")
     # startGame(connected)
 
 
 @socketIo.on("getUsers")
 def getUsers():
     global connected
-    socketIo.emit("getUsers", connectedPlayers(connected))
+    #socketIo.emit("getUsers", connectedPlayers(connected))
+    sendUnicasts(connected)
 
 
 @socketIo.on("disconnect")
@@ -224,7 +242,9 @@ def handleLeave():
     print(request.sid + " left")
     global connected
     connected = [u for u in connected if u["sid"] != request.sid]
-    socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
+    #socketIo.emit("getUsers", connectedPlayers(connected), broadcast=True)   
+    sendUnicasts(connected)
+    leave_room("joined")
     print(connected)
 
 
