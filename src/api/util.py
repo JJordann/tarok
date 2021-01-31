@@ -160,9 +160,9 @@ def playCard(gameState, card, player):
 
         # a player has no cards at the end of round, game is over
         if any(len(p["hand"]) == 0 for p in gameState["players"]):
-            if "tarok_1" in gameState["table"]:
-                # pagat ultimo happened
-                pagatIndex = gameState["table"].index("tarok_1")
+            #if "tarok_1" in gameState["table"]:
+                ## pagat ultimo happened
+                #pagatIndex = gameState["table"].index("tarok_1")
 
             return concludeGame(gameState)
 
