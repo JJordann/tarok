@@ -18,6 +18,7 @@ def dealCards(deck, connected):
 def initGame(deck, connected):
     (talon, hands) = dealCards(deck, connected)
     return {
+        "table": [],
         "talon": talon,
         "players": [
             {

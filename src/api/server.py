@@ -20,6 +20,7 @@ connected = []
 
 if False: """
 GameState:
+    table
     talon
     players:
         name
@@ -54,6 +55,28 @@ mockCon = [
 ]
 
 
+def playable(hand):
+    return None
+
+
+@socketIo.on("getState")
+def handleGetCards():
+    global gameState
+    sender = next(p for p in gameState["players"] if p["sid"] == request.sid)
+    playerState = {
+        "table": gameState["table"],
+        "players": [u["name"] for u in gameState["players"]],
+        "hand": sender["hand"],
+        "playable": [],
+        "cardsWon": sender["cardsWon"],
+        "turn": sender["turn"]
+    }
+    print(playerState)
+    socketIo.emit("getState", json.dumps(playerState))
+
+
+
+
 def sendUnicasts(connected):
     msg = [[u["name"], u["ready"], False] for u in connected]
     for i in range(0, len(connected)):
@@ -65,7 +88,7 @@ def sendUnicasts(connected):
 def startGame(connected):
     (talon, hands) = dealCards(deck, connected)
     for i in range(0, len(connected)):
-        socketIo.emit("dealCards", hands[i], room=connected[i]["sid"])
+        socketIo.emit("getCards", hands[i], room=connected[i]["sid"])
 
 
 @socketIo.on("join")
@@ -99,7 +122,8 @@ def handleAllReady():
     global connected
     print("****** ALL READY ****** ")
     socketIo.emit("allReady", room="joined")
-    # startGame(connected)
+    global gameState
+    gameState = initGame(deck, connected)
 
 
 @socketIo.on("getUsers")

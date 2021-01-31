@@ -23,9 +23,9 @@ const Lobby = (props: any) => {
       setPlayerList(players);
     });
 
-    socket.on('dealCards', msg => { 
-      console.log('dealt cards: ' + msg);
-    });
+    //socket.on('dealCards', msg => { 
+      //console.log('dealt cards: ' + msg);
+    //});
 
     socket.on('allReady', () => {
       history.push('/game');
@@ -35,7 +35,7 @@ const Lobby = (props: any) => {
       // unregister event listeners here
       console.log('unregistered');
       socket.off('getUsers');
-      socket.off('dealCards')
+      //socket.off('dealCards')
       socket.off('allReady')
     }
 

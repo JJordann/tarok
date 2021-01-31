@@ -1,7 +1,6 @@
 import React from 'react';
 
 import cardStyles from "../style/card.module.scss"
-import getSocket from './global';
 
 const Card = (props: any) => {
   let imgsrc = `${process.env.PUBLIC_URL}/cards/${props.cardPack}/${props.value}.png`
