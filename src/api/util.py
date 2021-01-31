@@ -90,16 +90,34 @@ def takesOrder(a, b):
      
 
 
+def dominantSuit(table):
+    return suit(next(card for card in table if "tarok" not in card))
+
+
 # returns index of player who takes
 def takes(table):
-    # maximum for the takesOrder ordering
-    highest = reduce(lambda a, b: a if takesOrder(a, b) else b, table)
+
+    # no tarot cards - highest rank of dominant suit takes
+    if not any("tarok" in card for card in table):
+        candidates = [card for card in table if suit(card) == dominantSuit(table)]
+    else:
+        candidates = table
+
+    # return maximum for the takesOrder ordering among candidates
+    highest = reduce(lambda a, b: a if takesOrder(a, b) else b, candidates)
     return table.index(highest)
 
 
 
-table = ["srce_kraljica", "srce_kralj", "srce_2", "srce_konj"]
-print(takes(table))
+tests = [
+    ["kara_1", "pik_kralj", "srce_kralj", "kara_poba"],
+    ["kara_dama", "tarok_1", "kara_kralj", "pik_kralj"],
+    ["pik_konj", "srce_kralj", "kara_kralj", "pik_7"],
+    ["tarok_1", "tarok_2", "tarok_12", "tarok_3"]
+]
+
+for table in tests: 
+    print(table, " -> ", table[takes(table)])
 
 
 
