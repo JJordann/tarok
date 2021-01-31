@@ -17,7 +17,7 @@ const LandingPage = () => {
         </div>
       </div>
       <div className={landingPageStyles.content}>
-        <Link to="/game">
+        <Link to="/lobby">
           <div className={landingPageStyles.startButton}>
             <FontAwesomeIcon icon={faPlayCircle} />
             <span>Začni</span>
