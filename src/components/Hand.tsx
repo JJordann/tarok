@@ -30,7 +30,6 @@ const Hand = ({ cards, playable }) => {
   const sortedCards = cards.sort(compareCardOrder);
 
   const isCardPlayable = (card => {
-    console.log(cards.indexOf(card) + 1);
     return cards.indexOf(card) + 1; // starting index is 0, not found is -1
   })
 
