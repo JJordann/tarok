@@ -80,6 +80,11 @@ const Lobby = (props: any) => {
   const clientIsReady = () => clientIsJoined() ? 
         playerList.find(p => p[2])[1] : false
 
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    connect();
+  }
+
 
   let Ready = 
     <div className={lobbyStyles.input}>
@@ -87,11 +92,11 @@ const Lobby = (props: any) => {
     </div> 
 
   let Connect = 
-    <div className={lobbyStyles.input}>
+    <form className={lobbyStyles.input} onSubmit={onFormSubmit}>
       <input type="text" placeholder="Vnesi ime" value={playerName}
         onChange={onPlayerNameInputChange} />
-      <button onClick={connect}>Connect</button>
-    </div>
+      <button type="submit">Connect</button>
+    </form>
 
   return (
     <div className={lobbyStyles.lobbyContainer}>
