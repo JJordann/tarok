@@ -227,8 +227,10 @@ def playCard(gameState, card, player):
         return gameState
     
     # round is over, transfer table to round winner
-    takesPlayer = (playerIndex + takes(gameState["table"])) % nPlayers
+    takesPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + takes(gameState["table"])) % nPlayers
     gameState["players"][takesPlayer]["cardsWon"] += gameState["table"]
+
+    print(gameState["table"], "takes: ", takesPlayer, takes(gameState["table"]))
 
     if all(len(p["hand"]) == 0 for p in gameState["players"]):
         # players have no cards, game ends
@@ -239,9 +241,9 @@ def playCard(gameState, card, player):
             gameState["players"][pagatPlayer]["contractBonus"] += [{"bonus": "pagatUltimo", "value": 25}]
             print("PAGAT ULTIMO: ", gameState["players"][pagatPlayer]["name"])
 
-    # after round ends, skip a player
+    # player who takes begins next round
     gameState["players"][(playerIndex + 1) % nPlayers]["turn"] = False
-    gameState["players"][(playerIndex + 2) % nPlayers]["turn"] = True
+    gameState["players"][takesPlayer]["turn"] = True
     gameState["table"] = []
     return gameState
 
@@ -272,7 +274,7 @@ def initGame(deck, connected):
             {
                 "name": user["name"],
                 "sid": user["sid"],
-                "hand": hands[i][0:2],
+                "hand": hands[i],
                 "cardsWon": [],
                 "turn": (i == 0),
                 "contractBonus": [],
