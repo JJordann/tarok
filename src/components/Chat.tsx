@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import getSocket from './global'
 
 import chatStyles from '../style/chat.module.scss'
@@ -14,6 +14,8 @@ const Chat = ({ myName }) => {
 
     let [history, setHistory] = useState(_history)
 
+    const historyRef = useRef(null)
+
     useEffect(
         () => {
             // register
@@ -21,11 +23,20 @@ const Chat = ({ myName }) => {
                 setHistory(old => old.concat(JSON.parse(msg)))
             })
 
+            socket.on("INFO", info => {
+                setHistory(old => old.concat({sender: 'INFO', message: info}))
+            })
+
             return () => {
                 // cleanup
                 socket.off("chat")
+                socket.off("INFO")
             }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        historyRef.current.scrollTop = historyRef.current.scrollHeight;
+    }, [history])
 
 
 
@@ -43,17 +54,20 @@ const Chat = ({ myName }) => {
 
     const [mymessage, setMymessage] = useState("")
 
-    let History = history.map(m => <pre>{m["sender"]}: {m["message"]}</pre>)
+    let History = history.map(m => <pre><span>{m["sender"]}</span>: {m["message"]}</pre>)
 
     return (
         <div className={chatStyles.wrapper}>
-            { History }
-            <div className={chatStyles.inputRow}>
-                <hr />
-                <pre>{myName + ">"}</pre>
-                <input type="text" onChange={handleChange} value={mymessage}/>
-                <button type="submit" onClick={handleSend}>send</button>
+            <div ref={historyRef} className={chatStyles.history}>
+                { History }
             </div>
+            
+            <form className={chatStyles.inputRow} onSubmit={handleSend}>
+                <label>
+                    <p>{myName}:</p>
+                    <input type="text" onChange={handleChange} value={mymessage}/>
+                </label>
+            </form>
         </div>
     )
 }
