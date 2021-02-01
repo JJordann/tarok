@@ -3,7 +3,7 @@ import React from 'react';
 import cardStyles from "../style/card.module.scss"
 
 const Card = (props: any) => {
-  let imgsrc = `${process.env.PUBLIC_URL}/cards/${props.cardPack}/${props.value}.png`
+  let imgsrc = `${process.env.PUBLIC_URL}/cards/fmf/${props.value}.png`
 
   return (
     <div className={props.playable ? cardStyles.cardWrapper : `${cardStyles.cardWrapper} ${cardStyles.disabled}`}

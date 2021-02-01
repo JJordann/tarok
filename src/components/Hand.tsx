@@ -34,14 +34,11 @@ const Hand = ({ cards, playable }) => {
     return cards.indexOf(card) + 1; // starting index is 0, not found is -1
   })
 
-  const cardPack = 'fmf';
-
   let Cards = sortedCards.map((card, index) => 
   <Card
     playable={isCardPlayable(card)}
     value={card} 
     rotation={ -15 + (30 / cards.length) * index } 
-    cardPack={cardPack} 
     id={index} 
     key={index}
   />)
