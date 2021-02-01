@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Hand from './Hand'
+import Table from './Table'
 
 import { Link } from 'react-router-dom'
 import getSocket from './global'
@@ -23,6 +24,11 @@ const Game = () => {
     socket.on('getState', s => {
       console.log(JSON.parse(s))
       setState(JSON.parse(s))
+
+      let testState = state;
+      testState.table = ['tarok_21', 'srce_kralj', 'tarok_22', 'tarok_1']
+
+      setState(testState);
     })
 
 
@@ -33,6 +39,7 @@ const Game = () => {
   
   return (
     <div>
+      <Table cards={state.table} />
       <Hand cards={state.hand} playable={state.playable} />
     </div>
   )
