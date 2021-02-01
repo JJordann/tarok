@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from './Card';
-
+import getSocket from './global'
 import handStyles from "../style/hand.module.scss"
 
+
 const Hand = ({ cards, playable }) => {
+
+  const socket = getSocket()
+
   const cardsOrdered = [
     'srce_4', 'srce_3', 'srce_2', 'srce_1',
     'srce_poba', 'srce_konj', 'srce_kraljica', 'srce_kralj',
@@ -30,17 +34,25 @@ const Hand = ({ cards, playable }) => {
   const sortedCards = cards.sort(compareCardOrder);
 
   const isCardPlayable = (card => {
-    return cards.indexOf(card) + 1; // starting index is 0, not found is -1
+    return playable.indexOf(card) + 1; // starting index is 0, not found is -1
   })
 
+
+  const handleCardClick = card => {
+    console.log("klik: ", card)
+    socket.emit("playCard", card)
+  }
+
+
   let Cards = sortedCards.map((card, index) => 
-  <Card
-    playable={isCardPlayable(card)}
-    value={card} 
-    rotation={ -15 + (30 / cards.length) * index } 
-    id={index} 
-    key={index}
-  />)
+    <Card
+      playable={isCardPlayable(card)}
+      value={card} 
+      rotation={ -15 + (30 / cards.length) * index } 
+      id={index} 
+      key={index}
+      onClick={() => handleCardClick(card)}
+    />)
 
   return (
     <div className={handStyles.hand}>

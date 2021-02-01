@@ -22,21 +22,22 @@ const Game = () => {
     socket.emit('getState')
 
     socket.on('getState', s => {
-      console.log(JSON.parse(s))
-      setState(JSON.parse(s))
+      
+      let _s = JSON.parse(s)
+      _s.table = ['tarok_21' ]
 
-      let testState = state;
-      testState.table = ['tarok_21', 'srce_kralj', 'tarok_22', 'tarok_1']
+      console.log(_s)
 
-      setState(testState);
+      setState(_s)
+
     })
-
 
     return () => {
       socket.off('getState')
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-  
+
+
   return (
     <div>
       <Table cards={state.table} />

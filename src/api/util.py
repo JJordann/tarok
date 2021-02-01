@@ -38,7 +38,7 @@ def cardValue(card):
         return 1
 
 
-def playable(table, hand):
+def playable(hand, table):
     # if table is empty, any card can be played
     if table == []:
         return hand
@@ -143,7 +143,16 @@ def concludeGame(gameState):
 
 # gameState, card, playerSID -> gameState
 def playCard(gameState, card, player):
-    # TODO: check if play is valid
+    sender = next(p for p in gameState["players"] if p["sid"] == request.sid)
+
+    if sender["turn"] != True:
+        print("It's not your turn. Stop hacking.")
+        return None
+
+    if card not in sender["playable"]:
+        print("Illegal move. Stop hacking.")
+        return None
+
     nPlayers = len(gameState["players"])
     turnIndex = next(p for p in gameState["players"] if p["turn"] == True)
 

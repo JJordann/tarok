@@ -7,9 +7,9 @@ const Table = ({cards}) => {
 
   console.log(cards);
 
-  let Cards =cards.map((card, index) => 
+  let Cards = cards.map((card, index) => 
   <Card
-    playable={0}
+    playable={false}
     value={card} 
     rotation={ 0 } 
     id={index} 

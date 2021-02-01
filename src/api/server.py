@@ -55,8 +55,9 @@ mockCon = [
 ]
 
 
-def playable(hand):
-    return hand
+@socketIo.on("playCard")
+def handlePlayCard(card):
+    print("CARD PLAYED: ", card)
 
 
 @socketIo.on("getState")
@@ -67,7 +68,8 @@ def handleGetCards():
         "table": gameState["table"],
         "players": [u["name"] for u in gameState["players"]],
         "hand": sender["hand"],
-        "playable": playable(sender["hand"]),
+        #"playable": sender["hand"][1:5],
+        "playable": playable(sender["hand"], gameState["table"]),
         "cardsWon": sender["cardsWon"],
         "turn": sender["turn"]
     }
