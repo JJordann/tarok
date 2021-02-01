@@ -200,52 +200,6 @@ def pagatUltimo(table):
 
 
 
-def playCard(gameState, card, player):
-    sender = next(p for p in gameState["players"] if p["sid"] == player)
-
-    if sender["turn"] != True:
-        print("It's not your turn. Stop hacking.")
-        return gameState
-
-    if card not in playable(sender["hand"], gameState["table"]):
-        print("Illegal move. Stop hacking.")
-        return gameState
-
-    nPlayers = len(gameState["players"])
-    playerIndex = next(i for i,p in enumerate(gameState["players"]) if p["turn"] == True)
-
-    # transfer played card from hand to table
-    gameState["table"].append(card)
-    gameState["players"][playerIndex]["hand"].remove(card)
-
-    # transfer turn to next player
-    gameState["players"][playerIndex]["turn"] = False
-    gameState["players"][(playerIndex + 1) % nPlayers]["turn"] = True
-
-    if len(gameState["table"]) < nPlayers:
-        # round is not over
-        return gameState
-    
-    # round is over, transfer table to round winner
-    takesPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + takes(gameState["table"])) % nPlayers
-    gameState["players"][takesPlayer]["cardsWon"] += gameState["table"]
-
-    print(gameState["table"], "takes: ", takesPlayer, takes(gameState["table"]))
-
-    if all(len(p["hand"]) == 0 for p in gameState["players"]):
-        # players have no cards, game ends
-        # check for pagat ultimo
-        pagatIndex = pagatUltimo(gameState["table"])
-        if pagatIndex > -1:
-            pagatPlayer = (pagatIndex + pagatIndex) % nPlayers
-            gameState["players"][pagatPlayer]["contractBonus"] += [{"bonus": "pagatUltimo", "value": 25}]
-            print("PAGAT ULTIMO: ", gameState["players"][pagatPlayer]["name"])
-
-    # player who takes begins next round
-    gameState["players"][(playerIndex + 1) % nPlayers]["turn"] = False
-    gameState["players"][takesPlayer]["turn"] = True
-    gameState["table"] = []
-    return gameState
 
 
 
