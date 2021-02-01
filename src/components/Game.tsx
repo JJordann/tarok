@@ -24,7 +24,6 @@ const Game = () => {
     socket.on('getState', s => {
       
       let _s = JSON.parse(s)
-      _s.table = ['tarok_21' ]
 
       console.log(_s)
 
@@ -37,9 +36,13 @@ const Game = () => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  let _style = {
+    border: `10px solid ${ state.turn ? "green" : "gray" }`,
+    margin: 20
+  }
 
   return (
-    <div>
+    <div style={_style}>
       <Table cards={state.table} />
       <Hand cards={state.hand} playable={state.playable} />
     </div>

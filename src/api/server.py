@@ -57,26 +57,41 @@ mockCon = [
 
 @socketIo.on("playCard")
 def handlePlayCard(card):
+    global gameState
+    gameState = playCard(gameState, card, request.sid)
     print("CARD PLAYED: ", card)
+    broadcastPublicState(gameState)
 
 
 @socketIo.on("getState")
 def handleGetCards():
     global gameState
-    sender = next(p for p in gameState["players"] if p["sid"] == request.sid)
-    playerState = {
-        "table": gameState["table"],
-        "players": [u["name"] for u in gameState["players"]],
-        "hand": sender["hand"],
-        #"playable": sender["hand"][1:5],
-        "playable": playable(sender["hand"], gameState["table"]),
-        "cardsWon": sender["cardsWon"],
-        "turn": sender["turn"]
-    }
-    print(playerState)
+    playerState = getPublicState(gameState, request.sid)
     socketIo.emit("getState", json.dumps(playerState), room=request.sid)
 
 
+def broadcastPublicState(gameState):
+    print("broadcasting: ", gameState)
+    for player in gameState["players"]:
+        playerState = getPublicState(gameState, player["sid"])
+        print("SENDING TO: ", player["name"], ": ", playerState)
+        socketIo.emit("getState", json.dumps(playerState), room=player["sid"])
+
+
+def findPlayerBySid(gameState, sid):
+    return next(p for p in gameState["players"] if p["sid"] == sid)
+
+
+def getPublicState(gameState, sid):
+    player = findPlayerBySid(gameState, sid)
+    return {
+        "table": gameState["table"],
+        "players": [u["name"] for u in gameState["players"]],
+        "hand": player["hand"],
+        "playable": playable(player["hand"], gameState["table"]),
+        "cardsWon": player["cardsWon"],
+        "turn": player["turn"]
+    }
 
 
 def sendUnicasts(connected):

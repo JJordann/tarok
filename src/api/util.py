@@ -141,20 +141,46 @@ def concludeGame(gameState):
 
 
 
-# gameState, card, playerSID -> gameState
 def playCard(gameState, card, player):
-    sender = next(p for p in gameState["players"] if p["sid"] == request.sid)
+    sender = next(p for p in gameState["players"] if p["sid"] == player)
+
+    if sender["turn"] != True:
+        print("It's not your turn. Stop hacking.")
+        return gameState
+
+    if card not in playable(sender["hand"], gameState["table"]):
+        print("Illegal move. Stop hacking.")
+        return gameState
+
+    nPlayers = len(gameState["players"])
+    playerIndex = next(i for i,p in enumerate(gameState["players"]) if p["turn"] == True)
+
+    # transfer played card from hand to table
+    gameState["table"].append(card)
+    gameState["players"][playerIndex]["hand"].remove(card)
+
+    # transfer turn to next player
+    gameState["players"][playerIndex]["turn"] = False
+    gameState["players"][(playerIndex + 1) % nPlayers]["turn"] = True
+    return gameState
+
+
+
+
+# gameState, card, playerSID -> gameState
+def playCard2(gameState, card, player):
+    sender = next(p for p in gameState["players"] if p["sid"] == player)
 
     if sender["turn"] != True:
         print("It's not your turn. Stop hacking.")
         return None
 
-    if card not in sender["playable"]:
+    if card not in playable(sender["hand"], gameState["table"]):
         print("Illegal move. Stop hacking.")
         return None
 
     nPlayers = len(gameState["players"])
-    turnIndex = next(p for p in gameState["players"] if p["turn"] == True)
+    turnIndex = next(i for i,p in enumerate(gameState["players"]) if p["turn"] == True)
 
     # transfer played card from hand to table
     gameState["table"].append(card)
@@ -176,6 +202,7 @@ def playCard(gameState, card, player):
             return concludeGame(gameState)
 
         gameState["table"] = []
+    # TODO: if last round, increment turn index by 2
     # transfer turn to next starting player
     gameState["players"][turnIndex]["turn"] = False
     gameState["players"][(turnIndex + 2) % nPlayers]["turn"] = True
