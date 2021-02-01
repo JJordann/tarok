@@ -68,7 +68,7 @@ def getPublicState(gameState, sid):
 
 
 
-def sendUnicasts(connected):
+def dispatchLobbyState(connected):
     msg = [[u["name"], u["ready"], False] for u in connected]
     for i in range(0, len(connected)):
         msg[i][2] = True
@@ -90,7 +90,7 @@ def handleJoin(msg):
     connected.append({"name": msg, 
                       "sid": request.sid,
                       "ready": False})
-    sendUnicasts(connected)
+    dispatchLobbyState(connected)
     join_room("joined")
 
 
@@ -103,7 +103,7 @@ def handleReady(msg):
             u["ready"] = True if (msg == "true") else False
             if allReady(connected) == True:
                 handleAllReady()
-    sendUnicasts(connected)
+    dispatchLobbyState(connected)
     return None
     
 
@@ -125,16 +125,15 @@ def handleAllReady():
 @socketIo.on("getUsers")
 def getUsers():
     global connected
-    sendUnicasts(connected)
+    dispatchLobbyState(connected)
 
 
 
 @socketIo.on("disconnect")
 def handleLeave():
-    print(request.sid + " left")
     global connected
     connected = [u for u in connected if u["sid"] != request.sid]
-    sendUnicasts(connected)
+    dispatchLobbyState(connected)
     leave_room("joined")
 
 

@@ -1,6 +1,6 @@
 import random
 from deck import *
-from functools import reduce, cmp_to_key
+from functools import reduce
 
 
 
@@ -132,15 +132,61 @@ def score(cards):
 
 
 
+def trula(cards):
+    return "tarok_1" in cards and "tarok_21" in cards and "tarok_22" in cards
+
+
+
+def trulapagat(cards):
+    return trula(cards) and pagatUltimo(cards)
+
+
+
+def kralji(cards):
+    return len([card for card in cards if rank(card) == "kralj"]) == 4
+
+
+
+def valat(cards):
+    return len(cards) == 48
+
+
+
+def contractBonus(cards):
+    bonus = []
+
+    if valat(cards): 
+        bonus.append({"bonus": "Valat", "value": 250})
+
+    if trulapagat(cards):
+        bonus.append({"bonus": "Trulapagat", "value": 35})
+    elif trula(cards):
+        bonus.append({"bonus": "Trula", "value": 10})
+
+    if kralji(cards):
+        bonus.append({"bonus": "Kralji", "value": 10})
+
+    return bonus
+
+
+
+
 def concludeGame(gameState):
     print("---- GAME OVER ----")
+
+    for player in gameState["players"]:
+        player["contractBonus"] += contractBonus(player["cardsWon"])
+        for contract in player["contractBonus"]:
+            player["score"] += contract["value"]
+
     ranked = sorted(gameState["players"], key=lambda p: score(p["cardsWon"]), reverse=True)
     return [
         {
             "name": player["name"],
             "place": index,
             "score": score(player["cardsWon"]),
-            "cardsWon": player["cardsWon"]
+            "cardsWon": player["cardsWon"],
+            "contractBonus": player["contractBonus"]
         } for index, player in enumerate(ranked)
     ]
 
@@ -193,63 +239,11 @@ def playCard(gameState, card, player):
             gameState["players"][pagatPlayer]["contractBonus"] += [{"bonus": "pagatUltimo", "value": 25}]
             print("PAGAT ULTIMO: ", gameState["players"][pagatPlayer]["name"])
 
-
-
     # after round ends, skip a player
-    if nPlayers > 2:
-        gameState["players"][(playerIndex + 1) % nPlayers]["turn"] = False
-        gameState["players"][(playerIndex + 2) % nPlayers]["turn"] = True
+    gameState["players"][(playerIndex + 1) % nPlayers]["turn"] = False
+    gameState["players"][(playerIndex + 2) % nPlayers]["turn"] = True
     gameState["table"] = []
     return gameState
-
-
-
-
-
-
-
-# gameState, card, playerSID -> gameState
-def playCard2(gameState, card, player):
-    sender = next(p for p in gameState["players"] if p["sid"] == player)
-
-    if sender["turn"] != True:
-        print("It's not your turn. Stop hacking.")
-        return None
-
-    if card not in playable(sender["hand"], gameState["table"]):
-        print("Illegal move. Stop hacking.")
-        return None
-
-    nPlayers = len(gameState["players"])
-    turnIndex = next(i for i,p in enumerate(gameState["players"]) if p["turn"] == True)
-
-    # transfer played card from hand to table
-    gameState["table"].append(card)
-    gameState["players"][turnIndex]["hand"].remove(card)
-
-    if len(gameState["table"]) == nPlayers:
-        # last card of the round was played
-        takesPlayer = (turnIndex + takes(gameState["table"])) % nPlayers
-
-        # transfer table to winner
-        gameState["players"][takesPlayer]["cardsWon"] += gameState["table"]
-
-        # a player has no cards at the end of round, game is over
-        if any(len(p["hand"]) == 0 for p in gameState["players"]):
-            #if "tarok_1" in gameState["table"]:
-                ## pagat ultimo happened
-                #pagatIndex = gameState["table"].index("tarok_1")
-
-            return concludeGame(gameState)
-
-        gameState["table"] = []
-    # TODO: if last round, increment turn index by 2
-    # transfer turn to next starting player
-    gameState["players"][turnIndex]["turn"] = False
-    gameState["players"][(turnIndex + 2) % nPlayers]["turn"] = True
-    return gameState
-
-
 
 
 
@@ -320,39 +314,5 @@ def orderHand(cards):
 
 
 
-def trula(cards):
-    return "tarok_1" in cards and "tarok_21" in cards and "tarok_22" in cards
-
-
-
-def trulapagat(cards):
-    return trula(cards) and pagatUltimo(cards)
-
-
-
-def kralji(cards):
-    return len([card for card in cards if rank(card) == "kralj"]) == 4
-
-
-
-def valat(cards):
-    return len(cards) == 48
-
-
-
-def contractBonus(cards):
-    bonus = []
-    if valat(cards): 
-        bonus.append({"bonus": "Valat", "value": 250})
-
-    if trulapagat(cards):
-        bonus.append({"bonus": "Trulapagat", "value": 35})
-    elif trula(cards):
-        bonus.append({"bonus": "Trula", "value": 10})
-
-    if kralji(cards):
-        bonus.append({"bonus": "Kralji", "value": 10})
-
-    return bonus
 
 

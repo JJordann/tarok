@@ -46,7 +46,7 @@ const Game = () => {
   }
 
   let Summary = gameSummary == null ? null : 
-    gameSummary.map(obj => <pre>{JSON.stringify(obj)}</pre>)
+    gameSummary.map(obj => <pre>{JSON.stringify(obj).replace(/,/g, "\n")}</pre>)
 
 
   // TODO spremeni v redirect al pa v nekaj lepšega
