@@ -8,6 +8,8 @@ import getSocket from './global'
 const Game = () => {
   const socket = getSocket()
 
+  const [gameSummary, setGameSummary] = useState(null)
+
   const [state, setState] = useState({
     table: [],     // cards on table
     players: [],   // players in room
@@ -22,17 +24,19 @@ const Game = () => {
     socket.emit('getState')
 
     socket.on('getState', s => {
-      
       let _s = JSON.parse(s)
-
       console.log(_s)
-
       setState(_s)
+    })
 
+    socket.on("gameOver", info => {
+      console.log(info)
+      setGameSummary(info)
     })
 
     return () => {
       socket.off('getState')
+      socket.off("gameOver")
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -41,10 +45,20 @@ const Game = () => {
     margin: 20
   }
 
-  return (
-    <div style={_style}>
+  let Summary = gameSummary == null ? null : 
+    gameSummary.map(obj => <pre>{JSON.stringify(obj)}</pre>)
+
+
+  // TODO spremeni v redirect al pa v nekaj lepšega
+  let Tableandhand = 
+    <div>
       <Table cards={state.table} />
       <Hand cards={state.hand} playable={state.playable} />
+    </div>
+
+  return (
+    <div style={_style}>
+      { gameSummary == null ? Tableandhand : Summary }
     </div>
   )
 }

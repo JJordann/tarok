@@ -13,54 +13,26 @@ logging.getLogger('werkzeug').disabled = True
 socketIo = SocketIO(app, cors_allowed_origins="*")
 
 
+
 connected = []
 
 
 
+def broadcastResults(res):
+    socketIo.emit("gameOver", res, room="joined")
 
-if False: """
-GameState:
-    table
-    talon
-    players:
-        name
-        sid
-        hand
-        cardsWon
-        turn
-"""
-
-
-mockCon = [
-    {
-        "name": "Prvyyy",
-        "sid": "1111111111",
-        "ready": True
-    },
-    {
-        "name": "Drugyy",
-        "sid": "2222222222",
-        "ready": True
-    },
-    {
-        "name": "Tretyyy",
-        "sid": "3333333333",
-        "ready": True
-    },
-    {
-        "name": "Czetrtyyy",
-        "sid": "4444444444",
-        "ready": True
-    }
-]
 
 
 @socketIo.on("playCard")
 def handlePlayCard(card):
     global gameState
     gameState = playCard(gameState, card, request.sid)
-    print("CARD PLAYED: ", card)
-    broadcastPublicState(gameState)
+    dispatchPublicState(gameState)
+
+    if all(len(p["hand"]) == 0 for p in gameState["players"]):
+        results =  concludeGame(gameState)
+        broadcastResults(results)
+
 
 
 @socketIo.on("getState")
@@ -70,16 +42,17 @@ def handleGetCards():
     socketIo.emit("getState", json.dumps(playerState), room=request.sid)
 
 
-def broadcastPublicState(gameState):
-    print("broadcasting: ", gameState)
+
+def dispatchPublicState(gameState):
     for player in gameState["players"]:
         playerState = getPublicState(gameState, player["sid"])
-        print("SENDING TO: ", player["name"], ": ", playerState)
         socketIo.emit("getState", json.dumps(playerState), room=player["sid"])
+
 
 
 def findPlayerBySid(gameState, sid):
     return next(p for p in gameState["players"] if p["sid"] == sid)
+
 
 
 def getPublicState(gameState, sid):
@@ -94,6 +67,7 @@ def getPublicState(gameState, sid):
     }
 
 
+
 def sendUnicasts(connected):
     msg = [[u["name"], u["ready"], False] for u in connected]
     for i in range(0, len(connected)):
@@ -102,21 +76,23 @@ def sendUnicasts(connected):
         print(msg)
         msg[i][2] = False
 
+
+
 def startGame(connected):
     (talon, hands) = dealCards(deck, connected)
     for i in range(0, len(connected)):
         socketIo.emit("getCards", hands[i], room=connected[i]["sid"])
 
 
+
 @socketIo.on("join")
 def handleJoin(msg):
-    print("JOIN: #### " + msg + " ####" + request.sid + "####")
     connected.append({"name": msg, 
                       "sid": request.sid,
                       "ready": False})
     sendUnicasts(connected)
     join_room("joined")
-    print(connected)
+
 
 
 @socketIo.on("ready")
@@ -131,8 +107,10 @@ def handleReady(msg):
     return None
     
 
+
 def allReady(connected):
     return all(map(lambda x: x["ready"], connected))
+
 
 
 def handleAllReady():
@@ -143,10 +121,12 @@ def handleAllReady():
     gameState = initGame(deck, connected)
 
 
+
 @socketIo.on("getUsers")
 def getUsers():
     global connected
     sendUnicasts(connected)
+
 
 
 @socketIo.on("disconnect")
@@ -156,7 +136,6 @@ def handleLeave():
     connected = [u for u in connected if u["sid"] != request.sid]
     sendUnicasts(connected)
     leave_room("joined")
-    print(connected)
 
 
 if __name__ == '__main__':
