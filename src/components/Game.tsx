@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Hand from './Hand'
 import Table from './Table'
-
-import { Link } from 'react-router-dom'
+import Chat from './Chat'
 import getSocket from './global'
 
 const Game = () => {
@@ -11,6 +11,7 @@ const Game = () => {
   const [gameSummary, setGameSummary] = useState(null)
 
   const [state, setState] = useState({
+    myName: "",    
     table: [],     // cards on table
     players: [],   // players in room
     hand: [],      // cards in hand
@@ -51,13 +52,14 @@ const Game = () => {
 
   // TODO spremeni v redirect al pa v nekaj lepšega
   let Tableandhand = 
-    <div>
+    <div style={_style} >
       <Table cards={state.table} />
       <Hand cards={state.hand} playable={state.playable} />
     </div>
 
   return (
-    <div style={_style}>
+    <div >
+      <Chat myName={state.myName} />
       { gameSummary == null ? Tableandhand : Summary }
     </div>
   )

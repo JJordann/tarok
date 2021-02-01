@@ -265,7 +265,7 @@ def dealCards(deck, connected):
 
 def initGame(deck, connected):
     (talon, hands) = dealCards(deck, connected)
-    return {
+    state = {
         "table": [],
         "talon": talon,
         "players": [
@@ -279,8 +279,9 @@ def initGame(deck, connected):
                 "contracts": []
             } for (i, user) in enumerate(connected)
         ]
-
     }
+    connected = []
+    return state
     
 
 

@@ -1,0 +1,26 @@
+.wrapper {
+    margin: 10px;
+    padding: 5px;
+    border: 1px solid gray;
+    border-radius: 2px;
+
+    overflow: scroll;
+    
+    pre {
+        // #IRC
+        margin: 0;
+        padding: 0;
+    }
+
+}
+
+.inputRow {
+
+    pre {
+        display: inline;
+    }
+
+    input {
+        //border: none;
+    }
+}

@@ -17,6 +17,14 @@ socketIo = SocketIO(app, cors_allowed_origins="*")
 connected = []
 
 
+@socketIo.on("chat")
+def handleChat(msg):
+    sender = findPlayerBySid(gameState, request.sid)["name"]
+    print(msg)
+    socketIo.emit("chat", json.dumps({"sender": sender, "message": msg}), room="joined")
+
+
+
 
 def broadcastResults(res):
     socketIo.emit("gameOver", res, room="joined")
@@ -58,6 +66,7 @@ def findPlayerBySid(gameState, sid):
 def getPublicState(gameState, sid):
     player = findPlayerBySid(gameState, sid)
     return {
+        "myName": player["name"],
         "table": gameState["table"],
         "players": [u["name"] for u in gameState["players"]],
         "hand": player["hand"],
