@@ -3,7 +3,8 @@
     flex: 1;
 
     &.disabled {
-
+        pointer-events: none;
+        
         .card {
             filter: brightness(90%);
         }
