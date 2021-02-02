@@ -226,3 +226,63 @@ def initGame(deck, connected):
     connected = []
     return state
     
+
+contracts2 = [
+    {
+        "name": "tri",
+        "value": 10
+    },
+    {
+        "name": "dva",
+        "value": 20
+    },
+    {
+        "name": "ena",
+        "value": 30
+    },
+    {
+        "name": "solo_brez",
+        "value": 50
+    },
+    {
+        "name": "pikolo",
+        "value": 60
+    },
+    {
+        "name": "berac",
+        "value": 70
+    },
+    {
+        "name": "odprti_berac",
+        "value": 80
+    },
+]
+
+
+contracts = {
+        "naprej": 0,
+        "tri": 10,
+        "dva": 20,
+        "ena": 30,
+        "solo_brez": 50,
+        "pikolo": 60,
+        "berac": 70,
+        "odprti_berac": 80,
+}
+
+
+def highestContract(cs):
+    return reduce(lambda cmax, el: el if contracts[el] > contracts[cmax] else cmax, cs)
+
+
+
+
+def playableContracts(gameState):
+    playedContracts = [c for p in gameState["players"] for c in p["contracts"]]
+
+    global contracts
+    if playedContracts == []:
+        return list(contracts.keys())
+
+    highest = highestContract(playedContracts)
+    return [c for c in contracts.keys() if contracts[c] > contracts[highest]]

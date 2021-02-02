@@ -172,6 +172,8 @@ def findPlayerBySid(gameState, sid):
 
 
 
+
+
 def getPublicState(gameState, sid):
     playerIndex = next(i for i,v in enumerate(gameState["players"]) if v["sid"] == sid)
     player = gameState["players"][playerIndex]
@@ -181,7 +183,7 @@ def getPublicState(gameState, sid):
     if player["turn"] == True and gameState["phase"] == "active":
         _playable = playable(player["hand"], gameState["table"])
     
-    return {
+    _state =  {
         "phase": gameState["phase"],
         "myIndex": playerIndex,
         "table": gameState["table"],
@@ -194,6 +196,13 @@ def getPublicState(gameState, sid):
         "cardsWon": player["cardsWon"],
         "turn": player["turn"]
     }
+
+    if gameState["phase"] == "contracts":
+        _state["playableContracts"] = playableContracts(gameState) + ["naprej"]
+
+    return _state
+
+
 
 
 # ------------ LOBBY ------------------------------------------------------

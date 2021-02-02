@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import getSocket from './global'
 
-const Contracts = () => {
+const Contracts = ({ playable }) => {
 
     const socket = getSocket()
 
@@ -25,7 +25,7 @@ const Contracts = () => {
         console.log(contract)
     }
     
-    let Items = availableContracts.map( c => 
+    let Items = playable.map( c => 
         <div>
             <button onClick={() => handleContract(c)}>{c}</button>
             <br />

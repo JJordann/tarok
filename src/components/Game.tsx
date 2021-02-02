@@ -22,7 +22,8 @@ const Game = () => {
     hand: [],      // cards in hand
     playable: [],  // playable cards in hand
     cardsWon: [], 
-    turn: false    // is it my turn?
+    turn: false,    // is it my turn?
+    playableContracts: []
   })
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const Game = () => {
   // TODO spremeni v redirect al pa v nekaj lepšega
   let Tableandhand = 
     <div style={_style} >
-      { state.phase == "contracts" ? <Contracts /> : <Table cards={state.table} /> }
+      { state.phase === "contracts" ? <Contracts playable={state.playableContracts} /> : <Table cards={state.table} /> }
       <Hand cards={state.hand} playable={state.playable} />
     </div>
 
