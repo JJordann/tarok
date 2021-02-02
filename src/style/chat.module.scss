@@ -3,11 +3,18 @@
 .wrapper {
   box-sizing: border-box;
   width: 400px;
+  height: 500px;
   background: linear-gradient(25deg, rgba(35, 206, 107, 0.1), rgba(155, 230, 110, 0.1));
 
+  display: flex;
+  flex-direction: column;
+
   >.history {
+    overflow-y: scroll;
+
     >div {
       display: flex;
+      flex-direction: row;
 
       >p, >span {
         margin: 0;
@@ -19,10 +26,13 @@
         font-weight: bold;
       }
     }
+
+    /* TODO: Prettier scrollbar...ew */
   }
 
   >.inputRow {
     position: relative;
+    margin-top: auto; // Stick to bottom
     padding-top: 1px;
     
     &::before {
