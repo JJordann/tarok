@@ -3,21 +3,6 @@ from deck import *
 from functools import reduce
 
 
-
-
-
-# ce si prvi na vrsti, lahko vrzes katerokoli
-# ce nisi:
-#   fst = prva karta na mizi
-#   ce imas v roki karto iste barve kot fst:
-#       lahko vrzes samo karto iste barve kot fst
-#   sicer ce imas taroka:
-#       vrzes taroka
-#   sicer: 
-#       lahko vrzes katerokoli karto
-
-
-
 def suit(card):
     return card.split('_')[0]
 
@@ -68,30 +53,6 @@ def playable(hand, table):
 
 
 
-
-# ordering "a takes b"
-def takesOrder(a, b):
-    if "tarok" in a and "tarok" in b:
-        # both cards are tarots, higher ranking takes
-        return int(rank(a)) > int(rank(b))
-
-    # one card is tarot and the other is not, tarot takes
-    if "tarok" in a and "tarok" not in b:
-        return True
-    if "tarok" not in a and "tarok" in b:
-        return False
-
-    # neither card is tarot
-    if not (cardValue(a) == 1 and cardValue(b) == 1):
-        # not both cards are number cards, return more valuable one
-        return cardValue(a) > cardValue(b)
-    else:
-        # both cards are number cards, return higher rank
-        return rank(a) > rank(b)
-     
-
-
-
 def dominantSuit(table):
     return suit(next(card for card in table if "tarok" not in card))
 
@@ -135,23 +96,6 @@ def takes(table):
     global orderedDeck
     cand = [c for c in table if suit(c) == dominantSuit(table)]
     return table.index(max(cand, key=orderedDeck.index))
-
-
-
-
-
-# returns index of player who takes
-def takes2(table):
-
-    # no tarot cards - highest rank of dominant suit takes
-    if not any("tarok" in card for card in table):
-        candidates = [card for card in table if suit(card) == dominantSuit(table)]
-    else:
-        candidates = table
-
-    # maximum for the takesOrder ordering among candidates
-    highest = reduce(lambda a, b: a if takesOrder(a, b) else b, candidates)
-    return table.index(highest)
 
 
 
@@ -245,8 +189,6 @@ def pagatUltimo(table):
 
 
 
-
-
 def dealCards(deck, connected):
     random.shuffle(deck)
     talon = deck[0:6]
@@ -283,14 +225,3 @@ def initGame(deck, connected):
     connected = []
     return state
     
-
-
-
-#random.shuffle(deck)
-#print(orderHand(deck))
-
-
-
-
-
-

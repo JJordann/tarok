@@ -115,12 +115,14 @@ def findPlayerBySid(gameState, sid):
 
 def getPublicState(gameState, sid):
     player = findPlayerBySid(gameState, sid)
+    _playable = playable(player["hand"], gameState["table"]) if player["turn"] else []
+        
     return {
         "myName": player["name"],
         "table": gameState["table"],
         "players": [u["name"] for u in gameState["players"]],
         "hand": player["hand"],
-        "playable": playable(player["hand"], gameState["table"]),
+        "playable": _playable,
         "cardsWon": player["cardsWon"],
         "turn": player["turn"]
     }
