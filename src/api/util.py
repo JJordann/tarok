@@ -227,43 +227,15 @@ def initGame(deck, connected):
     return state
     
 
-contracts2 = [
-    {
-        "name": "tri",
-        "value": 10
-    },
-    {
-        "name": "dva",
-        "value": 20
-    },
-    {
-        "name": "ena",
-        "value": 30
-    },
-    {
-        "name": "solo_brez",
-        "value": 50
-    },
-    {
-        "name": "pikolo",
-        "value": 60
-    },
-    {
-        "name": "berac",
-        "value": 70
-    },
-    {
-        "name": "odprti_berac",
-        "value": 80
-    },
-]
-
 
 contracts = {
         "naprej": 0,
         "tri": 10,
+        "solo_tri": 20,
         "dva": 20,
         "ena": 30,
+        "solo_dva": 30,
+        "solo_ena": 40,
         "solo_brez": 50,
         "pikolo": 60,
         "berac": 70,

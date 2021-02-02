@@ -59,6 +59,10 @@ def handleContract(contract):
     for player in gameState["players"]:
         print(player["name"], ": ", player["contracts"])
 
+    if contract != "naprej":
+        msg = sender["name"] + " played " + contract
+        socketIo.emit("INFO", msg, room="joined")
+
     gameState = finishContracts(gameState)
     dispatchPublicState("getState", gameState)
     return None
