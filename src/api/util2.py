@@ -63,3 +63,139 @@ def playable(hand, table):
     else:
         # card on table is tarot, player does not have any tarot cards, return all cards
         return hand
+
+
+
+
+
+
+def dominantSuit(table):
+    return suit(next(card for card in table if "tarok" not in card))
+
+
+
+def keyRed(card):
+    if cardValue(card) == 1:
+        return -int(rank(card))
+    else:
+        return cardValue(card)
+
+
+
+def keyBlack(card):
+    if cardValue(card) == 1:
+        return int(rank(card))
+    else:
+        return 10 + cardValue(card)
+
+
+
+def orderHand(cards):
+    return (sorted([c for c in cards if suit(c) == "kara"], key=keyRed)
+    + sorted([c for c in cards if suit(c) == "srce"], key=keyRed)
+    + sorted([c for c in cards if suit(c) ==  "pik"], key=keyBlack)
+    + sorted([c for c in cards if suit(c) == "kriz"], key=keyBlack)
+    + sorted([c for c in cards if suit(c) == "tarok"], key=rank))
+
+
+
+orderedDeck = orderHand(deck)
+
+def takes(table):
+    if any("tarok" in card for card in table):
+        # if table contains tarot card, return highest rank among tarot cards
+        cand = [c for c in table if "tarok" in c]
+        return table.index(max(cand, key=lambda c: int(rank(c))))
+    
+    # if table does not contain tarot card, return maximum for the 
+    # among cards of dominant suit orderHand ordering
+    global orderedDeck
+    cand = [c for c in table if suit(c) == dominantSuit(table)]
+    return table.index(max(cand, key=orderedDeck.index))
+
+
+
+tests = [
+    ["kara_1", "pik_kralj", "srce_kralj", "kara_poba"],
+    ["kara_dama", "tarok_1", "kara_kralj", "pik_kralj"],
+    ["pik_konj", "srce_kralj", "kara_kralj", "pik_7"],
+    ["tarok_1", "tarok_2", "tarok_12", "tarok_3"],
+    ["kara_1", "pik_kralj", "pik_poba", "pik_kraljica"],
+    ["kara_4", "kara_3"]
+]
+
+
+
+def score(cards):
+    return sum(map(cardValue, cards)) - 2 * int(len(cards) / 3)
+
+
+
+def trula(cards):
+    return "tarok_1" in cards and "tarok_21" in cards and "tarok_22" in cards
+
+
+
+def trulapagat(cards):
+    return trula(cards) and pagatUltimo(cards)
+
+
+
+def kralji(cards):
+    return len([card for card in cards if rank(card) == "kralj"]) == 4
+
+
+
+def valat(cards):
+    return len(cards) == 48
+
+
+
+def pagatUltimo(table):
+    if table[takes(table)] == "tarok_1":
+        return takes(table)
+    else:
+        return -1
+
+
+
+
+
+contracts = {
+        "naprej": 0,
+        "tri": 10,
+        "solo_tri": 20,
+        "dva": 20,
+        "ena": 30,
+        "solo_dva": 30,
+        "solo_ena": 40,
+        "solo_brez": 50,
+        "pikolo": 60,
+        "berac": 70,
+        "odprti_berac": 80,
+}
+
+
+def highestContract(cs):
+    global contracts
+    return reduce(lambda cmax, el: el if contracts[el] > contracts[cmax] else cmax, cs)
+
+
+
+def playableContracts(players):
+    playedContracts = [c for p in players for c in p["contracts"]]
+
+    global contracts
+    if playedContracts == []:
+        return list(contracts.keys())
+
+    highest = highestContract(playedContracts)
+    return [c for c in contracts.keys() if contracts[c] > contracts[highest]]
+
+
+
+
+
+
+
+

@@ -42,10 +42,19 @@ def handleGetState():
     game1.getCards()
 
 
+@sio.on("playCard")
+def handlePlayCard(card):
+    game1.handlePlayCard(card)
 
 
+@sio.on("chat")
+def handleChat(msg):
+    game1.sendChat(msg)
 
 
+@sio.on("contract")
+def handleContract(contract):
+    game1.playContract(contract)
 
 
 if __name__ == '__main__':
