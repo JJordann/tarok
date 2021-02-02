@@ -23,10 +23,6 @@ const Lobby = (props: any) => {
       setPlayerList(players);
     });
 
-    //socket.on('dealCards', msg => { 
-      //console.log('dealt cards: ' + msg);
-    //});
-
     socket.on('allReady', () => {
       history.push('/game');
     });
@@ -44,6 +40,9 @@ const Lobby = (props: any) => {
   const onPlayerNameInputChange = (event) => {
     setPlayerName(event.target.value);
   }
+
+
+  // TODO: zagotovi, da lahko uporabnik joina samo enkrat (v state shrani če je že joinu)
 
   const connect = () => {
     socket.emit('join', playerName);

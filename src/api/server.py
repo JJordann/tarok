@@ -17,11 +17,67 @@ socketIo = SocketIO(app, cors_allowed_origins="*")
 connected = []
 
 
+# ----------- CONTRACTS ---------------------------------------------------
+
+
+def addContract(gameState, sid, contract):
+    sidIndex = next(i for i,v in enumerate(gameState["players"]) if v["sid"] == sid)
+    gameState["players"][sidIndex]["contracts"] += [contract]
+    return gameState
+
+
+
+# returns index of player who is currently choosing contract,
+# or -1 if all have chosen
+def finishContracts(gameState):
+    contracts = [p["contracts"] for p in gameState["players"]]
+    done = all([len(c) > 0 and c[-1] == "naprej" for c in contracts])
+    # every player recently skipped
+    if done:
+        gameState["phase"] = "active"
+    return gameState
+
+
+
+
+@socketIo.on("contract")
+def handleContract(contract):
+    global gameState
+
+    sender = findPlayerBySid(gameState, request.sid)
+    if sender["turn"] == False:
+        print("It's not your turn. Stop hacking.")
+        return gameState
+
+    gameState = addContract(gameState, request.sid, contract)
+    playerIndex = gameState["players"].index(sender)
+
+    # transfer turn to next player
+    gameState["players"][playerIndex]["turn"] = False
+    gameState["players"][(playerIndex + 1) % len(gameState["players"])]["turn"] = True
+
+    for player in gameState["players"]:
+        print(player["name"], ": ", player["contracts"])
+
+    gameState = finishContracts(gameState)
+    dispatchPublicState("getState", gameState)
+    return None
+
+
+
+
+# ----------- CHAT --------------------------------------------------------
+
+
 @socketIo.on("chat")
 def handleChat(msg):
     sender = findPlayerBySid(gameState, request.sid)["name"]
     print(msg)
     socketIo.emit("chat", json.dumps({"sender": sender, "message": msg}), room="joined")
+    return None
+
+
+# -------------------------------------------------------------------------
 
 
 def playCard(gameState, card, player):
@@ -55,7 +111,6 @@ def playCard(gameState, card, player):
     takesPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + takesIndex) % nPlayers
     gameState["players"][takesPlayer]["cardsWon"] += gameState["table"]
 
-    #print(gameState["table"], "takes: ", takesPlayer, takes(gameState["table"]))
     msg = str(gameState["players"][takesPlayer]["name"]) + " takes -- " + gameState["table"][takesIndex] + " takes " + str(gameState["table"])
     socketIo.emit("INFO", msg, room="joined")
     print(msg)
@@ -78,6 +133,7 @@ def playCard(gameState, card, player):
 
 def broadcastResults(res):
     socketIo.emit("gameOver", res, room="joined")
+    return None
 
 
 
@@ -85,11 +141,12 @@ def broadcastResults(res):
 def handlePlayCard(card):
     global gameState
     gameState = playCard(gameState, card, request.sid)
-    dispatchPublicState(gameState)
+    dispatchPublicState("getState", gameState)
 
     if all(len(p["hand"]) == 0 for p in gameState["players"]):
         results =  concludeGame(gameState)
         broadcastResults(results)
+    return None
 
 
 
@@ -98,13 +155,15 @@ def handleGetCards():
     global gameState
     playerState = getPublicState(gameState, request.sid)
     socketIo.emit("getState", json.dumps(playerState), room=request.sid)
+    return None
 
 
 
-def dispatchPublicState(gameState):
+def dispatchPublicState(event, gameState):
     for player in gameState["players"]:
         playerState = getPublicState(gameState, player["sid"])
-        socketIo.emit("getState", json.dumps(playerState), room=player["sid"])
+        socketIo.emit(event, json.dumps(playerState), room=player["sid"])
+    return None
 
 
 
@@ -114,13 +173,22 @@ def findPlayerBySid(gameState, sid):
 
 
 def getPublicState(gameState, sid):
-    player = findPlayerBySid(gameState, sid)
-    _playable = playable(player["hand"], gameState["table"]) if player["turn"] else []
-        
+    playerIndex = next(i for i,v in enumerate(gameState["players"]) if v["sid"] == sid)
+    player = gameState["players"][playerIndex]
+    #player = findPlayerBySid(gameState, sid)
+    
+    _playable = []
+    if player["turn"] == True and gameState["phase"] == "active":
+        _playable = playable(player["hand"], gameState["table"])
+    
     return {
-        "myName": player["name"],
+        "phase": gameState["phase"],
+        "myIndex": playerIndex,
         "table": gameState["table"],
-        "players": [u["name"] for u in gameState["players"]],
+        "players": [{
+            "name": p["name"],
+            "contracts": p["contracts"]
+        } for p in gameState["players"]],
         "hand": player["hand"],
         "playable": _playable,
         "cardsWon": player["cardsWon"],
@@ -128,13 +196,13 @@ def getPublicState(gameState, sid):
     }
 
 
+# ------------ LOBBY ------------------------------------------------------
 
 def dispatchLobbyState(connected):
     msg = [[u["name"], u["ready"], False] for u in connected]
     for i in range(0, len(connected)):
         msg[i][2] = True
         socketIo.emit("getUsers", msg, room=connected[i]["sid"])
-        print(msg)
         msg[i][2] = False
 
 
@@ -148,11 +216,13 @@ def startGame(connected):
 
 @socketIo.on("join")
 def handleJoin(msg):
+    # TODO: if sid not in connected
     connected.append({"name": msg, 
                       "sid": request.sid,
                       "ready": False})
     dispatchLobbyState(connected)
     join_room("joined")
+    return None
 
 
 
@@ -187,6 +257,7 @@ def handleAllReady():
 def getUsers():
     global connected
     dispatchLobbyState(connected)
+    return None
 
 
 
@@ -196,6 +267,7 @@ def handleLeave():
     connected = [u for u in connected if u["sid"] != request.sid]
     dispatchLobbyState(connected)
     leave_room("joined")
+    return None
 
 
 if __name__ == '__main__':

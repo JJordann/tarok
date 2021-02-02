@@ -4,6 +4,7 @@ import Hand from './Hand'
 import Table from './Table'
 import Chat from './Chat'
 import getSocket from './global'
+import Contracts from './Contracts'
 
 import gameStyle from '../style/game.module.scss'
 
@@ -13,9 +14,11 @@ const Game = () => {
   const [gameSummary, setGameSummary] = useState(null)
 
   const [state, setState] = useState({
+    phase: "contracts",
+    myIndex: 0,
     myName: "",    
     table: [],     // cards on table
-    players: [],   // players in room
+    players: [],   // json: {name: string, contracts: string[]}
     hand: [],      // cards in hand
     playable: [],  // playable cards in hand
     cardsWon: [], 
@@ -55,13 +58,16 @@ const Game = () => {
   // TODO spremeni v redirect al pa v nekaj lepšega
   let Tableandhand = 
     <div style={_style} >
-      <Table cards={state.table} />
+      { state.phase == "contracts" ? <Contracts /> : <Table cards={state.table} /> }
       <Hand cards={state.hand} playable={state.playable} />
     </div>
 
+  //let myName = state.players[state.myIndex].name
+  let myName = ""
+
   return (
     <div className={gameStyle.game} >
-      <Chat myName={state.myName} />
+      <Chat myName={myName} />
       { gameSummary == null ? Tableandhand : Summary }
     </div>
   )

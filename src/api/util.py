@@ -110,8 +110,8 @@ tests = [
 
 
 
-for table in tests: 
-    print(table, " -> ", table[takes(table)])
+#for table in tests: 
+    #print(table, " -> ", table[takes(table)])
 
 
 
@@ -208,6 +208,7 @@ def dealCards(deck, connected):
 def initGame(deck, connected):
     (talon, hands) = dealCards(deck, connected)
     state = {
+        "phase": "contracts",    # contracts / active / finished
         "table": [],
         "talon": talon,
         "players": [
