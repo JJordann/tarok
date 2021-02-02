@@ -97,8 +97,51 @@ def dominantSuit(table):
 
 
 
-# returns index of player who takes
+def keyRed(card):
+    if cardValue(card) == 1:
+        return -int(rank(card))
+    else:
+        return cardValue(card)
+
+
+
+def keyBlack(card):
+    if cardValue(card) == 1:
+        return int(rank(card))
+    else:
+        return 10 + cardValue(card)
+
+
+
+def orderHand(cards):
+    return (sorted([c for c in cards if suit(c) == "kara"], key=keyRed)
+    + sorted([c for c in cards if suit(c) == "srce"], key=keyRed)
+    + sorted([c for c in cards if suit(c) ==  "pik"], key=keyBlack)
+    + sorted([c for c in cards if suit(c) == "kriz"], key=keyBlack)
+    + sorted([c for c in cards if suit(c) == "tarok"], key=rank))
+
+
+
+orderedDeck = orderHand(deck)
+
 def takes(table):
+    if any("tarok" in card for card in table):
+        # if table contains tarot card, return highest rank among tarot cards
+        cand = [c for c in table if "tarok" in c]
+        return table.index(max(cand, key=lambda c: int(rank(c))))
+    
+    # if table does not contain tarot card, return maximum for the 
+    # among cards of dominant suit orderHand ordering
+    global orderedDeck
+    cand = [c for c in table if suit(c) == dominantSuit(table)]
+    return table.index(max(cand, key=orderedDeck.index))
+
+
+
+
+
+# returns index of player who takes
+def takes2(table):
 
     # no tarot cards - highest rank of dominant suit takes
     if not any("tarok" in card for card in table):
@@ -117,13 +160,14 @@ tests = [
     ["kara_dama", "tarok_1", "kara_kralj", "pik_kralj"],
     ["pik_konj", "srce_kralj", "kara_kralj", "pik_7"],
     ["tarok_1", "tarok_2", "tarok_12", "tarok_3"],
-    ["kara_1", "pik_kralj", "pik_poba", "pik_kraljica"]
+    ["kara_1", "pik_kralj", "pik_poba", "pik_kraljica"],
+    ["kara_4", "kara_3"]
 ]
 
 
 
-#for table in tests: 
-    #print(table, " -> ", table[takes(table)])
+for table in tests: 
+    print(table, " -> ", table[takes(table)])
 
 
 
@@ -240,29 +284,6 @@ def initGame(deck, connected):
     return state
     
 
-
-def keyRed(card):
-    if cardValue(card) == 1:
-        return -int(rank(card))
-    else:
-        return cardValue(card)
-
-
-
-def keyBlack(card):
-    if cardValue(card) == 1:
-        return int(rank(card))
-    else:
-        return 10 + cardValue(card)
-
-
-
-def orderHand(cards):
-    return (sorted([c for c in cards if suit(c) == "kara"], key=keyRed)
-    + sorted([c for c in cards if suit(c) == "srce"], key=keyRed)
-    + sorted([c for c in cards if suit(c) ==  "pik"], key=keyBlack)
-    + sorted([c for c in cards if suit(c) == "kriz"], key=keyBlack)
-    + sorted([c for c in cards if suit(c) == "tarok"], key=rank))
 
 
 #random.shuffle(deck)
