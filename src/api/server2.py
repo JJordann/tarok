@@ -13,9 +13,11 @@ from game import Game
 
 game1 = Game()
 
+
 @sio.on("getUsers")
 def handleGetUsers():
     game1.dispatchLobbyState()
+
 
 
 @sio.on("join")
@@ -26,14 +28,24 @@ def handleJoin(name):
 
 @sio.on("ready")
 def handleReady(msg):
-    global game1
     game1.ready(msg)
+
 
 
 @sio.on("disconnect")
 def handleDisconnect():
-    global game1
     game1.disconnect()
+
+
+@sio.on("getState")
+def handleGetState():
+    game1.getCards()
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
