@@ -1,46 +1,49 @@
 @import './variables';
 
 .wrapper {
+  box-sizing: border-box;
+  width: 400px;
+  background: linear-gradient(25deg, rgba(35, 206, 107, 0.1), rgba(155, 230, 110, 0.1));
+
+  >.history {
+    >div {
+      display: flex;
+
+      >p, >span {
+        margin: 0;
+        padding: 0.1em 0.25em;
+        font-size: 1.2em;
+      }
+
+      >span {
+        font-weight: bold;
+      }
+    }
+  }
+
+  >.inputRow {
     position: relative;
-    margin: 1em;
-    border: 1px solid gray;
-    border-radius: 2px;
-
-    display: flex;
-    flex-direction: column;
-
-    height: 200px;
-
-    .history {
-        max-height: 90%;
-
-        overflow-y: scroll;
-
-        pre {
-            // #IRC
-            margin: 0;
-            font-size: 1.5em;
-        }
+    padding-top: 1px;
+    
+    &::before {
+      /* Transparent "border-top" */
+      content: '';
+      z-index: 100;
+      position: absolute;
+      background:rgba(0, 0, 0, 0.1);
+      top: 0;
+      width: 100%;
+      height: 1px;
     }
 
-}
-
-.inputRow {
-    width: 100%;
-    bottom: 0;
-
-    label {
-        display: flex;
-        width: 100%;
-
-        p {
-            margin: 0;
-            padding: 0 1em 0 0;
-            min-width: fit-content;
-        }
-
-        input {
-            width: 100%;
-        }
+    input {
+      position: relative;
+      border: none;
+      background: rgba(128, 128, 128, 0.1);
+      box-sizing: border-box;
+      width: 100%;
+      padding: 0.25em;
+      font-size: 1.2em;
     }
+  }
 }

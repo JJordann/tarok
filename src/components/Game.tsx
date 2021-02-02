@@ -5,6 +5,8 @@ import Table from './Table'
 import Chat from './Chat'
 import getSocket from './global'
 
+import gameStyle from '../style/game.module.scss'
+
 const Game = () => {
   const socket = getSocket()
 
@@ -58,7 +60,7 @@ const Game = () => {
     </div>
 
   return (
-    <div >
+    <div className={gameStyle.game} >
       <Chat myName={state.myName} />
       { gameSummary == null ? Tableandhand : Summary }
     </div>

@@ -8,9 +8,9 @@ const Chat = ({ myName }) => {
 
     let socket = getSocket()
 
-    let _history = [{sender: "janko", message: "o ne"}, 
-                    {sender: "tezki_poldek", message: "ojoj"},
-                    {sender: "betka", message: "adasdasfasf"}]
+    let _history = [{sender: "Lars Ulrich", message: "I'm sad"}, 
+                    {sender: "Dubioza Kolektiv", message: "Our music is for free"},
+                    {sender: "Dubioza Kolektiv", message: "You can download .mp3"}]
 
     let [history, setHistory] = useState(_history)
 
@@ -54,7 +54,7 @@ const Chat = ({ myName }) => {
 
     const [mymessage, setMymessage] = useState("")
 
-    let History = history.map(m => <pre><span>{m["sender"]}</span>: {m["message"]}</pre>)
+    let History = history.map(m => <div><span>{m["sender"]}</span><p>{m["message"]}</p></div>)
 
     return (
         <div className={chatStyles.wrapper}>
@@ -64,8 +64,7 @@ const Chat = ({ myName }) => {
             
             <form className={chatStyles.inputRow} onSubmit={handleSend}>
                 <label>
-                    <p>{myName}:</p>
-                    <input type="text" onChange={handleChange} value={mymessage}/>
+                    <input type="text" onChange={handleChange} value={mymessage} placeholder="Bodi glasen" />
                 </label>
             </form>
         </div>
