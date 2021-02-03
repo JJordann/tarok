@@ -13,7 +13,7 @@
   div {
     width: 100%;
     box-sizing: border-box;
-    border-right: 2px solid $blue;
+    border-right: 2px solid $lightBlue;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -24,7 +24,7 @@
 
     h3 {
       margin: 0;
-      border-bottom: 2px solid $blue;
+      border-bottom: 2px solid $lightBlue;
       padding: 0.5em;
       font-size: 1.1em;
       font-family: $roboto;
@@ -40,7 +40,7 @@
       text-align: center;
       padding: 0.4em 0;
       letter-spacing: 1px;
-      border-top: 2px solid $blue;
+      border-top: 2px solid $lightBlue;
     }
 
     div {
@@ -53,7 +53,7 @@
         text-align: center;
         padding: 0.4em 0;
         letter-spacing: 1px;
-        border-bottom: 1px solid $blue;
+        border-bottom: 1px solid $lightBlue;
       }
     }
   }

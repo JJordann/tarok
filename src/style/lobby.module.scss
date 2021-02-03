@@ -132,10 +132,10 @@
     width: 200px;
     margin: 0;
     padding: 5px 10px;
-    border: 2px solid $yellow;
+    border: 2px solid $blue; // TODO
     border-right: 0;
     font-size: 2em;
-    color: $green;
+    color: $darkGrey;
   }
 
   button {
@@ -143,15 +143,15 @@
     width: 140px;
     padding: 5px 10px;
     outline: none;
-    border: 2px solid $yellow;
+    border: 2px solid $blue;
     font-size: 2em;
     cursor: pointer;
-    background: $yellow;
+    background: $blue;
     color: white;
 
     &:hover {
-      background: $green;
-      border: 2px solid $green;
+      background: white;
+      color: $blue;
     }
   }
 }

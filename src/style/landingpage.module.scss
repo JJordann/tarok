@@ -15,11 +15,11 @@
     justify-content: center;
     align-items: center;
     background:
-      linear-gradient(135deg, $blue 21px, #0ABAFF 22px, #0ABAFF 24px,
-        transparent 24px, transparent 67px, #0ABAFF 67px, #0ABAFF 69px,
+      linear-gradient(135deg, $blue 21px, #0AB6FF 22px, #0AB6FF 24px,
+        transparent 24px, transparent 67px, #0AB6FF 67px, #0AB6FF 69px,
           transparent 69px),
-      linear-gradient(225deg, $blue 21px, #0ABAFF 22px, #0ABAFF 24px,
-        transparent 24px, transparent 67px, #0ABAFF 67px, #0ABAFF 69px,
+      linear-gradient(225deg, $blue 21px, #0AB6FF 22px, #0AB6FF 24px,
+        transparent 24px, transparent 67px, #0AB6FF 67px, #0AB6FF 69px,
           transparent 69px) 0 64px; // Tiled background pattern
 
     background-color: $blue;
@@ -50,14 +50,14 @@
       z-index: 1;
       margin: 0 auto;
       max-width: 1200px;
-      font-size: 2em;
+      font-size: 2.5em;
       color: $white;
       text-align: center;
       font-family: $roboto;
 
       span {
         color: $red;
-        text-shadow: 0 0 5px $white;
+        text-shadow: 0 0 2px $white;
       }
     }
   }

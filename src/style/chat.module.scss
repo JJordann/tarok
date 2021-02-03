@@ -7,6 +7,8 @@
   background: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
 
+  overflow: hidden; // Otherwise input background overflows and fucks up border-radius
+
   display: flex;
   flex-direction: column;
 
@@ -20,12 +22,18 @@
 
       >p, >span {
         margin: 0;
-        padding: 0.2em 0.25em;
-        font-size: 1.1em;
+        padding: 0.3em 0.2em;
+        font-size: 1.2em;
+      }
+
+      >p {
+        color: $darkGrey;
+        font-weight: 400;
       }
 
       >span {
-        font-family: $roboto;
+        font-weight: 700;
+        color: $darkGrey;
       }
     }
 
@@ -42,7 +50,7 @@
       content: '';
       z-index: 100;
       position: absolute;
-      background:rgba(0, 0, 0, 0.1);
+      background:rgba(0, 0, 0, 0.3);
       top: 0;
       width: 100%;
       height: 1px;
@@ -51,11 +59,18 @@
     input {
       position: relative;
       border: none;
-      background: rgba(128, 128, 128, 0.1);
+      background: rgba(0, 0, 0, 0.1);
       box-sizing: border-box;
       width: 100%;
       padding: 0.25em;
-      font-size: 1.1em;
+      font-size: 1.2em;
+      font-weight: 400;
+      color: $black;
+      font-family: $roboto;
+
+      &::placeholder {
+        color: $black;
+      }
     }
   }
 }
