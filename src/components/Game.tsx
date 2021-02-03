@@ -52,35 +52,12 @@ const Game = () => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  let _style = {
-    border: `10px solid ${ state.turn ? "green" : "gray" }`,
-    margin: 20
-  }
-
-  let Summary = gameSummary == null ? null : 
-    gameSummary.map(obj => <pre>{JSON.stringify(obj).replace(/,/g, "\n")}</pre>)
-
-
-  // TODO spremeni v redirect al pa v nekaj lepšega
-  let Tableandhand = 
-    <div style={_style} >
-      { state.phase === "contracts" ? <Contracts playable={state.playableContracts} /> : <Table cards={state.table} /> }
-      <Hand cards={state.hand} playable={state.playable} />
-    </div>
-
   const testScores = [
-    {name: 'Lars Ulrich', sum: 680, points: [500, 250, 140, 70, 10, 30, -70, -250]},
-    {name: 'Dubioza Kolektiv', sum: 380, points: [0, 0, 30, 50, 70, 40, 50, 140]},
-    {name: 'Lars Ulrich', sum: 680, points: [500, 250, 140, 70, 10, 30, -70, -250]},
-    {name: 'Dubioza Kolektiv', sum: 380, points: [0, 0, 30, 50, 70, 40, 50, 140]}
+    {name: 'Lars', sum: 680, points: [500, 250, 140, 70, 10, 30, -70, -250]},
+    {name: 'Dubioza', sum: 380, points: [0, 0, 30, 50, 70, 40, 50, 140]},
+    {name: 'Valat.si', sum: 0, points: [0, 0, 0, 0, 0, 0, 0, 0]},
+    {name: 'Berač.si', sum: 1337, points: [125, 125, 250, 250, 250, 87, 125, 125]}
   ]
-
-  const testCards = [
-    'kara_poba', 'kara_konj', 'kara_kraljica', 'kara_kralj', 'pik_7', 'pik_8',
-    'srce_4', 'pik_kraljica', 'pik_kralj', 'tarok_1', 'tarok_18', 'tarok_21'
-  ]
-
-  const testPlayable = testCards;
 
   const otherPlayers = state.players.filter((player, index) => {
     if(state.myIndex !== index)
