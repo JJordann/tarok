@@ -8,53 +8,51 @@ app.config['SECRET_KEY'] = 'sekret'
 logging.getLogger('werkzeug').disabled = True
 sio = SocketIO(app, cors_allowed_origins="*")
 
+from lobby import Lobby
 
-from game import Game
-
-game1 = Game()
-
+lobby = Lobby("joined")
 
 @sio.on("getUsers")
 def handleGetUsers():
-    game1.dispatchLobbyState()
+    lobby.dispatchLobbyState()
 
 
 
 @sio.on("join")
 def handleJoin(name):
-    game1.join(name)
+    lobby.join(name)
 
 
 
 @sio.on("ready")
 def handleReady(msg):
-    game1.ready(msg)
+    lobby.ready(msg)
 
 
 
 @sio.on("disconnect")
 def handleDisconnect():
-    game1.disconnect()
+    lobby.disconnect()
 
 
 @sio.on("getState")
 def handleGetState():
-    game1.getCards()
+    lobby.game.getCards()
 
 
 @sio.on("playCard")
 def handlePlayCard(card):
-    game1.handlePlayCard(card)
+    lobby.game.handlePlayCard(card)
 
 
 @sio.on("chat")
 def handleChat(msg):
-    game1.sendChat(msg)
+    lobby.game.sendChat(msg)
 
 
 @sio.on("contract")
 def handleContract(contract):
-    game1.playContract(contract)
+    lobby.game.playContract(contract)
 
 
 if __name__ == '__main__':
