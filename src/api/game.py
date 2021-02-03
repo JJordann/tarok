@@ -64,6 +64,7 @@ class Game:
 
     def initGame(self, deck): 
         (talon, hands) = dealCards(deck, len(self.players))
+        self.turn = 0
         self.talon = talon
         self.table = []
         self.stage = "contracts"
@@ -74,9 +75,9 @@ class Game:
                     "hand": hands[i][0:2],
                     "ready": True,
                     "cardsWon": [],
-                    "turn": (i == 0),
                     "contractBonus": [],
-                    "contracts": []
+                    "contracts": [],
+                    "scores": p["scores"] if "scores" in p.keys() else []
                 } for (i, p) in enumerate(self.players)
         ]
 
@@ -92,21 +93,22 @@ class Game:
         player = self.players[playerIndex]
         
         _playable = []
-        if player["turn"] == True and self.stage == "active":
+        if self.turn == playerIndex and self.stage == "active":
             _playable = playable(player["hand"], self.table)
         
         publicState =  {
-            "phase": self.stage,
+            "stage": self.stage,
+            "turn": self.turn,
             "myIndex": playerIndex,
             "table": self.table,
             "players": [{
                 "name": p["name"],
-                "contracts": p["contracts"]
+                "contracts": p["contracts"],
+                "scores": p["scores"]
             } for p in self.players],
             "hand": player["hand"],
             "playable": _playable,
-            "cardsWon": player["cardsWon"],
-            "turn": player["turn"]
+            "cardsWon": player["cardsWon"]
         }
 
         if self.stage == "contracts":
@@ -124,11 +126,19 @@ class Game:
 
 
 
+    def getPlayerIndex(self, sid):
+        return next(i for i,p in enumerate(self.players) if p["sid"] == sid)
+
+
+
+    def passTurn(self):
+        self.turn = (self.turn + 1) % len(self.players)
 
 
 
     def concludeGame(self):
-        print("---- GAME OVER ----")
+        print("---- ROUND OVER ----")
+        self.stage = "round_finished"
 
         #for player in self.players:
             #player["contractBonus"] += contractBonus(player["cardsWon"])
@@ -160,26 +170,24 @@ class Game:
 
 
     def playCard(self, card, player):
-        sender = next(p for p in self.players if p["sid"] == player)
+        playerIndex = self.getPlayerIndex(player)
 
-        if sender["turn"] != True:
+        if self.turn != playerIndex != True:
             print("It's not your turn. Stop hacking.")
             return None
 
-        if card not in playable(sender["hand"], self.table):
+        if card not in playable(self.players[playerIndex]["hand"], self.table):
             print("Illegal move. Stop hacking.")
             return None
 
         nPlayers = len(self.players)
-        playerIndex = next(i for i,p in enumerate(self.players) if p["turn"] == True)
 
         # transfer played card from hand to table
         self.table.append(card)
         self.players[playerIndex]["hand"].remove(card)
 
         # transfer turn to next player
-        self.players[playerIndex]["turn"] = False
-        self.players[(playerIndex + 1) % nPlayers]["turn"] = True
+        self.passTurn()
 
         if len(self.table) < nPlayers:
             # round is not over
@@ -190,6 +198,7 @@ class Game:
         takesPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + takesIndex) % nPlayers
         self.players[takesPlayer]["cardsWon"] += self.table
 
+        # log round
         msg = str(self.players[takesPlayer]["name"]) + " takes -- " + self.table[takesIndex] + " takes " + str(self.table)
         sio.emit("INFO", msg, room=self.room)
         print(msg)
@@ -206,8 +215,7 @@ class Game:
                 sio.emit("INFO", msg, room=self.room)
 
         # player who takes begins next round
-        self.players[(playerIndex + 1) % nPlayers]["turn"] = False
-        self.players[takesPlayer]["turn"] = True
+        self.turn = takesIndex
         self.table = []
 
 
@@ -216,7 +224,6 @@ class Game:
         sender = next(p for p in self.players if p["sid"] == request.sid)["name"]
         print(sender,"> ", msg)
         sio.emit("chat", json.dumps({"sender": sender, "message": msg}), room=self.room)
-
 
 
 
@@ -232,25 +239,21 @@ class Game:
 
 
     def playContract(self, contract):
-        sender = next(p for p in self.players if p["sid"] == request.sid)
+        playerIndex = self.getPlayerIndex(request.sid)
 
-        if sender["turn"] == False:
+        if self.turn != playerIndex:
             print("It's not your turn. Stop hacking.")
             return None
 
-
-        playerIndex = self.players.index(sender)
         self.players[playerIndex]["contracts"] += [contract]
 
-        # transfer turn to next player
-        self.players[playerIndex]["turn"] = False
-        self.players[(playerIndex + 1) % len(self.players)]["turn"] = True
+        self.passTurn()
 
         for player in self.players:
             print(player["name"], ": ", player["contracts"])
 
         if contract != "naprej":
-            msg = sender["name"] + " played " + contract
+            msg = self.players[playerIndex]["name"] + " played " + contract
             sio.emit("INFO", msg, room="joined")
 
         self.finishContracts()

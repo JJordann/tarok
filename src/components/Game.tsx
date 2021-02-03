@@ -18,7 +18,7 @@ const Game = () => {
   const [myName, setMyName] = useState('');
 
   const [state, setState] = useState({
-    phase: "contracts",
+    stage: "contracts",
     myIndex: 0,
     myName: "",    
     table: [],     // cards on table
@@ -27,7 +27,7 @@ const Game = () => {
     playable: [],  // playable cards in hand
     cardsWon: [], 
     turn: false,    // is it my turn?
-    playableContracts: []
+    playableContracts: [],
   })
 
   useEffect(() => {
@@ -52,7 +52,17 @@ const Game = () => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const testScores = [
+
+  const getScores = players => 
+    players.map(p => ({
+      name: p.name, 
+      points: p.scores, 
+      sum: p.scores.reduce((a, b) => a + b, 0)
+    }))
+
+  const testScores = getScores(state.players)
+
+  const _testScores = [
     {name: 'Lars', sum: 680, points: [500, 250, 140, 70, 10, 30, -70, -250]},
     {name: 'Dubioza', sum: 380, points: [0, 0, 30, 50, 70, 40, 50, 140]},
     {name: 'Valat.si', sum: 0, points: [0, 0, 0, 0, 0, 0, 0, 0]},
@@ -95,7 +105,7 @@ const Game = () => {
             </div>
 
             <div className={gameStyle.activityArea}>
-              { state.phase === "contracts" ? <Contracts playable={state.playableContracts} /> : <Table cards={state.table} /> }
+              { state.stage === "contracts" ? <Contracts playable={state.playableContracts} /> : <Table cards={state.table} /> }
             </div>
             
             <div className={gameStyle.handWrapper}>
