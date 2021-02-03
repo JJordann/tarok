@@ -12,7 +12,7 @@ class Game:
     def __init__(self, room):
         self.room = room
         self.players = []
-        self.state = "lobby"
+        self.stage = "lobby"
 
     def leave(self):
         self.players = [u for u in self.players if u["sid"] != request.sid]
@@ -33,7 +33,7 @@ class Game:
         self.turn = 0
         self.talon = talon
         self.table = []
-        self.state = "contracts"
+        self.stage = "contracts"
         self.players = [
                 {
                     "name": p["name"],
@@ -59,33 +59,25 @@ class Game:
         player = self.players[playerIndex]
         
         _playable = []
-<<<<<<< HEAD
         if self.turn == playerIndex and self.stage == "active":
             _playable = playable(player["hand"], self.table)
         
         publicState =  {
             "stage": self.stage,
             "turn": self.turn,
-=======
-        if player["turn"] == True and self.state == "active":
-            _playable = playable(player["hand"], self.table)
-        
-        publicState =  {
-            "phase": self.state,
->>>>>>> 8c3ddbb2b8439529430a8d4fefde7660c3d5cc1d
             "myIndex": playerIndex,
             "table": self.table,
             "players": [{
                 "name": p["name"],
                 "contracts": p["contracts"],
-                "scores": p["scores"]
+                "scores": p["scores"] if "scores" in p.keys() else []
             } for p in self.players],
             "hand": player["hand"],
             "playable": _playable,
             "cardsWon": player["cardsWon"]
         }
 
-        if self.state == "contracts":
+        if self.stage == "contracts":
             publicState["playableContracts"] = playableContracts(self.players) + ["naprej"]
 
         return publicState
@@ -199,12 +191,9 @@ class Game:
         print(sender,"> ", msg)
         sio.emit("chat", json.dumps({"sender": sender, "message": msg}), room=self.room)
 
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> 8c3ddbb2b8439529430a8d4fefde7660c3d5cc1d
     # returns index of player who is currently choosing contract,
     # or -1 if all have chosen
     def finishContracts(self):
@@ -212,7 +201,7 @@ class Game:
         done = all([len(c) > 0 and c[-1] == "naprej" for c in contracts])
         # every player recently skipped
         if done:
-            self.state = "active"
+            self.stage = "active"
 
 
     def playContract(self, contract):
@@ -236,3 +225,8 @@ class Game:
         self.finishContracts()
         self.dispatchPublicState("getState")
 
+
+
+
+    def showTalon(self, contract):
+        return None
