@@ -27,6 +27,19 @@ def cardValue(card):
 
 
 
+def dealCards(deck, nPlayers):
+    random.shuffle(deck)
+    talon = deck[0:6]
+    handSize = round(48 / nPlayers)
+    hands = []
+    for i in range(0, nPlayers):
+        start = 6 + i * handSize
+        end = start + handSize
+        hands.append(deck[start:end])
+    return (talon, hands)
+
+
+
 def playable(hand, table):
     # if table is empty, any card can be played
     if table == []:
@@ -50,6 +63,9 @@ def playable(hand, table):
     else:
         # card on table is tarot, player does not have any tarot cards, return all cards
         return hand
+
+
+
 
 
 
@@ -110,11 +126,6 @@ tests = [
 
 
 
-#for table in tests: 
-    #print(table, " -> ", table[takes(table)])
-
-
-
 def score(cards):
     return sum(map(cardValue, cards)) - 2 * int(len(cards) / 3)
 
@@ -140,46 +151,6 @@ def valat(cards):
 
 
 
-def contractBonus(cards):
-    bonus = []
-
-    if valat(cards): 
-        bonus.append({"bonus": "Valat", "value": 250})
-
-    if trulapagat(cards):
-        bonus.append({"bonus": "Trulapagat", "value": 35})
-    elif trula(cards):
-        bonus.append({"bonus": "Trula", "value": 10})
-
-    if kralji(cards):
-        bonus.append({"bonus": "Kralji", "value": 10})
-
-    return bonus
-
-
-
-
-def concludeGame(gameState):
-    print("---- GAME OVER ----")
-
-    for player in gameState["players"]:
-        player["contractBonus"] += contractBonus(player["cardsWon"])
-        for contract in player["contractBonus"]:
-            player["score"] += contract["value"]
-
-    ranked = sorted(gameState["players"], key=lambda p: score(p["cardsWon"]), reverse=True)
-    return [
-        {
-            "name": player["name"],
-            "place": index,
-            "score": score(player["cardsWon"]),
-            "cardsWon": player["cardsWon"],
-            "contractBonus": player["contractBonus"]
-        } for index, player in enumerate(ranked)
-    ]
-
-
-
 def pagatUltimo(table):
     if table[takes(table)] == "tarok_1":
         return takes(table)
@@ -188,44 +159,6 @@ def pagatUltimo(table):
 
 
 
-
-def dealCards(deck, connected):
-    random.shuffle(deck)
-    talon = deck[0:6]
-    nPlayers = len(connected)
-    handSize = round(48 / nPlayers)
-    hands = []
-    for i in range(0, nPlayers):
-        start = 6 + i * handSize
-        end = start + handSize
-        hands.append(deck[start:end])
-
-    return (talon, hands)
-
-
-
-
-def initGame(deck, connected):
-    (talon, hands) = dealCards(deck, connected)
-    state = {
-        "phase": "contracts",    # contracts / active / finished
-        "table": [],
-        "talon": talon,
-        "players": [
-            {
-                "name": user["name"],
-                "sid": user["sid"],
-                "hand": hands[i],
-                "cardsWon": [],
-                "turn": (i == 0),
-                "contractBonus": [],
-                "contracts": []
-            } for (i, user) in enumerate(connected)
-        ]
-    }
-    connected = []
-    return state
-    
 
 
 contracts = {
@@ -244,13 +177,13 @@ contracts = {
 
 
 def highestContract(cs):
+    global contracts
     return reduce(lambda cmax, el: el if contracts[el] > contracts[cmax] else cmax, cs)
 
 
 
-
-def playableContracts(gameState):
-    playedContracts = [c for p in gameState["players"] for c in p["contracts"]]
+def playableContracts(players):
+    playedContracts = [c for p in players for c in p["contracts"]]
 
     global contracts
     if playedContracts == []:
@@ -258,3 +191,11 @@ def playableContracts(gameState):
 
     highest = highestContract(playedContracts)
     return [c for c in contracts.keys() if contracts[c] > contracts[highest]]
+
+
+
+
+
+
+
+
