@@ -1,6 +1,6 @@
 .cardWrapper {
     position: relative;
-    flex: 1;
+    transform-origin: center;
 
     &.disabled {
         pointer-events: none;
@@ -18,11 +18,13 @@
         max-width: 150px;
         z-index: 1;
         width: 100%;
-        filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+        filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
         transition: all .1s ease-in-out;
+
         &:hover {
             transform-origin: bottom right;
             transform: scale(1.25);
+            filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
         }
     }
     

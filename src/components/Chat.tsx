@@ -3,6 +3,8 @@ import getSocket from './global'
 
 import chatStyles from '../style/chat.module.scss'
 
+import { Scrollbars } from 'react-custom-scrollbars';
+
 
 const Chat = ({ myName }) => {
 

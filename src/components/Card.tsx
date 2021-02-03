@@ -10,7 +10,7 @@ const Card = (props: any) => {
 
   return (
     <div className={wrapperclass}
-         style={{transform: `rotate(${props.rotation}deg)`}}
+         style={{transform: `rotate(${props.rotation}deg)`, marginBottom: `-${props.translate}px`}}
          onClick={props.onClick}>
       <img 
         src={imgsrc} 

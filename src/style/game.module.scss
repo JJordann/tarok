@@ -1,6 +1,154 @@
 @import './variables';
 
-.game {
+$sidebar-width: 22%;
+$game-width: calc(100% - #{$sidebar-width});
+$header-height: 50px;
+
+$container-height: calc(100vh - #{$header-height});
+
+$scoreboard-height: calc(#{$container-height} / 1.6);
+$chat-wrapper-height: calc(#{$container-height} - #{$scoreboard-height});
+
+
+.layout {
+  position: relative;
   height: 100vh;
-  background: $white;
+  width: 100vw;
+
+  .header {
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    height: $header-height;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    display: flex;
+
+    h1 {
+      box-sizing: border-box;
+      margin: 0;
+      width: $sidebar-width;
+      text-align: center;
+      line-height: $header-height;
+      color: $red;
+    }
+
+    p {
+      margin: 0;
+      margin-left: auto; // Push right
+      line-height: $header-height;
+
+      padding: 0 1em;
+
+      font-family: $roboto;
+      font-size: 1.4em;
+    }
+  }
+
+  .container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    
+    .sidebar, .game {
+      box-sizing: border-box;
+      display: block;
+      height: 100%;
+      padding-top: $header-height;
+    }
+
+    .sidebar {
+      width: $sidebar-width;
+      background: $blue;
+
+      .scoreboardWrapper {
+        box-sizing: border-box;
+        padding: 10px;
+        padding-bottom: 0;
+        height: $scoreboard-height;
+      }
+
+      .chatWrapper {
+        box-sizing: border-box;
+        padding: 10px;
+        height: $chat-wrapper-height;
+      }
+    }
+
+    .game {
+      width: $game-width;
+      background: $white;
+      height: 100%;
+      background: $green;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+
+      .gameContainer {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        .playerWrappers {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+
+          // Left
+          .playerWrapper:nth-of-type(1) {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          // Top
+          .playerWrapper:nth-of-type(2) {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
+          // Right
+          .playerWrapper:nth-of-type(3) {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          .left {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          .right {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+
+        .activityArea {
+          position: absolute;
+          width: 50%;
+          height: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(0, 0, 0, 0.1);
+          box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .handWrapper {
+          position: absolute;
+          width: 100%;
+          bottom: -20px;
+        }
+      }
+    }
+  }
 }
