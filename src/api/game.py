@@ -9,64 +9,30 @@ from util2 import *
 
 class Game:
 
-    def __init__(self):
-        self.room = "joined"
+    def __init__(self, room):
+        self.room = room
         self.players = []
-        self.stage = "lobby"
+        self.state = "lobby"
 
-
-    def join(self, name):
-        self.players.append({"name": name, 
-                               "sid": request.sid,
-                               "ready": False})
-        self.dispatchLobbyState()
-        join_room(self.room)
-
-
-
-    def ready(self, msg):
-        for u in self.players:
-            if u["sid"] == request.sid:
-                u["ready"] = True if (msg == "true") else False
-                if self.allReady() == True:
-                    self.handleAllReady()
-        self.dispatchLobbyState()
-    
-
-
-    def allReady(self):
-        return all(map(lambda x: x["ready"], self.players))
-
-
-
-    def handleAllReady(self):
-        print("****** ALL READY ****** ")
-        sio.emit("allReady", room="joined")
-        self.initGame(deck)
-
-
-
-    def disconnect(self):
+    def leave(self):
         self.players = [u for u in self.players if u["sid"] != request.sid]
-        self.dispatchLobbyState()
-        leave_room(self.room)
-
-
-
-    def dispatchLobbyState(self):
+        self.dispatchGameLobbyState()
+    
+    def dispatchGameLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.players]
         for i in range(0, len(self.players)):
             msg[i][2] = True
             sio.emit("getUsers", msg, room=self.players[i]["sid"])
             msg[i][2] = False
 
+    def initGame(self, players):
+        # Hand over players from lobby to game state 
+        self.players = players
 
-
-    def initGame(self, deck): 
         (talon, hands) = dealCards(deck, len(self.players))
         self.talon = talon
         self.table = []
-        self.stage = "contracts"
+        self.state = "contracts"
         self.players = [
                 {
                     "name": p["name"],
@@ -92,11 +58,11 @@ class Game:
         player = self.players[playerIndex]
         
         _playable = []
-        if player["turn"] == True and self.stage == "active":
+        if player["turn"] == True and self.state == "active":
             _playable = playable(player["hand"], self.table)
         
         publicState =  {
-            "phase": self.stage,
+            "phase": self.state,
             "myIndex": playerIndex,
             "table": self.table,
             "players": [{
@@ -109,7 +75,7 @@ class Game:
             "turn": player["turn"]
         }
 
-        if self.stage == "contracts":
+        if self.state == "contracts":
             publicState["playableContracts"] = playableContracts(self.players) + ["naprej"]
 
         return publicState
@@ -217,10 +183,6 @@ class Game:
         print(sender,"> ", msg)
         sio.emit("chat", json.dumps({"sender": sender, "message": msg}), room=self.room)
 
-
-
-
-
     # returns index of player who is currently choosing contract,
     # or -1 if all have chosen
     def finishContracts(self):
@@ -228,7 +190,7 @@ class Game:
         done = all([len(c) > 0 and c[-1] == "naprej" for c in contracts])
         # every player recently skipped
         if done:
-            self.stage = "active"
+            self.state = "active"
 
 
     def playContract(self, contract):
