@@ -40,6 +40,8 @@ $chat-wrapper-height: calc(#{$container-height} - #{$scoreboard-height});
 
       padding: 0 1em;
 
+      color: $darkGrey;
+
       font-family: $roboto;
       font-size: 1.4em;
     }
