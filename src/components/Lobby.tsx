@@ -67,7 +67,8 @@ const Lobby = (props: any) => {
 
             <div className={lobbyStyles.bottom}>
               <Toggle name={`${player}-switch-${i}`} checked={player[1]}
-                onChange={onToggleChange} className={lobbyStyles.checkbox} />
+                onChange={onToggleChange} className={lobbyStyles.checkbox}
+                  disabled={true} />
             </div>
           </div> 
         </span>
