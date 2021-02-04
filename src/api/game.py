@@ -4,7 +4,7 @@ from flask_socketio import join_room, leave_room
 import json
 
 from deck import *
-from util2 import *
+from util import *
 from contracts import *
 from chat import *
 from talonSwap import *

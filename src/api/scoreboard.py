@@ -1,6 +1,6 @@
 from __main__ import sio
 import json
-from util2 import score
+from util import score
 
 
 
