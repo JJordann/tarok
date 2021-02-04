@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Switch>
           <Route path="/" exact component={LandingPage} />
-          <Route path="/game" exact component={Game} />
+          <Route path="/game/:debug?/:stage?" exact component={Game} />
           <Route path="/test" exact component={Flask} />
           <Route path="/lobby" exact component={Lobby} />
       </Switch>
