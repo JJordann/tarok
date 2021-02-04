@@ -1,59 +1,132 @@
 @import './variables';
 
+$borderThick: 2px solid $lightBlue;
+$borderThin: 1px solid $lightBlue;
+
 .scoreboard {
-  position: relative;
   width: 100%;
   height: 100%;
   background: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  text-align: center;
 
-  div {
+  >.container {
+    position: relative;
     width: 100%;
-    box-sizing: border-box;
-    border-right: 2px solid $lightBlue;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     overflow: hidden;
 
-    &:last-of-type {
-      border-right: none;
+    >.radelciWrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+
+      border-bottom: $borderThin;
+
+      >.radelci {
+        position: relative;
+        width: 100%;
+        padding: 0.5em 0.1em;
+
+        // Maybe a slightly dirty trick to display vertical borders, but
+        //  the Scrollbars component adds additional width to the .pointsWrapper element,
+        //    making the borders unaligned if added to each "cell" in the scoreboard seperately
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100vh;
+
+          border-right: $borderThick;
+        }
+
+        &:last-child {
+          &::before {
+            border: none;
+          }
+        }
+        
+        >svg { // FontAwesomeIcon returns svg
+          padding: 0 2px;
+
+          &:last-child {
+            margin: 0;
+          }
+        }
+      }
     }
 
-    h3 {
-      margin: 0;
-      border-bottom: 2px solid $lightBlue;
-      padding: 0.5em;
-      font-size: 1.1em;
-      font-family: $roboto;
-      text-align: center;
-    }
+    >.namesWrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: stretch; // In case any of the names are multi-line
 
-    h4 {
-      margin: 0;
-      margin-top: auto;
-      display: block;
-      font-size: 1.2em;
-      font-family: $roboto;
-      text-align: center;
-      padding: 0.4em 0;
-      letter-spacing: 1px;
-      border-top: 2px solid $lightBlue;
-    }
+      border-bottom: $borderThick;
 
-    div {
-      overflow-y: auto;
-
-      span {
-        display: block;
-        font-size: 0.9em;
+      >.name {
+        width: 100%;
+        padding: 0.5em 0.1em;
         font-family: $roboto;
-        text-align: center;
-        padding: 0.4em 0;
-        letter-spacing: 1px;
-        border-bottom: 1px solid $lightBlue;
+        font-size: 1.2em;
+
+        // Vertically center name
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:last-child {
+          border: none;
+        }
+      }
+    }
+
+    .pointsWrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+
+      >.points {
+        width: 100%;
+        height: 100%;
+
+        >.point {
+          width: 100%;
+          font-family: $roboto;
+          font-size: 1.2em;
+          padding: 0.2em 0;
+
+          border-bottom: $borderThin;
+
+          &:first-child {
+            padding-top: 0.2em;
+          }
+
+          &:last-child {
+            border: none;
+          }
+        }
+      }
+    }
+
+    >.sumsWrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      
+      border-top: $borderThick;
+
+      >.sum {
+        width: 100%;
+        font-family: $roboto;
+        font-size: 1.5em;
+        padding: 0.2em 0;
       }
     }
   }
