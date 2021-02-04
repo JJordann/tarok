@@ -161,7 +161,7 @@ def pagatUltimo(table):
 
 
 
-contracts = {
+allContracts = {
         "naprej": 0,
         "tri": 10,
         "solo_tri": 20,
@@ -177,20 +177,20 @@ contracts = {
 
 
 def highestContract(cs):
-    global contracts
-    return reduce(lambda cmax, el: el if contracts[el] > contracts[cmax] else cmax, cs)
+    global allContracts
+    return reduce(lambda cmax, el: el if allContracts[el] > allContracts[cmax] else cmax, cs)
 
 
 
 def playableContracts(players):
     playedContracts = [c for p in players for c in p["contracts"]]
 
-    global contracts
+    global allContracts
     if playedContracts == []:
-        return list(contracts.keys())
+        return list(allContracts.keys())
 
     highest = highestContract(playedContracts)
-    return [c for c in contracts.keys() if contracts[c] > contracts[highest]]
+    return [c for c in allContracts.keys() if allContracts[c] > allContracts[highest]]
 
 
 

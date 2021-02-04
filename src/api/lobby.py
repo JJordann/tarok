@@ -1,15 +1,24 @@
 from __main__ import sio
 from flask import request
 from flask_socketio import join_room, leave_room
+import json
+from deck import *
+from util2 import *
 
 from game import Game
+from contracts import Contracts
 
 class Lobby:
     def __init__(self, room):
         self.room = room
         self.lobby = []
-        self.game = Game(room)
-    
+        self.contracts = None
+        self.game = None
+        self.scoreScreen = None
+
+
+
+
     def join(self, name):
         self.lobby.append({"name": name, 
                             "sid": request.sid,
@@ -17,9 +26,12 @@ class Lobby:
         self.dispatchLobbyState()
         join_room(self.room)
     
+
+
+
     def disconnect(self):
         # If game has not started yet leave lobby
-        if self.game.state == "lobby":
+        if self.contracts == None:
             self.lobby = [u for u in self.lobby if u["sid"] != request.sid]
             self.dispatchLobbyState()
         else:
@@ -27,6 +39,9 @@ class Lobby:
         
         leave_room(self.room)
     
+
+
+
     def ready(self, msg):
         for u in self.lobby:
             if u["sid"] == request.sid:
@@ -35,16 +50,25 @@ class Lobby:
                     self.handleAllReady()
         self.dispatchLobbyState()
     
+
+
+
     def allReady(self):
         return all(map(lambda x: x["ready"], self.lobby))
     
+
+
     def handleAllReady(self):
         print("****** ALL READY ****** ")
         sio.emit("allReady", room=self.room)
 
         # Start game
-        self.game.initGame(self.lobby)
+        #self.game.initGame(self.lobby)
+        self.contracts = Contracts(self.lobby, self.room)
     
+
+
+
     def dispatchLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.lobby]
         for i in range(0, len(self.lobby)):

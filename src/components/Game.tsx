@@ -22,7 +22,7 @@ const Game = ({match}) => {
     playable: [],  // playable cards in hand
     cardsWon: [], 
     turn: false,    // is it my turn?
-    playableContracts: [],
+    playableTypes: [],
   })
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Game = ({match}) => {
         playable: [],
         cardsWon: [],
         turn: true,
-        playableContracts: ['Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Naprej']
+        playableTypes: ['Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Naprej']
       }
   
       setState(testState);
@@ -120,11 +120,11 @@ const Game = ({match}) => {
             </div>
 
             <div className={gameStyle.activityArea}>
-              { state.stage === "contracts" ? <Contracts contracts={state.playableContracts} /> : <Table cards={state.table} /> }
+              { state.stage === "contracts" ? <Contracts contracts={state.playableTypes} /> : <Table cards={state.table} /> }
             </div>
             
             <div className={gameStyle.handWrapper}>
-              <Hand cards={state.hand} playable={state.playable} />
+              <Hand cards={state.hand} playable={state.playable || []} />
             </div>
           </div>
         </main>

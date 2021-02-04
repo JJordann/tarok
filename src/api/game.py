@@ -33,7 +33,8 @@ class Game:
         self.turn = 0
         self.talon = talon
         self.table = []
-        self.stage = "contracts"
+        self.stage = "gameType"
+        self.gameType = {}
         self.players = [
                 {
                     "name": p["name"],
@@ -77,8 +78,12 @@ class Game:
             "cardsWon": player["cardsWon"]
         }
 
-        if self.stage == "contracts":
-            publicState["playableContracts"] = playableContracts(self.players) + ["naprej"]
+
+        #if self.stage == "gameType":
+            #publicState["playableGameTypes"] = playableGameTypes(self.players) + ["naprej"]
+
+        #if self.stage == "contracts":
+            #publicState["playableContracts"] = playableContracts(self.players) + ["naprej"]
 
         return publicState
 
@@ -194,8 +199,32 @@ class Game:
 
 
 
+
+    def playableGameTypes(self, playerIndex):
+        
+
+
+        return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     # returns index of player who is currently choosing contract,
     # or -1 if all have chosen
+    if False: """
     def finishContracts(self):
         contracts = [p["contracts"] for p in self.players]
         done = all([len(c) > 0 and c[-1] == "naprej" for c in contracts])
@@ -224,9 +253,99 @@ class Game:
 
         self.finishContracts()
         self.dispatchPublicState("getState")
-
+    """
 
 
 
     def showTalon(self, contract):
-        return None
+
+ 
+        # TODO: contract preberi iz stanja
+
+        if self.stage != "talon_swap" or contract not in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri"]:
+            print("illegal talon request")
+            return None
+
+        # group talon cards
+        if "dva" in contract:
+            self.talon = [self.talon[i:i+2] for i in [0, 2, 4]]
+        elif "tri" in contract: 
+            self.talon = [self.talon[i:i+3] for i in [0, 3]]
+        else:
+            self.talon = [[t] for t in self_talon]
+
+        print(self.talon)
+        
+
+
+    def pickTalonIndex(self, index):
+
+        if self.stage != "talon_swap" or contract not in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri"]:
+            return None
+
+
+        if index >= len(self.talon):
+            print("illegal talon index")        
+            return None
+
+        self.talonSwapped = 0
+        self.talonIndex = index
+        # TODO: dodaj talonIndex v public state
+        self.dispatchPublicState("getState")
+
+
+    def swapTalon(self, card):
+        if self.stage != "talon_swap" or self.talonSwapped >= len(self.talon[0]):
+            return None
+
+        player = self.players[findPlayerBySid(request.sid)]
+
+        if card not in player["hand"]:
+            print("illegal swap")
+            return None
+
+        # swap card with first unswapped talon card
+        cardIndex = player["hand"].index(card)
+        player["hand"][cardIndex] = self.talon[self.talonIndex][self.talonSwapped]
+        self.talon[self.talonIndex][self.talonSwapped] = card
+
+        self.talonSwapped += 1
+        if self.talonSwapped == len(self.talon[0]):
+            # last card was swapped
+            self.stage = "active"
+
+        self.dispatchPublicState("getState")
+
+
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

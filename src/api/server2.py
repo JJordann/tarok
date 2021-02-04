@@ -37,7 +37,7 @@ def handleDisconnect():
 
 @sio.on("getState")
 def handleGetState():
-    lobby.game.getCards()
+    lobby.contracts.getCards()
 
 
 @sio.on("playCard")
@@ -50,9 +50,9 @@ def handleChat(msg):
     lobby.game.sendChat(msg)
 
 
-@sio.on("contract")
-def handleContract(contract):
-    lobby.game.playContract(contract)
+#@sio.on("contract")
+#def handleContract(contract):
+    #lobby.game.playContract(contract)
 
 
 if __name__ == '__main__':
