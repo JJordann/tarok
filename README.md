@@ -5,6 +5,17 @@ http://www.tarok.net/pravila106.pdf
 
 https://e-mesto.si/vsebina/v/pravila-tarok
 
+## Client
+Dev mode  
+`npm start`
+
+Build  
+`npm run build`
+
+Deploy  
+`npm install -g serve`  
+`serve -s build -l 3000`
+
 ## Server
 Bash  
 `$ export FLASK_APP=server.py`  
