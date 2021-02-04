@@ -1,6 +1,8 @@
 import React from 'react'
 import getSocket from './global'
 
+import contractStyle from '../style/contracts.module.scss'
+
 const Contracts = ({ contracts }) => {
 
   const socket = getSocket()
@@ -10,15 +12,14 @@ const Contracts = ({ contracts }) => {
     console.log(contract)
   }
     
-  let Items = contracts.map( c => 
+  let Items = contracts.map((contract, index) =>
     <div>
-      <button onClick={() => handleContract(c)}>{c}</button>
-      <br />
+      <button onClick={() => handleContract(contract)} key={index}>{contract}</button>
     </div>
   )
 
   return (
-    <div>
+    <div className={contractStyle.container}>
       { Items }
     </div>
   )
