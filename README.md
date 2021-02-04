@@ -3,6 +3,8 @@ http://www.slovenski-tarok.si/pravila.html
 
 http://www.tarok.net/pravila106.pdf
 
+https://e-mesto.si/vsebina/v/pravila-tarok
+
 ## Server
 Bash  
 `$ export FLASK_APP=server.py`  
