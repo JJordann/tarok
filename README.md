@@ -151,7 +151,7 @@ PowerShell
         se vsem igralcem doda en radelc
 
   - Dodatno:
-    1. Igralec igra z igralcem, ki tega kralja drži v roki. Kdo to je, se razktije, ko je ta kralj igran (položen na mizo).
+    1. Igralec igra z igralcem, ki tega kralja drži v roki. Kdo to je, se razkrije, ko je ta kralj igran (položen na mizo).
         V primeru, da je ta kralj v talonu, igralec igra sam. Če iz talona vzame kralja in z njim pobere vzetek, dobi k svojim pobranim/založenim
         kartam tudi preostanek talona
 
