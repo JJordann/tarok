@@ -34,7 +34,7 @@ const Game = ({match}) => {
         myIndex: 0,
         table: [],
         players: [
-          {name: 'Tilen Gombač', contracts: [], scores: [0, 0, 20, 25], radelci: 1},
+          {name: 'Player 1', contracts: [], scores: [0, 0, 20, 25], radelci: 1},
           {name: 'Player 2', contracts: [], scores: [80, 0, 0, -20], radelci: 2},
           {name: 'Player 3', contracts: [], scores: [0, 0, -42, -20], radelci: 2},
           {name: 'Player 4', contracts: [], scores: [0, -70, 20, 0], radelci: 2}
