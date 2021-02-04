@@ -1,31 +1,35 @@
-.cardWrapper {
-    position: relative;
-    transform-origin: center;
+$brightness: 85%;
 
-    &.disabled {
-        pointer-events: none;
-        
-        .card {
-            filter: brightness(50%);
-        }
+.cardWrapper {
+  position: relative;
+  transform-origin: center;
+
+  &.disabled {
+    .card {
+      filter: brightness($brightness) drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+
+      &:hover {
+        cursor: default;
+        filter: brightness($brightness) drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+      }
     }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .card {
+    max-width: 150px;
+    z-index: 1;
+    width: 100%;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+    transition: all .1s ease-in-out;
 
     &:hover {
-        cursor: pointer;
+      transform-origin: bottom right;
+      transform: scale(1.25);
+      filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
     }
-
-    .card {
-        max-width: 150px;
-        z-index: 1;
-        width: 100%;
-        filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
-        transition: all .1s ease-in-out;
-
-        &:hover {
-            transform-origin: bottom right;
-            transform: scale(1.25);
-            filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
-        }
-    }
-    
+  }   
 }
