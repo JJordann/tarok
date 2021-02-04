@@ -1,17 +1,29 @@
 from __main__ import sio
 from flask import request
 from flask_socketio import join_room, leave_room
-
 import json
+
 from deck import *
 from util2 import *
 from contracts import *
+from chat import *
+from talonSwap import *
+from scoreboard import *
 
 
 class Game:
 
     def __init__(self, room):
+        # contracts
         Game.playGameType = playGameType
+        # talonSwap
+        Game.pickTalon = pickTalon
+        Game.talonSwap = talonSwap
+        # chat
+        Game.sendChat = sendChat
+        # scoreboard
+        Game.concludeGame = concludeGame
+        #
         self.room = room
         self.players = []
         self.stage = "lobby"
@@ -119,28 +131,6 @@ class Game:
 
 
 
-    def concludeGame(self):
-        print("---- ROUND OVER ----")
-        self.stage = "round_finished"
-
-        #for player in self.players:
-            #player["contractBonus"] += contractBonus(player["cardsWon"])
-            #for contract in player["contractBonus"]:
-                #player["score"] += contract["value"]
-
-        ranked = sorted(self.players, key=lambda p: score(p["cardsWon"]), reverse=True)
-        self.results = [
-            {
-                "name": player["name"],
-                "place": index,
-                "score": score(player["cardsWon"]),
-                "cardsWon": player["cardsWon"],
-                "contractBonus": player["contractBonus"]
-            } for index, player in enumerate(ranked)
-        ]
-        sio.emit("gameOver", self.results, broadcast=True, room=self.room)
-
-
 
     def handlePlayCard(self, card):
         self.playCard(card, request.sid)
@@ -200,21 +190,3 @@ class Game:
         # player who takes begins next round
         self.turn = takesIndex
         self.table = []
-
-
-
-    def sendChat(self, msg):
-        sender = next(p for p in self.players if p["sid"] == request.sid)["name"]
-        print(sender,"> ", msg)
-        sio.emit("chat", json.dumps({"sender": sender, "message": msg}), room=self.room)
-
-
-
-
-
-
-
-
-
-    def showTalon(self, contract):
-        return None

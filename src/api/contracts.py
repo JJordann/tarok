@@ -1,4 +1,4 @@
-#from __main__ import sio
+from __main__ import sio
 from flask import request
 
 import json
@@ -30,17 +30,9 @@ def playGameType(self, gameType):
         # every player has played a game type or skipped
         if len([g for g in self.gameType if g["name"] == "naprej"]) >= len(self.players) - 1:
             # every player but one skipped, game type is determined
-            self.stage = "active"
             # set self.gameType to a single dict
-            if all([g["name"] == "naprej" for g in self.gameType]):
-                self.gameType = {
-                    "name": "normal",
-                    "player": -1
-                }
-            else: 
-                self.gameType = max(self.gameType, key=valueOfGameType)
+            finishGameType(self)
             self.dispatchPublicState("getState")
-            print("game type: ", self.gameType)
             return None
 
     self.passTurn()
@@ -51,6 +43,28 @@ def playGameType(self, gameType):
 
     self.dispatchPublicState("getState")
 
+
+
+def finishGameType(self):
+    if all([g["name"] == "naprej" for g in self.gameType]):
+        # every player skipped
+        self.gameType = {
+            "name": "normal",
+            "player": -1
+        }
+    else: 
+        # set game type of highest value
+        self.gameType = max(self.gameType, key=valueOfGameType)
+
+    if self.gameType["name"] in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri"]:
+        # talon swap
+        self.stage = "talonSwap"
+        self.turn = 0
+        #self.turn = self.gameType["player"]
+    else:
+        # no talon swap, straight to game
+        self.stage = "active"
+        self.turn = 0
 
 
 
@@ -123,32 +137,3 @@ def playableGames(gameType, isPlayerLast):
         return [g["name"] for g in gameTypes if g["value"] >= currentGameValue] + ["naprej"]
     else:
         return [g["name"] for g in gameTypes if g["value"] > currentGameValue and g["name"] != "tri"] + ["naprej"]
-
-    
-
-
-
-
-myg = [
-    {
-        "name": "naprej",
-        "player": 0
-    },
-    {
-        "name": "pikolo",
-        "player": 1
-    },
-    {
-        "name": "solo_brez",
-        "player": 3
-    }
-]
-
-#pg = playableGames(myg, False)
-#print(pg)
-
-
-
-
-
-
