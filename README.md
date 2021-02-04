@@ -1,5 +1,6 @@
 ## Pravila
 http://www.slovenski-tarok.si/pravila.html
+http://www.tarok.net/pravila106.pdf
 
 ## Server
 Bash  
