@@ -5,11 +5,13 @@ from flask_socketio import join_room, leave_room
 import json
 from deck import *
 from util2 import *
+from contracts import *
 
 
 class Game:
 
     def __init__(self, room):
+        Game.playGameType = playGameType
         self.room = room
         self.players = []
         self.stage = "lobby"
@@ -32,8 +34,14 @@ class Game:
         (talon, hands) = dealCards(deck, len(self.players))
         self.turn = 0
         self.talon = talon
+        self.gameType = [
+            {
+                "name": "choosing",
+                "player": i
+            } for (i, p) in enumerate(self.players)
+        ]
         self.table = []
-        self.stage = "contracts"
+        self.stage = "gameType"
         self.players = [
                 {
                     "name": p["name"],
@@ -64,6 +72,7 @@ class Game:
         
         publicState =  {
             "stage": self.stage,
+            "gameType": self.gameType,
             "turn": self.turn,
             "myIndex": playerIndex,
             "table": self.table,
@@ -77,8 +86,13 @@ class Game:
             "cardsWon": player["cardsWon"]
         }
 
-        if self.stage == "contracts":
-            publicState["playableContracts"] = playableContracts(self.players) + ["naprej"]
+        if self.stage == "gameType":
+            isPlayerLast = self.turn == len(self.players) - 1
+            publicState["playableGames"] = playableGames(self.gameType, isPlayerLast)
+
+
+        #if self.stage == "contracts":
+            #publicState["playableContracts"] = playableContracts(self) + ["naprej"]
 
         return publicState
 
@@ -93,7 +107,10 @@ class Game:
 
 
     def getPlayerIndex(self, sid):
-        return next(i for i,p in enumerate(self.players) if p["sid"] == sid)
+        for i, p in enumerate(self.players):
+            if p["sid"] == sid:
+                return i
+        return -1
 
 
 
@@ -194,36 +211,7 @@ class Game:
 
 
 
-    # returns index of player who is currently choosing contract,
-    # or -1 if all have chosen
-    def finishContracts(self):
-        contracts = [p["contracts"] for p in self.players]
-        done = all([len(c) > 0 and c[-1] == "naprej" for c in contracts])
-        # every player recently skipped
-        if done:
-            self.stage = "active"
 
-
-    def playContract(self, contract):
-        playerIndex = self.getPlayerIndex(request.sid)
-
-        if self.turn != playerIndex:
-            print("It's not your turn. Stop hacking.")
-            return None
-
-        self.players[playerIndex]["contracts"] += [contract]
-
-        self.passTurn()
-
-        for player in self.players:
-            print(player["name"], ": ", player["contracts"])
-
-        if contract != "naprej":
-            msg = self.players[playerIndex]["name"] + " played " + contract
-            sio.emit("INFO", msg, room="joined")
-
-        self.finishContracts()
-        self.dispatchPublicState("getState")
 
 
 

@@ -8,7 +8,7 @@ const Contracts = ({ contracts }) => {
   const socket = getSocket()
 
   const handleContract = contract => {
-    socket.emit('contract', contract)
+    socket.emit('gameType', contract)
     console.log(contract)
   }
     

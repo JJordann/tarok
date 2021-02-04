@@ -14,7 +14,7 @@ const Game = ({match}) => {
   const socket = getSocket()
 
   const [state, setState] = useState({
-    stage: "contracts",
+    stage: "gameType",
     myIndex: 0,   
     table: [],     // cards on table
     players: [],   // json: {name: string, contracts: string[]}
@@ -22,7 +22,7 @@ const Game = ({match}) => {
     playable: [],  // playable cards in hand
     cardsWon: [], 
     turn: false,    // is it my turn?
-    playableContracts: [],
+    playableGames: [],
   })
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const Game = ({match}) => {
         playable: [],
         cardsWon: [],
         turn: true,
-        playableContracts: ['Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Naprej']
+        playableGames: ['Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Naprej']
       }
   
       setState(testState);
@@ -120,7 +120,7 @@ const Game = ({match}) => {
             </div>
 
             <div className={gameStyle.activityArea}>
-              { state.stage === "contracts" ? <Contracts contracts={state.playableContracts} /> : <Table cards={state.table} /> }
+              { state.stage === "gameType" ? <Contracts contracts={state.playableGames} /> : <Table cards={state.table} /> }
             </div>
             
             <div className={gameStyle.handWrapper}>

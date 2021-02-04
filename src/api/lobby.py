@@ -19,7 +19,7 @@ class Lobby:
     
     def disconnect(self):
         # If game has not started yet leave lobby
-        if self.game.state == "lobby":
+        if self.game.stage == "lobby":
             self.lobby = [u for u in self.lobby if u["sid"] != request.sid]
             self.dispatchLobbyState()
         else:

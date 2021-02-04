@@ -49,10 +49,15 @@ def handlePlayCard(card):
 def handleChat(msg):
     lobby.game.sendChat(msg)
 
+@sio.on("gameType")
+def handleGameType(gameType):
+    lobby.game.playGameType(gameType)
 
-@sio.on("contract")
-def handleContract(contract):
-    lobby.game.playContract(contract)
+
+
+#@sio.on("contract")
+#def handleContract(contract):
+    #lobby.game.playContract(contract)
 
 
 if __name__ == '__main__':
