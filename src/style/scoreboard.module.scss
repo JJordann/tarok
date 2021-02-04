@@ -75,6 +75,8 @@ $borderThin: 1px solid $lightBlue;
         font-family: $roboto;
         font-size: 1.2em;
 
+        overflow: hidden;
+
         // Vertically center name
         display: flex;
         justify-content: center;
