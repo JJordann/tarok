@@ -46,7 +46,7 @@ const Game = ({match}) => {
         playable: [],
         cardsWon: [],
         turn: true,
-        playableContracts: ['Dve', 'Ena', 'Ena', 'Solo tri', 'Solo dve', 'Pikolo', 'Solo ena', 'Berač', 'Solo brez', 'Odprti berač', 'Naprej']
+        playableContracts: ['Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Naprej']
       }
   
       setState(testState);
