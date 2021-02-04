@@ -18,6 +18,11 @@ PowerShell
         ta igralec igro napoveduje zadnji
       - Vsako novo rundo se ta pozicija pomakne za 1 naprej
     - NAJAVA IGRE:
+      - Vsak igralec mora napovedati igro višje vrednosti od najvišje vrednosti igre, ki je bila napovedana preden je bil na vrsti on
+      - Igralec, ki ima "prednost", ima pravico najaviti igro enake vrednosti, kot jo je izbral že nekdo pred njim, ne pa igre nižje vrednosti
+      - V primeru, da igralec ne želi napovedati nobene od iger, ki jih ima na voljo, lahko izbere "naprej", s tem torej ne igra nobene igre (vseeno je lahko soigralec)
+      - V primeru, da je več igralcev najavilo igro, se ponovi najavljanje igre, v novem krogu pa ne sodelujejo igralci, ki so v prejšnjem krogu izbrali "naprej"
+      - V primeru, da noben igralec ni najavil igre, igralec s "prednostjo" ne more iti "naprej" ampak se mu namesto te možnosti ponudi najava igre Klop
       - Tri:
         - Možno samo ob 4 igralcih
         - Talon se razdeli na 2 dela [po 3 karte]
@@ -90,6 +95,9 @@ PowerShell
         - Ekipa pobere vse 4 kralje
         - Tiha vrednost: 10
         - Napovedana vrednost: 20
+      - Kralj ultimo:
+        - Možno ob: Tri, Dve, Ena
+        - Kralj barve, ki je bil klican, je igran in pobran v zadnji rundi, s strani ekipe, ki igra
       - Pagat ultimo:
         - Možno ob: Tri, Dve, Ena, Solo tri, Solo dve, Solo ena, Solo brez
         - Pagat (Tarok 1 / Tarok I) je zadnja karta, ki jo igralec odvrže IN z njo tudi pobere vzetek
