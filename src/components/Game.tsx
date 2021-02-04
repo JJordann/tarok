@@ -109,7 +109,7 @@ const Game = ({match}) => {
             <Scoreboard scores={testScores} />
           </div>
           <div className={gameStyle.chatWrapper}>
-            <Chat myName={myName} />
+            <Chat />
           </div>
         </aside>
 
