@@ -1,6 +1,9 @@
 import React from 'react'
 import getSocket from './global'
 
+
+import talonStyles from '../style/talon.module.scss'
+
 const Talon = ({ cardGroups }) => {
 
     const socket = getSocket()
@@ -9,21 +12,19 @@ const Talon = ({ cardGroups }) => {
         socket.emit("chooseTalon", index)
     }
 
+    const Groups = cardGroups.map((group, index) => 
+            <div className={talonStyles.cardGroup}
+                 onClick={() => handleOnClick(index)}>
+                    { 
+                        group.map(card => 
+                            <div className={talonStyles.card}> {card} </div>) 
+                    }
+            </div>)
 
         // polepši to sranje 
     return (
-        <div style={{display: "flex", flexDirection: "row"}}>
-            {
-                cardGroups.map((group, index) => 
-                <div style={{border: "1px solid black", padding: 5}}>
-                    { group.map(card => 
-                        <div onClick={() => handleOnClick(index)}
-                        style={{border: "1px solid black", margin: 5}}>
-                            [{card}]
-                        </div>) 
-                    }
-                </div>)
-            }
+        <div className={talonStyles.wrapper}>
+            { Groups }
         </div>
     )
 }
