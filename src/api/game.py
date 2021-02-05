@@ -77,7 +77,7 @@ class Game:
                 {
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i][0:2],
+                    "hand": hands[i],
                     "ready": True,
                     "cardsWon": [],
                     "contractBonus": [],
@@ -212,11 +212,11 @@ class Game:
                 pagatPlayer = (pagatIndex + pagatIndex) % nPlayers
                 self.players[pagatPlayer]["contractBonus"] += [{"bonus": "pagatUltimo", "value": 25}]
                 msg = "PAGAT ULTIMO: " + self.players[pagatPlayer]["name"]
-                print(msg)
-                sio.emit("INFO", msg, room=self.room)
+                self.info(msg)
 
         # player who takes begins next round
         self.turn = takesIndex
+        self.info("turn: " + str(takesIndex))
         self.table = []
 
 

@@ -80,6 +80,7 @@ def talonSwap(self, card):
 
     if self.talon[0] == []:
         self.stage = "active"
+        self.turn = 0
     self.dispatchPublicState("getState")
 
 

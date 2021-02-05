@@ -25,5 +25,10 @@ def concludeGame(self):
             "contractBonus": player["contractBonus"]
         } for index, player in enumerate(ranked)
     ]
-    # TODO: json dumps
-    sio.emit("gameOver", self.results, broadcast=True, room=self.room)
+    sio.emit("gameOver", json.dumps(self.results), broadcast=True, room=self.room)
+
+    self.info("Game over")
+    self.info("Starting new game")
+
+    self.initGame(self.players)
+    self.dispatchPublicState("getState")
