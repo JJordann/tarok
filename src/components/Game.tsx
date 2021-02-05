@@ -4,6 +4,7 @@ import Table from './Table'
 import Chat from './Chat'
 import getSocket from './global'
 import Contracts from './Contracts'
+import RoundEnd from './RoundEnd'
 
 import gameStyle from '../style/game.module.scss'
 import Scoreboard from './Scoreboard'
@@ -98,20 +99,19 @@ const Game = ({match}) => {
     </div>
   )
 
-  let _talon = [
-    ["tarok_1", "tarok_2"],
-    ["tarok_3", "tarok_4"],
-    ["tarok_5", "tarok_6"],
-  ]
 
+  let kings = ["srce_kralj", "kara_kralj", "pik_kralj", "kriz_kralj"]
+
+
+  // DIY ROUTER
   var Activity = <></>
   switch(state.stage) {
-    case "gameType": Activity = <Contracts contracts={state.playableGames} /> ;break; 
-    case "chooseKing": Activity = <Table cards={["srce_kralj", "kara_kralj", "pik_kralj", "kriz_kralj"]} stage={state.stage}/> ; break;
-    case "chooseTalon": Activity = <Talon cardGroups={state.talon} /> ;break;
-    case "talonSwap": Activity = <Talon cardGroups={state.talon} /> ;break;
-    case "scoreboard": Activity = <Scoreboard scores={state.players} /> ; break;
-    default: Activity = <Table cards={state.table} stage={state.stage}/>
+    case "gameType":    Activity = <Contracts contracts={state.playableGames} />    ;break; 
+    case "chooseKing":  Activity = <Table cards={kings} stage={state.stage}/>       ;break;
+    case "chooseTalon": Activity = <Talon cardGroups={state.talon} />               ;break;
+    case "talonSwap":   Activity = <Talon cardGroups={state.talon} />               ;break;
+    case "roundFinished":  Activity = <RoundEnd players={state.players} />             ;break;
+    default:            Activity = <Table cards={state.table} stage={state.stage}/>
   }
 
   return (

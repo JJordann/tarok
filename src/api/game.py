@@ -25,6 +25,7 @@ class Game:
         Game.sendChat = sendChat
         # scoreboard
         Game.concludeGame = concludeGame
+        Game.nextGame = nextGame
         #
         self.room = room
         self.players = []
@@ -77,7 +78,7 @@ class Game:
                 {
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i],
+                    "hand": hands[i][0:2],
                     "ready": True,
                     "cardsWon": [],
                     "contractBonus": [],

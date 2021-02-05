@@ -7,8 +7,8 @@ from util import score
 
 
 def concludeGame(self):
-    print("---- ROUND OVER ----")
-    self.stage = "round_finished"
+    self.info("Game over")
+    self.stage = "roundFinished"
 
     #for player in self.players:
         #player["contractBonus"] += contractBonus(player["cardsWon"])
@@ -25,10 +25,18 @@ def concludeGame(self):
             "contractBonus": player["contractBonus"]
         } for index, player in enumerate(ranked)
     ]
-    sio.emit("gameOver", json.dumps(self.results), broadcast=True, room=self.room)
+    #sio.emit("getState", json.dumps(self.results), broadcast=True, room=self.room)
+    self.dispatchPublicState("getState")
 
-    self.info("Game over")
+
+
+
+
+def nextGame(self):
+    if self.stage != "roundFinished":
+        self.error("Illegal request - game is not finished")       
+        return None
+
     self.info("Starting new game")
-
     self.initGame(self.players)
     self.dispatchPublicState("getState")
