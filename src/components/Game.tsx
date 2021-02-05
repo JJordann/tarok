@@ -106,12 +106,12 @@ const Game = ({match}) => {
   // DIY ROUTER
   var Activity = <></>
   switch(state.stage) {
-    case "gameType":    Activity = <Contracts contracts={state.playableGames} />    ;break; 
-    case "chooseKing":  Activity = <Table cards={kings} stage={state.stage}/>       ;break;
-    case "chooseTalon": Activity = <Talon cardGroups={state.talon} />               ;break;
-    case "talonSwap":   Activity = <Talon cardGroups={state.talon} />               ;break;
-    case "roundFinished":  Activity = <RoundEnd players={state.players} />             ;break;
-    default:            Activity = <Table cards={state.table} stage={state.stage}/>
+    case "gameType":      Activity = <Contracts contracts={state.playableGames} />    ;break; 
+    case "chooseKing":    Activity = <Table cards={kings} stage={state.stage}/>       ;break;
+    case "chooseTalon":   Activity = <Talon cardGroups={state.talon} />               ;break;
+    case "talonSwap":     Activity = <Talon cardGroups={state.talon} />               ;break;
+    case "roundFinished": Activity = <RoundEnd players={state.players} />          ;break;
+    default:              Activity = <Table cards={state.table} stage={state.stage}/>
   }
 
   return (

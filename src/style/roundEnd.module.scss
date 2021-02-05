@@ -1,9 +1,28 @@
+.header {
+    font-size: 4vh;
+    text-align: center;
+}
+
+
 .wrapper {
-    border: 1px solid black;
-    border-radius: 5px;
     padding: 30px;
-    margin: 30px;
-    background: rgba(0, 0, 0, 0.1);
+    margin: 0px;
 
     font-size: larger;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.scoreWrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px; 
+    margin: 10px;
+
+    div {
+        text-align: center;
+    }
 }

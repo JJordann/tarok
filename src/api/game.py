@@ -130,6 +130,11 @@ class Game:
         if self.stage in ["chooseTalon", "talonSwap"]:
             publicState["talon"] = self.talon
 
+
+        #if self.stage == "roundFinished":
+            #publicState["results"] = ...
+
+
         #if self.stage == "contracts":
             #publicState["playableContracts"] = playableContracts(self) + ["naprej"]
 
@@ -210,14 +215,13 @@ class Game:
             # check for pagat ultimo
             pagatIndex = pagatUltimo(self.table)
             if pagatIndex > -1:
-                pagatPlayer = (pagatIndex + pagatIndex) % nPlayers
+                pagatPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + pagatIndex) % nPlayers
                 self.players[pagatPlayer]["contractBonus"] += [{"bonus": "pagatUltimo", "value": 25}]
                 msg = "PAGAT ULTIMO: " + self.players[pagatPlayer]["name"]
                 self.info(msg)
 
         # player who takes begins next round
         self.turn = takesIndex
-        self.info("turn: " + str(takesIndex))
         self.table = []
 
 
