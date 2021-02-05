@@ -3,7 +3,7 @@ import getSocket from './global';
 import lobbyStyles from '../style/lobby.module.scss';
 import Toggle from './elements/Toggle';
 
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const Lobby = (props: any) => {
   

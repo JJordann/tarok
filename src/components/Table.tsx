@@ -2,18 +2,30 @@ import React from 'react'
 import Card from './Card'
 
 import tableStyle from '../style/table.module.scss'
+import getSocket from './global'
 
-const Table = ({cards}) => {
+const Table = ({cards, stage}) => {
 
   console.log(cards);
 
+  const socket = getSocket()
+  var handleOnClick = card => {}
+
+  if(stage === "chooseKing") {
+    handleOnClick = card => {
+      socket.emit("chooseKing", card)
+    }
+  }
+
+  // TODO: karte naj bodo playable samo če si na potezi!!
   let Cards = cards.map((card, index) => 
   <Card
-    playable={false}
+    playable={stage === "chooseKing"}
     value={card} 
     rotation={ 0 } 
     id={index} 
     key={index}
+    onClick={() => handleOnClick(card)}
   />)
 
   return (

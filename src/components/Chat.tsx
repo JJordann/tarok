@@ -25,10 +25,15 @@ const Chat = () => {
         setHistory(old => old.concat({sender: 'INFO', message: info}))
       })
 
+      socket.on('ERROR', e => {
+        setHistory(old => old.concat({sender: 'ERROR', message: e}))
+      })
+
       return () => {
         // cleanup
         socket.off('chat')
         socket.off('INFO')
+        socket.off('ERROR')
       }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

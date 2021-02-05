@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import Hand from './Hand'
 import Table from './Table'
 import Chat from './Chat'
@@ -9,6 +8,7 @@ import Contracts from './Contracts'
 import gameStyle from '../style/game.module.scss'
 import Scoreboard from './Scoreboard'
 import PlayerBox from './PlayerBox'
+import Talon from './Talon'
 
 const Game = ({match}) => {
   const socket = getSocket()
@@ -23,6 +23,7 @@ const Game = ({match}) => {
     cardsWon: [], 
     turn: false,    // is it my turn?
     playableGames: [],
+    talon: [[]],
   })
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const Game = ({match}) => {
         playableGames: ['Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Naprej']
       }
   
-      setState(testState);
+      //setState(testState);
 
       return () => {
       }
@@ -97,6 +98,22 @@ const Game = ({match}) => {
     </div>
   )
 
+  let _talon = [
+    ["tarok_1", "tarok_2"],
+    ["tarok_3", "tarok_4"],
+    ["tarok_5", "tarok_6"],
+  ]
+
+  var Activity = <></>
+  switch(state.stage) {
+    case "gameType": Activity = <Contracts contracts={state.playableGames} /> ;break; 
+    case "chooseKing": Activity = <Table cards={["srce_kralj", "kara_kralj", "pik_kralj", "kriz_kralj"]} stage={state.stage}/> ; break;
+    case "chooseTalon": Activity = <Talon cardGroups={state.talon} /> ;break;
+    case "talonSwap": Activity = <Talon cardGroups={state.talon} /> ;break;
+    case "scoreboard": Activity = <Scoreboard scores={state.players} /> ; break;
+    default: Activity = <Table cards={state.table} stage={state.stage}/>
+  }
+
   return (
     <div className={gameStyle.layout}>
       <header className={gameStyle.header}>
@@ -120,11 +137,11 @@ const Game = ({match}) => {
             </div>
 
             <div className={gameStyle.activityArea}>
-              { state.stage === "gameType" ? <Contracts contracts={state.playableGames} /> : <Table cards={state.table} /> }
+              { Activity }
             </div>
             
             <div className={gameStyle.handWrapper}>
-              <Hand cards={state.hand} playable={state.playable} />
+              <Hand cards={state.hand} playable={state.playable} stage={state.stage}/>
             </div>
           </div>
         </main>

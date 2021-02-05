@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Card from './Card';
 import getSocket from './global'
 import handStyles from "../style/hand.module.scss"
 
 
-const Hand = ({ cards, playable }) => {
+const Hand = ({ cards, playable, stage }) => {
 
   const socket = getSocket()
 
@@ -38,9 +38,14 @@ const Hand = ({ cards, playable }) => {
   })
 
 
-  const handleCardClick = card => {
-    console.log("klik: ", card)
+  var handleCardClick = card => {
     socket.emit("playCard", card)
+  }
+
+  if(stage === "talonSwap") {
+    handleCardClick = card => {
+      socket.emit("talonSwap", card)
+    }
   }
 
 
