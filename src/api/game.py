@@ -78,7 +78,7 @@ class Game:
                 {
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i][0:2],
+                    "hand": hands[i],
                     "ready": True,
                     "cardsWon": [],
                     "contractBonus": [],
@@ -180,8 +180,8 @@ class Game:
     def playCard(self, card, player):
         playerIndex = self.getPlayerIndex(player)
 
-        if self.turn != playerIndex != True:
-            self.error("Illegal move - It's not your turn")
+        if self.turn != playerIndex:
+            self.error("Illegal move (PlayCard) - It's not your turn")
             return None
 
         if card not in playable(self.players[playerIndex]["hand"], self.table):
