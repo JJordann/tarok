@@ -11,6 +11,10 @@ def chooseKing(self, king):
         print("illegal move")
         return None
 
+    if king not in ["srce_kralj", "kara_kralj", "pik_kralj", "kriz_kralj"]:
+        print("illegal move")
+        return None
+
     self.gameType["king"] = king
     self.stage = "chooseTalon"
     self.showTalon()
@@ -41,15 +45,52 @@ def showTalon(self):
 
 
 
+def chooseTalon(self, index):
+    playerIndex = self.getPlayerIndex(request.sid)
 
+    if self.stage != "chooseTalon" or playerIndex != self.turn:
+        print("illegal move")
+        return None
 
-
-def pickTalon(self, index):
-    return None
+    # set talon to chosen subset 
+    self.talon = [self.talon[index]]
+    self.stage = "talonSwap"
+    self.dispatchPublicState("getState")
 
 
 
 
 
 def talonSwap(self, card):
-    return None
+    playerIndex = self.getPlayerIndex(request.sid)
+
+    if self.stage != "talonSwap" or self.turn != playerIndex:
+        print("illegal move")
+        return None
+
+    if card not in self.players[playerIndex]["hand"]:
+        print("illegal move")
+        return None
+
+
+    # transfer first card in talon to player's hand
+    cardIndex = self.players[playerIndex]["hand"].index(card)
+    self.players[playerIndex]["hand"][cardIndex] = self.talon[0][0]
+    self.talon[0].pop(0)
+
+    if self.talon[0] == []:
+        self.stage = "active"
+        print("setting active")
+    self.dispatchPublicState("getState")
+
+
+
+
+
+
+
+
+
+
+
+

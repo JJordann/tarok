@@ -63,8 +63,9 @@ def finishGameType(self):
 
     elif self.gameType["name"] in ["solo_ena", "solo_dva", "solo_tri"]:
         # swap with talon
-        self.stage = "talonSwap"
+        self.stage = "chooseTalon"
         self.turn = self.gameType["player"]
+        self.showTalon()
     else:
         # no talon swap, straight to game
         self.stage = "active"

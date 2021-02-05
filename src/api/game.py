@@ -18,7 +18,7 @@ class Game:
         Game.playGameType = playGameType
         # talonSwap
         Game.showTalon = showTalon
-        Game.pickTalon = pickTalon
+        Game.chooseTalon = chooseTalon
         Game.talonSwap = talonSwap
         Game.chooseKing = chooseKing
         # chat
@@ -83,6 +83,8 @@ class Game:
         _playable = []
         if self.turn == playerIndex and self.stage == "active":
             _playable = playable(player["hand"], self.table)
+        elif self.turn == playerIndex and self.stage == "talonSwap":
+            _playable = player["hand"]
         
         publicState =  {
             "stage": self.stage,
@@ -104,6 +106,9 @@ class Game:
             isPlayerLast = self.turn == len(self.players) - 1
             publicState["playableGames"] = playableGames(self.gameType, isPlayerLast)
 
+
+        if self.stage in ["chooseTalon", "talonSwap"]:
+            publicState["talon"] = self.talon
 
         #if self.stage == "contracts":
             #publicState["playableContracts"] = playableContracts(self) + ["naprej"]

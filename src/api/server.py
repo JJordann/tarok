@@ -57,6 +57,14 @@ def handleGameType(gameType):
 def handleChooseKing(king):
     lobby.game.chooseKing(king)
 
+@sio.on("chooseTalon")
+def handleChooseTalon(index):
+    lobby.game.chooseTalon(index)
+
+@sio.on("talonSwap")
+def handleTalonSwap(card):
+    lobby.game.talonSwap(card)
+
 
 #@sio.on("contract")
 #def handleContract(contract):
