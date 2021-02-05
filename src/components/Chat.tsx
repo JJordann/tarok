@@ -38,8 +38,7 @@ const Chat = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    //historyRef.current.scrollTop = historyRef.current.scrollHeight;
-    historyRef.current.scrollToBottom()
+    historyRef.current.scrollTop = historyRef.current.scrollHeight;
   }, [history])
     
   const handleSend = (e) => {
@@ -72,11 +71,9 @@ const Chat = () => {
 
   return (
     <div className={chatStyles.wrapper}>
-      <CustomScrollbars ref={historyRef} autoHide autoHideTimeout={500} autoHideDuration={200}>
-        <div className={chatStyles.history}>
+        <div ref={historyRef} className={chatStyles.history}>
           { History }
-        </div>
-      </CustomScrollbars>
+      </div>
             
       <form className={chatStyles.inputRow} onSubmit={handleSend}>
         <label>

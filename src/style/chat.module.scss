@@ -13,6 +13,8 @@
   flex-direction: column;
 
   .history {
+
+    overflow-y: auto;
     padding: 0.25em;
 
     >div {
