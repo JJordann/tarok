@@ -53,6 +53,9 @@ def handleChat(msg):
 def handleGameType(gameType):
     lobby.game.playGameType(gameType)
 
+@sio.on("chooseKing")
+def handleChooseKing(king):
+    lobby.game.chooseKing(king)
 
 
 #@sio.on("contract")

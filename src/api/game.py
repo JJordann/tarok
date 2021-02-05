@@ -17,8 +17,10 @@ class Game:
         # contracts
         Game.playGameType = playGameType
         # talonSwap
+        Game.showTalon = showTalon
         Game.pickTalon = pickTalon
         Game.talonSwap = talonSwap
+        Game.chooseKing = chooseKing
         # chat
         Game.sendChat = sendChat
         # scoreboard

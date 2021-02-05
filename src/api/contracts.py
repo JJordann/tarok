@@ -56,11 +56,15 @@ def finishGameType(self):
         # set game type of highest value
         self.gameType = max(self.gameType, key=valueOfGameType)
 
-    if self.gameType["name"] in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri"]:
-        # talon swap
+    if self.gameType["name"] in ["ena", "dva", "tri"]:
+        # choose king
+        self.stage = "chooseKing"
+        self.turn = self.gameType["player"]
+
+    elif self.gameType["name"] in ["solo_ena", "solo_dva", "solo_tri"]:
+        # swap with talon
         self.stage = "talonSwap"
-        self.turn = 0
-        #self.turn = self.gameType["player"]
+        self.turn = self.gameType["player"]
     else:
         # no talon swap, straight to game
         self.stage = "active"
