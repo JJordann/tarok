@@ -221,7 +221,7 @@ class Game:
                 self.info(msg)
 
         # player who takes begins next round
-        self.turn = takesIndex
+        self.turn = takesPlayer
         self.table = []
 
 
