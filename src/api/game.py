@@ -30,16 +30,33 @@ class Game:
         self.players = []
         self.stage = "lobby"
 
+
+
+    def error(self, msg):
+        print("ERROR>", msg)
+        sio.emit("ERROR", msg, room=self.room)
+
+    def info(self, msg):
+        print("INFO>", msg)
+        sio.emit("INFO", msg, room=self.room)
+
+
     def leave(self):
         self.players = [u for u in self.players if u["sid"] != request.sid]
         self.dispatchGameLobbyState()
     
+
+
+
     def dispatchGameLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.players]
         for i in range(0, len(self.players)):
             msg[i][2] = True
             sio.emit("getUsers", msg, room=self.players[i]["sid"])
             msg[i][2] = False
+
+
+
 
     def initGame(self, players):
         # Hand over players from lobby to game state 
@@ -70,9 +87,11 @@ class Game:
         ]
 
 
+
     def getCards(self):
         playerState = self.getPublicState(request.sid)
         sio.emit("getState", json.dumps(playerState), room=request.sid)
+
 
 
 
@@ -117,6 +136,7 @@ class Game:
 
 
 
+
     def dispatchPublicState(self, event):
         for player in self.players:
             playerState = self.getPublicState(player["sid"])
@@ -130,6 +150,7 @@ class Game:
             if p["sid"] == sid:
                 return i
         return -1
+
 
 
 
@@ -149,15 +170,16 @@ class Game:
 
 
 
+
     def playCard(self, card, player):
         playerIndex = self.getPlayerIndex(player)
 
         if self.turn != playerIndex != True:
-            print("It's not your turn. Stop hacking.")
+            self.error("Illegal move - It's not your turn")
             return None
 
         if card not in playable(self.players[playerIndex]["hand"], self.table):
-            print("Illegal move. Stop hacking.")
+            self.error("Illegal move - Stop Hacking")
             return None
 
         nPlayers = len(self.players)
@@ -180,8 +202,7 @@ class Game:
 
         # log round
         msg = str(self.players[takesPlayer]["name"]) + " takes -- " + self.table[takesIndex] + " takes " + str(self.table)
-        sio.emit("INFO", msg, room=self.room)
-        print(msg)
+        self.info(msg)
 
         if all(len(p["hand"]) == 0 for p in self.players):
             # players have no cards, game ends
@@ -197,3 +218,9 @@ class Game:
         # player who takes begins next round
         self.turn = takesIndex
         self.table = []
+
+
+
+
+
+

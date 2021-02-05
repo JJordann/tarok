@@ -13,12 +13,11 @@ def valueOfGameType(gameType):
 
 
 def playGameType(self, gameType):
-    print("turn: ", self.turn)
     playerIndex = self.getPlayerIndex(request.sid)
     isPlayerLast = playerIndex == len(self.players) - 1
 
     if self.turn != playerIndex or gameType not in playableGames(self.gameType, isPlayerLast):
-        print("Illegal move")
+        self.error("Illegal move - It's not your turn")
         return None
 
     self.gameType[playerIndex] = {
@@ -36,7 +35,6 @@ def playGameType(self, gameType):
             return None
 
     self.passTurn()
-    print(self.gameType, self.turn)
     while self.gameType[self.turn]["name"] == "naprej":
         # if player has previously skipped, auto skip
         self.passTurn()
