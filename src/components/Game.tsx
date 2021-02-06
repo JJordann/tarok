@@ -11,6 +11,8 @@ import Scoreboard from './Scoreboard'
 import PlayerBox from './PlayerBox'
 import Talon from './Talon'
 
+import GameTypes from '../util/GameTypes'
+
 const Game = ({match}) => {
   const socket = getSocket()
 
@@ -103,7 +105,7 @@ const Game = ({match}) => {
     
 
     if(gameType && gameType.name !== 'choosing')
-      return gameType.name
+      return GameTypes[gameType.name]
   }
 
   const getOtherPlayers = () => {
@@ -137,7 +139,8 @@ const Game = ({match}) => {
   // DIY ROUTER
   var Activity = <></>
   switch(state.stage) {
-    case "gameType":      Activity = <Contracts contracts={state.playableGames} />    ;break; 
+    case "gameType":      Activity = <Contracts contracts={state.playableGames}
+                            show={(state.turn === state.myIndex) ? true : false} />    ;break; 
     case "chooseKing":    Activity = <Table cards={kings} stage={state.stage}/>       ;break;
     case "chooseTalon":   Activity = <Talon cardGroups={state.talon} />               ;break;
     case "talonSwap":     Activity = <Talon cardGroups={state.talon} />               ;break;
