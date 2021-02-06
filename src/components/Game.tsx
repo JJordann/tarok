@@ -88,26 +88,23 @@ const Game = ({match}) => {
 
   const testScores = getScores(state.players)
 
-  //var otherPlayers = state.players.filter((player, index) => {
-    //if(state.myIndex !== index)
-      //return player
-  //})
-
+  const getOtherPlayers = () => {
+    const otherPlayers = [];
   
-
-  if (state.players[0]) {
-    var otherPlayers = state.players
-    while(otherPlayers[0].index !== state.myIndex)
-      otherPlayers.push(otherPlayers.shift())
-
-    otherPlayers = otherPlayers.filter(p => p.index !== state.myIndex)
+    for(let i = 1; i < state.players.length; i++) {
+      let playerIndex = (state.myIndex + i) % state.players.length;
+      
+      otherPlayers.push(state.players[playerIndex]);
+    }
+  
+    return otherPlayers;
   }
 
-  const playerBoxes = otherPlayers ? otherPlayers.map(player =>
+  const playerBoxes = getOtherPlayers().map(player =>
     <div className={gameStyle.playerWrapper}>
       <PlayerBox name={player.name} activity={player.contracts[0]} />
     </div>
-  ) : <></>
+  )
 
 
   let kings = ["srce_kralj", "kara_kralj", "pik_kralj", "kriz_kralj"]
