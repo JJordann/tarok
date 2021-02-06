@@ -18,10 +18,11 @@ def chooseKing(self, king):
     self.gameType["king"] = king
 
 
+
     kingHolder = playerIndex
-    for player in self.players:
+    for (i, player) in enumerate(self.players):
         if king in player["hand"]:
-            kingHolder = player["index"]
+            kingHolder = i
             break
 
     self.gameType["with"] = kingHolder

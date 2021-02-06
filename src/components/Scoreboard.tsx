@@ -21,27 +21,21 @@ const Scoreboard = ({scores}) => {
   const CustomScrollbars = (props) => <Scrollbars renderThumbVertical={renderThumb} {...props} />
 
   const getScores = (scores) => {
-    const Radelci = scores.map(score => {
-      return (
-        <div className={scoreboardStyle.radelci}>
-          {[...Array((score.radelci ? score.radelci : 0))].map((element, index) => {
-            return (
-              <FontAwesomeIcon icon={faStar} />
-            )
-          })}
-        </div>
-      )
-    })
+    const Radelci = scores.map(score => 
+      <div className={scoreboardStyle.radelci}>
+        {[...Array((score.radelci ? score.radelci : 0))].map((element, index) => 
+          <FontAwesomeIcon icon={faStar} key={index} />
+        )}
+      </div>
+    )
 
     const Names = scores.map(score => <div className={scoreboardStyle.name}>{score.name}</div>)
 
-    const Points = scores.map(score => {
-      return (
-        <div className={scoreboardStyle.points}>
-          {score.points.map(point => <div className={scoreboardStyle.point}>{point}</div>)}
-        </div>
-      )
-    })
+    const Points = scores.map(score =>
+      <div className={scoreboardStyle.points}>
+        {score.points.map(point => <div className={scoreboardStyle.point}>{point}</div>)}
+      </div>
+    )
 
     const Sums = scores.map(score => <div className={scoreboardStyle.sum}>{score.sum}</div>)
 

@@ -13,9 +13,9 @@ def concludeGame(self):
     _scores = []
     for player in self.players:
         _scores.append(score(player["cardsWon"]))
+        
 
-
-    if "king" in self.gameType and self.gameType["with"] != self.gameType["player"]:
+    if "with" in self.gameType and self.gameType["with"] != self.gameType["player"]:
         # a king was called, add scores of player with index "player" and "with"
         _scores[self.gameType["player"]] += _scores[self.gameType["with"]]
         _scores[self.gameType["with"]]    = _scores[self.gameType["player"]]

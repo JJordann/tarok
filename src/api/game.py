@@ -79,7 +79,7 @@ class Game:
                     "index": i,
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i],
+                    "hand": hands[i][0:3],
                     "ready": True,
                     "cardsWon": [],
                     "contractBonus": [],
@@ -124,8 +124,16 @@ class Game:
             "cardsWon": player["cardsWon"]
         }
 
-        if "with" in self.gameType:
-            del self.gameType["with"]
+        if type(self.gameType) == list:
+            publicState["gameType"] = self.gameType
+        else:
+            publicState["gameType"] = {
+                "name": self.gameType["name"],
+                "player": self.gameType["player"],
+            }
+            if "king" in self.gameType:
+                publicState["gameType"]["king"] = self.gameType["king"]
+
 
         if self.stage == "gameType":
             isPlayerLast = self.turn == len(self.players) - 1
