@@ -17,7 +17,6 @@ const Table = ({cards, stage}) => {
     }
   }
 
-  // TODO: karte naj bodo playable samo če si na potezi!!
   let Cards = cards.map((card, index) => 
   <Card
     playable={stage === "chooseKing"}

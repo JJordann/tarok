@@ -76,6 +76,7 @@ class Game:
         self.stage = "gameType"
         self.players = [
                 {
+                    "index": i,
                     "name": p["name"],
                     "sid": p["sid"],
                     "hand": hands[i],
@@ -113,6 +114,7 @@ class Game:
             "myIndex": playerIndex,
             "table": self.table,
             "players": [{
+                "index": p["index"],
                 "name": p["name"],
                 "contracts": p["contracts"],
                 "scores": p["scores"] if "scores" in p.keys() else []
