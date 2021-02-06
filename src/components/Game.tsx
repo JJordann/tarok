@@ -16,13 +16,14 @@ const Game = ({match}) => {
 
   const [state, setState] = useState({
     stage: "gameType",
+    gameType: null,
     myIndex: 0,   
     table: [],     // cards on table
     players: [],   // json: {name: string, contracts: string[]}
     hand: [],      // cards in hand
     playable: [],  // playable cards in hand
     cardsWon: [], 
-    turn: false,    // is it my turn?
+    turn: 0,    // index of player whose turn it is
     playableGames: [],
     talon: [[]],
   })
@@ -33,6 +34,7 @@ const Game = ({match}) => {
 
       let testState = {
         stage: match.params.stage,
+        gameType: [],
         myIndex: 0,
         table: [],
         players: [
@@ -88,13 +90,35 @@ const Game = ({match}) => {
 
   const testScores = getScores(state.players)
 
+  const getPlayerActivity = (playerIndex) => {
+    let gameType = undefined;
+
+    if(state.stage === 'gameType') {
+      gameType = state.gameType.filter(obj => obj.player === playerIndex)[0]
+    } else {
+      // state.gameType has multiple personality disorder and is now an Object...
+      if(state.gameType.player === playerIndex)
+        gameType = state.gameType
+    }
+    
+
+    if(gameType && gameType.name !== 'choosing')
+      return gameType.name
+  }
+
   const getOtherPlayers = () => {
     const otherPlayers = [];
   
     for(let i = 1; i < state.players.length; i++) {
-      let playerIndex = (state.myIndex + i) % state.players.length;
+      const playerIndex = (state.myIndex + i) % state.players.length;
       
-      otherPlayers.push(state.players[playerIndex]);
+      const player = state.players[playerIndex];
+
+      otherPlayers.push({
+        name: player.name,
+        activity: getPlayerActivity(playerIndex),
+        hasTurn: (state.turn === playerIndex) ? true : false
+      });
     }
   
     return otherPlayers;
@@ -102,7 +126,7 @@ const Game = ({match}) => {
 
   const playerBoxes = getOtherPlayers().map(player =>
     <div className={gameStyle.playerWrapper}>
-      <PlayerBox name={player.name} activity={player.contracts[0]} />
+      <PlayerBox name={player.name} activity={player.activity} hasTurn={player.hasTurn} />
     </div>
   )
 
