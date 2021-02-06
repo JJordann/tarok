@@ -100,7 +100,7 @@ const Game = ({match}) => {
     while(otherPlayers[0].index !== state.myIndex)
       otherPlayers.push(otherPlayers.shift())
 
-    otherPlayers = otherPlayers.filter(p => p.index !== state.myIndex)
+    otherPlayers.shift()
   }
 
   const playerBoxes = otherPlayers ? otherPlayers.map(player =>
@@ -120,7 +120,7 @@ const Game = ({match}) => {
     case "chooseKing":    Activity = <Table cards={kings} stage={state.stage}/>       ;break;
     case "chooseTalon":   Activity = <Talon cardGroups={state.talon} />               ;break;
     case "talonSwap":     Activity = <Talon cardGroups={state.talon} />               ;break;
-    case "roundFinished": Activity = <RoundEnd players={state.players} />          ;break;
+    case "roundFinished": Activity = <RoundEnd players={state.players} />             ;break;
     default:              Activity = <Table cards={state.table} stage={state.stage}/>
   }
 

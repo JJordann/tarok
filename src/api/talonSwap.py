@@ -16,6 +16,16 @@ def chooseKing(self, king):
         return None
 
     self.gameType["king"] = king
+
+
+    kingHolder = playerIndex
+    for player in self.players:
+        if king in player["hand"]:
+            kingHolder = player["index"]
+            break
+
+    self.gameType["with"] = kingHolder
+
     self.stage = "chooseTalon"
     self.showTalon()
 

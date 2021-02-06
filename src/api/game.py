@@ -124,6 +124,9 @@ class Game:
             "cardsWon": player["cardsWon"]
         }
 
+        if "with" in self.gameType:
+            del self.gameType["with"]
+
         if self.stage == "gameType":
             isPlayerLast = self.turn == len(self.players) - 1
             publicState["playableGames"] = playableGames(self.gameType, isPlayerLast)
@@ -183,7 +186,7 @@ class Game:
         playerIndex = self.getPlayerIndex(player)
 
         if self.turn != playerIndex:
-            self.error("Illegal move (PlayCard) - It's not your turn")
+            self.error("Illegal move - It's not your turn")
             return None
 
         if card not in playable(self.players[playerIndex]["hand"], self.table):

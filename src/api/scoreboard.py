@@ -10,28 +10,20 @@ def concludeGame(self):
     self.info("Game over")
     self.stage = "roundFinished"
 
-    #for player in self.players:
-        #player["contractBonus"] += contractBonus(player["cardsWon"])
-        #for contract in player["contractBonus"]:
-            #player["score"] += contract["value"]
-
-
+    _scores = []
     for player in self.players:
-        pscore = score(player["cardsWon"])
-        player["scores"].append(pscore)
+        _scores.append(score(player["cardsWon"]))
 
 
-    #ranked = sorted(self.players, key=lambda p: score(p["cardsWon"]), reverse=True)
-    #self.results = [
-        #{
-            #"name": player["name"],
-            #"place": index,
-            #"score": score(player["cardsWon"]),
-            #"cardsWon": player["cardsWon"],
-            #"contractBonus": player["contractBonus"]
-        #} for index, player in enumerate(ranked)
-    #]
-    #sio.emit("getState", json.dumps(self.results), broadcast=True, room=self.room)
+    if "king" in self.gameType and self.gameType["with"] != self.gameType["player"]:
+        # a king was called, add scores of player with index "player" and "with"
+        _scores[self.gameType["player"]] += _scores[self.gameType["with"]]
+        _scores[self.gameType["with"]]    = _scores[self.gameType["player"]]
+
+    for (i, player) in enumerate(self.players):
+        player["scores"].append(_scores[i])
+
+
     self.dispatchPublicState("getState")
 
 
