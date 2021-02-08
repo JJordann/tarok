@@ -1,0 +1,39 @@
+@import '../../../variables';
+
+.input {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
+  input {
+    box-sizing: border-box;
+    width: 200px;
+    margin: 0;
+    padding: 5px 10px;
+    border: 2px solid $blue; // TODO
+    border-right: 0;
+    font-size: 2em;
+    color: $darkGrey;
+    outline: none;
+  }
+
+  button {
+    box-sizing: border-box;
+    width: 140px;
+    padding: 5px 10px;
+    outline: none;
+    border: 2px solid $blue;
+    font-size: 2em;
+    cursor: pointer;
+    background: $blue;
+    color: white;
+
+    &:hover {
+      background: white;
+      color: $blue;
+    }
+  }
+}
