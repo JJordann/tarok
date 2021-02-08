@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import Hand from './Hand'
-import Table from './Table'
-import Chat from './Chat'
-import getSocket from './global'
-import Contracts from './Contracts'
-import RoundEnd from './RoundEnd'
 
-import gameStyle from '../style/game.module.scss'
-import Scoreboard from './Scoreboard'
-import PlayerBox from './PlayerBox'
-import Talon from './Talon'
+import { socket } from '../../../services/Socket'
 
-import GameTypes from '../util/GameTypes'
+import { GameTypes } from '../GameTypes'
+
+import Hand from '../Hand'
+import Table from '../Table'
+import Chat from '../Chat'
+import Contracts from '../Contracts'
+import RoundEnd from '../RoundEnd'
+import Scoreboard from '../Scoreboard'
+import PlayerBox from '../PlayerBox'
+import Talon from '../Talon'
+
+import gameStyle from './style.module.scss'
 
 const Game = ({match}) => {
-  const socket = getSocket()
 
   const [state, setState] = useState({
     stage: "gameType",

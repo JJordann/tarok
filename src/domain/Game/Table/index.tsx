@@ -1,14 +1,14 @@
 import React from 'react'
-import Card from './Card'
 
-import tableStyle from '../style/table.module.scss'
-import getSocket from './global'
+import { socket } from '../../../services/Socket'
+
+import Card from '../Card'
+
+import tableStyle from './style.module.scss'
 
 const Table = ({cards, stage}) => {
 
   console.log(cards);
-
-  const socket = getSocket()
   var handleOnClick = card => {}
 
   if(stage === "chooseKing") {

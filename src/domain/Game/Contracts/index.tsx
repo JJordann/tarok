@@ -1,13 +1,12 @@
 import React from 'react'
-import getSocket from './global'
 
-import contractStyle from '../style/contracts.module.scss'
+import { socket } from '../../../services/Socket'
 
-import GameTypes from '../util/GameTypes'
+import { GameTypes } from '../GameTypes'
+
+import contractStyle from './style.module.scss'
 
 const Contracts = ({ contracts, show = true }) => {
-
-  const socket = getSocket()
 
   const handleContract = contract => {
     socket.emit('gameType', contract)

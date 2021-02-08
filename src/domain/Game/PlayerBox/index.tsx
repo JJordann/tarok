@@ -1,6 +1,6 @@
 import React from 'react'
 
-import playerBoxStyle from '../style/playerBox.module.scss';
+import playerBoxStyle from './style.module.scss'
 
 const PlayerBox = ({name, activity = null, hasTurn = false}) => {
   return (

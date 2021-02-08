@@ -1,9 +1,11 @@
 import React from 'react';
+
 import { faStar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import scoreboardStyle from '../style/scoreboard.module.scss';
+import scoreboardStyle from './style.module.scss'
 
 const Scoreboard = ({scores}) => {
 

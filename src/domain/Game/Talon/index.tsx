@@ -1,29 +1,27 @@
 import React from 'react'
-import getSocket from './global'
 
+import { socket } from '../../../services/Socket'
 
-import talonStyles from '../style/talon.module.scss'
+import talonStyle from './style.module.scss'
 
 const Talon = ({ cardGroups }) => {
-
-    const socket = getSocket()
 
     const handleOnClick = index => {
         socket.emit("chooseTalon", index)
     }
 
     const Groups = cardGroups.map((group, index) => 
-            <div className={talonStyles.cardGroup}
+            <div className={talonStyle.cardGroup}
                  onClick={() => handleOnClick(index)}>
                     { 
                         group.map(card => 
-                            <div className={talonStyles.card}> {card} </div>) 
+                            <div className={talonStyle.card}> {card} </div>) 
                     }
             </div>)
 
         // polepši to sranje 
     return (
-        <div className={talonStyles.wrapper}>
+        <div className={talonStyle.wrapper}>
             { Groups }
         </div>
     )

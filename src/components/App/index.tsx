@@ -5,7 +5,7 @@ import { HOME_ROUTE, GAME_ROUTE, LOBBY_ROUTE } from '../../routes'
 
 import Home from '../Home'
 import Lobby from '../../domain/Lobby/Lobby'
-import Game from '../Game'
+import Game from '../../domain/Game/Game'
 
 const App = () => {
 

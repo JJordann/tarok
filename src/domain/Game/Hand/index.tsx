@@ -1,12 +1,13 @@
-import React from 'react';
-import Card from './Card';
-import getSocket from './global'
-import handStyles from "../style/hand.module.scss"
+import React from 'react'
+
+import { socket } from '../../../services/Socket'
+
+import Card from '../Card'
+
+import handStyle from './style.module.scss'
 
 
 const Hand = ({ cards, playable, stage }) => {
-
-  const socket = getSocket()
 
   const cardsOrdered = [
     'srce_4', 'srce_3', 'srce_2', 'srce_1',
@@ -65,8 +66,8 @@ const Hand = ({ cards, playable, stage }) => {
     />)
 
   return (
-    <div className={handStyles.hand}>
-      <div className={handStyles.wrapper}>
+    <div className={handStyle.hand}>
+      <div className={handStyle.wrapper}>
         {Cards}
       </div>
     </div>

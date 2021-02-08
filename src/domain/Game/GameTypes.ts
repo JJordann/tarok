@@ -1,4 +1,4 @@
-const GameTypes = {
+export const GameTypes = {
   'tri': 'Tri',
   'dva': 'Dva',
   'ena': 'Ena',
@@ -12,5 +12,3 @@ const GameTypes = {
   'klop': 'Klop',
   'naprej': 'Naprej'
 }
-
-export default GameTypes
