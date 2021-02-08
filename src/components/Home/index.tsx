@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 
+import { LOBBY_ROUTE } from '../../routes'
+
 import homeStyle from './style.module.scss'
 
 const Home = () => {
@@ -17,7 +19,7 @@ const Home = () => {
         </div>
       </header>
       <main>
-        <Link to="/lobby">
+        <Link to={LOBBY_ROUTE}>
           <div className={homeStyle.startButton}>
             <FontAwesomeIcon icon={faPlayCircle} />
             <span>Začni</span>
