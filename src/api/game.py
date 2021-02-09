@@ -82,7 +82,6 @@ class Game:
 
         (talon, hands) = dealCards(deck, len(self.players))
         self.turn = self.startingPlayer()
-        print(self.turn)
         self.talon = talon
         self.gameType = [
             {
@@ -97,7 +96,7 @@ class Game:
                     "index": i,
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i][0:2],
+                    "hand": hands[i],
                     "ready": True,
                     "cardsWon": [],
                     "contractBonus": [],
@@ -127,7 +126,6 @@ class Game:
         
         publicState =  {
             "stage": self.stage,
-            "gameType": self.gameType,
             "turn": self.turn,
             "myIndex": playerIndex,
             "table": self.table,
@@ -151,6 +149,8 @@ class Game:
             }
             if "king" in self.gameType:
                 publicState["gameType"]["king"] = self.gameType["king"]
+            if "revealed" in self.gameType and self.gameType["revealed"] == True:
+                publicState["gameType"]["with"] = self.gameType["with"]
 
 
         if self.stage == "gameType":
@@ -218,6 +218,10 @@ class Game:
         # transfer played card from hand to table
         self.table.append(card)
         self.players[playerIndex]["hand"].remove(card)
+
+        # if called king was played, reveal player
+        if "king" in self.gameType and card == self.gameType["king"]:
+            self.gameType["revealed"] = True
 
         # transfer turn to next player
         self.passTurn()

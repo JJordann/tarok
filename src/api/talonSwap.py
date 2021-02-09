@@ -27,6 +27,7 @@ def chooseKing(self, king):
             break
 
     self.gameType["with"] = kingHolder
+    self.gameType["revealed"] = False
 
     self.stage = "chooseTalon"
     self.showTalon()
