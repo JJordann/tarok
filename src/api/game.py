@@ -120,7 +120,10 @@ class Game:
         
         _playable = []
         if self.turn == playerIndex and self.stage == "active":
-            _playable = playable(player["hand"], self.table)
+            if len(self.table) == len(self.players):
+                _playable = player["hand"]
+            else:
+                _playable = playable(player["hand"], self.table)
         elif self.turn == playerIndex and self.stage == "talonSwap":
             _playable = player["hand"]
         
