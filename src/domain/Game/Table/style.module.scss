@@ -9,9 +9,15 @@
   justify-content: center;
   flex-direction: row;
 
-  .card{
+  >div { // cardWrapper div
     position: absolute;
-    top: 50%;
-    left: 50%;
+    transform-origin: 50% 5%;
+    margin-top: 240px;
+
+    >img {
+      &:hover {
+        transform: scale(1) !important; // Override card scaling
+      }
+    }
   }
 }
