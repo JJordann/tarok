@@ -143,9 +143,9 @@ class Game:
         if self.stage in ["chooseTalon", "talonSwap"]:
             publicState["talon"] = self.talon
 
-
-        #if self.stage == "roundFinished":
-            #publicState["results"] = ...
+        if self.stage == "talonSwap":
+            # player can swap any card valued below 5
+            publicState["playable"] = [c for c in self.players[self.turn]["hand"] if cardValue(c) < 5]
 
 
         #if self.stage == "contracts":

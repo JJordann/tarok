@@ -1,5 +1,6 @@
 from __main__ import sio
 from flask import request
+from util import cardValue
 import json
 
 
@@ -63,8 +64,14 @@ def chooseTalon(self, index):
         self.error("Illegal move - It's not your turn")
         return None
 
-    # set talon to chosen subset 
-    self.talon = [self.talon[index]]
+    if index not in range(len(self.talon)):
+        self.error("Illegal move - Stop Hacking")
+        return None
+
+    # move chosen talon to player's hand
+    self.players[playerIndex]["hand"] += self.talon[index]
+    del self.talon[index]
+
     self.stage = "talonSwap"
     self.dispatchPublicState("getState")
 
@@ -79,17 +86,19 @@ def talonSwap(self, card):
         self.error("Illegal move - It's not your turn")
         return None
 
-    if card not in self.players[playerIndex]["hand"]:
+    if card not in self.players[playerIndex]["hand"] or cardValue(card) == 5:
         self.error("Illegal move - Stop Hacking")
         return None
 
-
-    # transfer first card in talon to player's hand
+    
+    # transfer chosen card to player's cardWon list
     cardIndex = self.players[playerIndex]["hand"].index(card)
-    self.players[playerIndex]["hand"][cardIndex] = self.talon[0][0]
-    self.talon[0].pop(0)
+    self.players[playerIndex]["cardsWon"].append(self.players[playerIndex]["hand"][cardIndex])
+    del self.players[playerIndex]["hand"][cardIndex]
 
-    if self.talon[0] == []:
+
+    handSize = int(48 / len(self.players))
+    if len(self.players[playerIndex]["hand"]) == handSize:
         self.stage = "active"
         self.turn = 0
     self.dispatchPublicState("getState")
@@ -97,6 +106,7 @@ def talonSwap(self, card):
 
 
 
+# TODO: self.startingPlayer()
 
 
 
