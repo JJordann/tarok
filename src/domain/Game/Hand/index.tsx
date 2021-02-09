@@ -40,7 +40,8 @@ const Hand = ({ cards, playable, stage }) => {
 
 
   var handleCardClick = card => {
-    socket.emit("playCard", card)
+    if(isCardPlayable(card))
+      socket.emit("playCard", card)
   }
 
   if(stage === "talonSwap") {
