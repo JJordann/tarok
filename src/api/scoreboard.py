@@ -20,7 +20,7 @@ def teamScores(self):
     playerSum   = sum(_scores[i] for i in playerTeam)
     opposingSum = sum(_scores[i] for i in opposingTeam)
     talonSum = score([c for pack in self.talon for c in pack])
-    self.info("Talon value: " + talonSum)
+    self.info("Talon value: " + str(talonSum))
 
     # if called king was in talon...
     if "with" in self.gameType and self.gameType["with"] == -1:
