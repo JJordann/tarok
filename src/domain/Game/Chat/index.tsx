@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-
-import { Scrollbars } from 'react-custom-scrollbars'
-
 import { socket } from '../../../services/Socket'
-
 import chatStyle from './style.module.scss'
 
 
@@ -66,7 +62,7 @@ const Chat = () => {
     )
   }
     
-  const CustomScrollbars = (props) => <Scrollbars renderThumbVertical={renderThumb} {...props} />
+  //const CustomScrollbars = (props) => <Scrollbars renderThumbVertical={renderThumb} {...props} />
 
   return (
     <div className={chatStyle.wrapper}>
@@ -76,7 +72,12 @@ const Chat = () => {
             
       <form className={chatStyle.inputRow} onSubmit={handleSend}>
         <label>
-          <input type="text" onChange={handleChange} value={mymessage} placeholder="Bodi glasen" />
+          <input 
+            type="text" 
+            onChange={handleChange} 
+            value={mymessage} 
+            placeholder="Bodi glasen" 
+          />
         </label>
       </form>
     </div>
