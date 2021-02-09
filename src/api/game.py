@@ -37,15 +37,32 @@ class Game:
         print("ERROR>", msg)
         sio.emit("ERROR", msg, room=self.room)
 
+
+
     def info(self, msg):
         print("INFO>", msg)
         sio.emit("INFO", msg, room=self.room)
+
 
 
     def leave(self):
         self.players = [u for u in self.players if u["sid"] != request.sid]
         self.dispatchGameLobbyState()
     
+
+
+    def startingPlayer(self):
+        return len(self.players[0]["scores"]) % len(self.players) if "scores" in self.players[0] else 0
+
+
+
+    def lastPlayer(self):
+        return (self.startingPlayer() - 1) % len(self.players)
+
+
+
+    def passTurn(self):
+        self.turn = (self.turn + 1) % len(self.players)
 
 
 
@@ -64,7 +81,8 @@ class Game:
         self.players = players
 
         (talon, hands) = dealCards(deck, len(self.players))
-        self.turn = 0
+        self.turn = self.startingPlayer()
+        print(self.turn)
         self.talon = talon
         self.gameType = [
             {
@@ -79,7 +97,7 @@ class Game:
                     "index": i,
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i],
+                    "hand": hands[i][0:2],
                     "ready": True,
                     "cardsWon": [],
                     "contractBonus": [],
@@ -136,7 +154,7 @@ class Game:
 
 
         if self.stage == "gameType":
-            isPlayerLast = self.turn == len(self.players) - 1
+            isPlayerLast = self.turn == self.lastPlayer()
             publicState["playableGames"] = playableGames(self.gameType, isPlayerLast, len(self.players))
 
 
@@ -173,15 +191,12 @@ class Game:
 
 
 
-    def passTurn(self):
-        self.turn = (self.turn + 1) % len(self.players)
 
 
 
 
     def handlePlayCard(self, card):
         self.playCard(card, request.sid)
-        self.dispatchPublicState("getState")
 
         if all(len(p["hand"]) == 0 for p in self.players):
             results = self.concludeGame()
@@ -192,6 +207,7 @@ class Game:
 
     def playCard(self, card, player):
         playerIndex = self.getPlayerIndex(player)
+        print(self.turn, playerIndex)
 
         if self.turn != playerIndex:
             self.error("Illegal move - It's not your turn")
@@ -212,6 +228,7 @@ class Game:
 
         if len(self.table) < nPlayers:
             # round is not over
+            self.dispatchPublicState("getState")
             return None
         
         # round is over, transfer table to round winner
@@ -235,6 +252,7 @@ class Game:
 
         # player who takes begins next round
         self.turn = takesPlayer
+        self.dispatchPublicState("getState")
         self.table = []
 
 

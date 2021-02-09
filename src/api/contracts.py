@@ -14,7 +14,7 @@ def valueOfGameType(gameType):
 
 def playGameType(self, gameType):
     playerIndex = self.getPlayerIndex(request.sid)
-    isPlayerLast = playerIndex == len(self.players) - 1
+    isPlayerLast = playerIndex == self.lastPlayer()
 
     if self.turn != playerIndex or gameType not in playableGames(self.gameType, isPlayerLast, len(self.players)):
         self.error("Illegal move - It's not your turn")
@@ -67,7 +67,7 @@ def finishGameType(self):
     else:
         # no talon swap, straight to game
         self.stage = "active"
-        self.turn = 0
+        self.turn = self.startingPlayer()
 
 
 

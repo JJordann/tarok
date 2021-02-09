@@ -97,10 +97,11 @@ def talonSwap(self, card):
     del self.players[playerIndex]["hand"][cardIndex]
 
 
-    handSize = int(48 / len(self.players))
+    # base hand size is size of any other player's hand
+    handSize = len(self.players[(playerIndex + 1) % len(self.players)]["hand"]) 
     if len(self.players[playerIndex]["hand"]) == handSize:
         self.stage = "active"
-        self.turn = 0
+        self.turn = self.startingPlayer()
     self.dispatchPublicState("getState")
 
 
