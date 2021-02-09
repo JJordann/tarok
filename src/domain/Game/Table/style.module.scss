@@ -12,9 +12,11 @@
   >div { // cardWrapper div
     position: absolute;
     transform-origin: 50% 5%;
-    margin-top: 240px;
+    margin-top: 150px;
 
     >img {
+      filter: brightness(100%) !important; // Override card brightness
+
       &:hover {
         transform: scale(1) !important; // Override card scaling
       }
