@@ -16,7 +16,7 @@ def playGameType(self, gameType):
     playerIndex = self.getPlayerIndex(request.sid)
     isPlayerLast = playerIndex == len(self.players) - 1
 
-    if self.turn != playerIndex or gameType not in playableGames(self.gameType, isPlayerLast):
+    if self.turn != playerIndex or gameType not in playableGames(self.gameType, isPlayerLast, len(self.players)):
         self.error("Illegal move - It's not your turn")
         return None
 
@@ -120,23 +120,26 @@ gameTypes = [
 
 
 
-def playableGames(gameType, isPlayerLast):
-
+def playableGames(gameType, isPlayerLast, numPlayers):
     global gameTypes
+    if numPlayers == 4:
+        _gameTypes = gameTypes
+    else:
+        _gameTypes = [g for g in gameTypes if g["name"] not in ["tri", "dva", "ena"]]
 
     if all([g["name"] in ["choosing", "naprej"] for g in gameType]):
         # no game was played yet
         if isPlayerLast:
             # player is last and no game was played, every game is playable
-            return [g["name"] for g in gameTypes] + ["naprej"]
+            return [g["name"] for g in _gameTypes] + ["naprej"]
         else:
-            return [g["name"] for g in gameTypes if g["name"] != "tri"] + ["naprej"]
+            return [g["name"] for g in _gameTypes if g["name"] != "tri"] + ["naprej"]
             # player is last and game was played, return all games with equal or higher value
 
     # a game was played already
     currentGameValue = valueOfGameType(max(gameType, key=valueOfGameType))
     
     if isPlayerLast: 
-        return [g["name"] for g in gameTypes if g["value"] >= currentGameValue] + ["naprej"]
+        return [g["name"] for g in _gameTypes if g["value"] >= currentGameValue] + ["naprej"]
     else:
-        return [g["name"] for g in gameTypes if g["value"] > currentGameValue and g["name"] != "tri"] + ["naprej"]
+        return [g["name"] for g in _gameTypes if g["value"] > currentGameValue and g["name"] != "tri"] + ["naprej"]

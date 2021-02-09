@@ -137,7 +137,7 @@ class Game:
 
         if self.stage == "gameType":
             isPlayerLast = self.turn == len(self.players) - 1
-            publicState["playableGames"] = playableGames(self.gameType, isPlayerLast)
+            publicState["playableGames"] = playableGames(self.gameType, isPlayerLast, len(self.players))
 
 
         if self.stage in ["chooseTalon", "talonSwap"]:
