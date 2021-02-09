@@ -29,7 +29,7 @@ const Table = ({ state }) => {
       className={tableStyle.card}
       playable={stage === "chooseKing"}
       value={card} 
-      rotation={ (indexOffset + index) * (360 / n) + Math.floor(Math.random() * Math.floor(10)) - 5 } 
+      rotation={ (indexOffset + index) * (360 / n) } 
       id={index} 
       key={index}
       onClick={() => handleOnClick(card)}
