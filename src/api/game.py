@@ -191,10 +191,6 @@ class Game:
 
 
 
-
-
-
-
     def handlePlayCard(self, card):
         self.playCard(card, request.sid)
 
