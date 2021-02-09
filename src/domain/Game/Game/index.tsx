@@ -32,6 +32,7 @@ const Game = ({match}) => {
   })
 
   useEffect(() => {
+     // TODO: Premakni to ven iz useEffect !
     if(match.params.debug) {
       console.log('Running in debug mode');
 
@@ -80,6 +81,24 @@ const Game = ({match}) => {
       }
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+
+
+  useEffect(() => {
+    let clearTable = () => {
+      if(state.table.length === state.players.length)
+        setState(oldState => ({
+          ...oldState,
+          table: []
+        }))
+    }
+
+    if(state.table.length === state.players.length) {
+      setTimeout(clearTable, 750)
+    }
+
+  }, [state.table.length, state.players.length])
+
 
   const myName = (state.players.length > 0) ? state.players[state.myIndex].name : '';
 
