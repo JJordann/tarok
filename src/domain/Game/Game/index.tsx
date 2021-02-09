@@ -12,6 +12,7 @@ import RoundEnd from '../RoundEnd'
 import Scoreboard from '../Scoreboard'
 import PlayerBox from '../PlayerBox'
 import Talon from '../Talon'
+import Kings from '../Kings'
 
 import gameStyle from './style.module.scss'
 
@@ -161,7 +162,7 @@ const Game = ({match}) => {
   switch(state.stage) {
     case "gameType":      Activity = <Contracts contracts={state.playableGames}
                             show={(state.turn === state.myIndex) ? true : false} />   ;break; 
-    case "chooseKing":    Activity = <Table state={state}/>       ;break;
+    case "chooseKing":    Activity = <Kings />                                        ;break;
     case "chooseTalon":   Activity = <Talon cardGroups={state.talon} />               ;break;
     case "talonSwap":     Activity = <Talon cardGroups={state.talon} />               ;break;
     case "roundFinished": Activity = <RoundEnd players={state.players} />             ;break;
