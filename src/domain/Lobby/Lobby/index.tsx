@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-
 import { socket } from '../../../services/Socket'
-
 import { GET_USERS, ALL_READY } from '../actions'
-
 import { GAME_ROUTE } from '../../../routes'
-
 import Connection from '../Connection'
 import LobbyCard from '../LobbyCard'
-
 import lobbyStyle from './style.module.scss'
+import Chat from '../../Game/Chat'
 
 const Lobby = () => {
   const [users, setUsers] = useState([])
@@ -49,6 +45,7 @@ const Lobby = () => {
       <div className={lobbyStyle.cards}>
         { (users.length) ? LobbyCards : '' }
       </div>
+      { clientIsJoined() ? <Chat /> : <></> }
     </div>
   )
 }

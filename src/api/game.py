@@ -66,14 +66,14 @@ class Game:
 
 
 
-
-
-
     def dispatchGameLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.players]
         for i in range(0, len(self.players)):
             msg[i][2] = True
-            sio.emit("getUsers", msg, room=self.players[i]["sid"])
+            try: 
+                sio.emit("getUsers", msg, room=self.players[i]["sid"])
+            except IndexError:
+                print("Handled disconnect gracefully")
             msg[i][2] = False
 
 

@@ -47,7 +47,7 @@ def handlePlayCard(card):
 
 @sio.on("chat")
 def handleChat(msg):
-    lobby.game.sendChat(msg)
+    lobby.sendChat(msg)
 
 @sio.on("gameType")
 def handleGameType(gameType):

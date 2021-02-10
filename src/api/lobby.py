@@ -1,7 +1,7 @@
 from __main__ import sio
 from flask import request
 from flask_socketio import join_room, leave_room
-
+import json
 from game import Game
 
 class Lobby:
@@ -13,11 +13,15 @@ class Lobby:
 
 
     def join(self, name):
-        self.lobby.append({"name": name, 
-                            "sid": request.sid,
-                            "ready": False})
-        self.dispatchLobbyState()
-        join_room(self.room)
+        if self.game.stage == "lobby":
+            self.lobby.append({"name": name, 
+                                "sid": request.sid,
+                                "ready": False})
+            self.dispatchLobbyState()
+            join_room(self.room)
+        else:
+            self.game.error("Unable to join -- Game has already started")
+            return None
     
 
 
@@ -68,3 +72,13 @@ class Lobby:
             msg[i][2] = True
             sio.emit("getUsers", msg, room=self.lobby[i]["sid"])
             msg[i][2] = False
+
+
+    
+    def sendChat(self, msg):
+        sender = next(p for p in self.lobby if p["sid"] == request.sid)["name"]
+        print(sender,"> ", msg)
+        sio.emit("chat", json.dumps({"sender": sender, "message": msg}), room=self.room)
+
+        if msg == "!next":
+            self.game.nextGame()
