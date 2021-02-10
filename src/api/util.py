@@ -13,6 +13,11 @@ def rank(card):
 
 
 
+def cards(table):
+    return [c["card"] for c in table]
+
+
+
 def cardValue(card):
     if "kraljica" in card:
         return 4

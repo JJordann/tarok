@@ -66,6 +66,11 @@ class Game:
 
 
 
+    def cards(table):
+        return [c["name"] for c in table]
+
+
+
     def dispatchGameLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.players]
         for i in range(0, len(self.players)):
@@ -120,7 +125,7 @@ class Game:
         
         _playable = []
         if self.turn == playerIndex and self.stage == "active":
-            _playable = playable(player["hand"], self.table)
+            _playable = playable(player["hand"], cards(self.table))
         elif self.turn == playerIndex and self.stage == "talonSwap":
             _playable = player["hand"]
         
@@ -209,14 +214,14 @@ class Game:
             self.error("Illegal move - It's not your turn")
             return None
 
-        if card not in playable(self.players[playerIndex]["hand"], self.table):
+        if card not in playable(self.players[playerIndex]["hand"], cards(self.table)):
             self.error("Illegal move - Stop Hacking")
             return None
 
         nPlayers = len(self.players)
 
         # transfer played card from hand to table
-        self.table.append(card)
+        self.table.append({"card": card, "player": playerIndex})
         self.players[playerIndex]["hand"].remove(card)
 
         # if called king was played, reveal player
@@ -232,18 +237,18 @@ class Game:
             return None
         
         # round is over, transfer table to round winner
-        takesIndex = takes(self.table)
+        takesIndex = takes(cards(self.table))
         takesPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + takesIndex) % nPlayers
-        self.players[takesPlayer]["cardsWon"] += self.table
+        self.players[takesPlayer]["cardsWon"] += cards(self.table)
 
         # log round
-        msg = str(self.players[takesPlayer]["name"]) + " takes -- " + self.table[takesIndex] + " takes " + str(self.table)
+        msg = str(self.players[takesPlayer]["name"]) + " takes -- " + self.table[takesIndex]["card"] + " takes " + str(cards(self.table))
         self.info(msg)
 
         if all(len(p["hand"]) == 0 for p in self.players):
             # players have no cards, game ends
             # check for pagat ultimo
-            pagatIndex = pagatUltimo(self.table)
+            pagatIndex = pagatUltimo(cards(self.table))
             if pagatIndex > -1:
                 pagatPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + pagatIndex) % nPlayers
                 self.players[pagatPlayer]["contractBonus"] += [{"bonus": "pagatUltimo", "value": 25}]

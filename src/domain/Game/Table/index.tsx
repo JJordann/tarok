@@ -19,6 +19,7 @@ const Table = ({ state }) => {
 
   const modulo = (n: number, mod: number): number => (((n % mod) + mod) % mod)
 
+
   let n = players.length
   let startingPlayer = modulo((turn - table.length), n)
   let indexOffset = modulo((startingPlayer - myIndex), n)
@@ -28,11 +29,11 @@ const Table = ({ state }) => {
     <Card
       className={tableStyle.card}
       playable={stage === "chooseKing"}
-      value={card} 
+      value={card.card} 
       rotation={ (indexOffset + index) * (360 / n) } 
       id={index} 
       key={index}
-      onClick={() => handleOnClick(card)}
+      onClick={() => handleOnClick(card.card)}
     />)
 
   return (
