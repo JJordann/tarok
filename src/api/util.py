@@ -45,9 +45,9 @@ def dealCards(deck, nPlayers):
 
 
 
-def playable(hand, table):
+def playable(hand, table, nPlayers):
     # if table is empty, any card can be played
-    if table == []:
+    if table == [] or len(table) == nPlayers:
         return hand
     
     if suit(table[0]) != "tarok":

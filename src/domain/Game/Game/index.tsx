@@ -114,19 +114,24 @@ const Game = ({match}) => {
   const testScores = getScores(state.players)
 
   const getPlayerActivity = (playerIndex) => {
-    let gameType = undefined;
-
-    if(state.stage === 'gameType') {
-      gameType = state.gameType.filter(obj => obj.player === playerIndex)[0]
-    } else {
-      // state.gameType has multiple personality disorder and is now an Object...
-      if(state.gameType.player === playerIndex)
-        gameType = state.gameType
+    const kingsSuits = {
+      srce_kralj: '♥',
+      kara_kralj: '♦',
+      kriz_kralj: '♣',
+      pik_kralj: '♠'
     }
-    
 
-    if(gameType && gameType.name !== 'choosing')
-      return GameTypes[gameType.name]
+    if(state.stage === 'gameType')
+      return GameTypes[state.gameType.filter(obj => obj.player === playerIndex)[0].name]
+
+    if(state.gameType.player === playerIndex && (state.gameType.king === undefined))
+      return GameTypes[state.gameType.name]
+
+    if(state.gameType.player === playerIndex)
+      return GameTypes[state.gameType.name] + ' ' + kingsSuits[state.gameType.king]
+
+    if((state.gameType.with !== undefined) && state.gameType.with === playerIndex)
+      return GameTypes[state.gameType.name]
   }
 
   const getOtherPlayers = () => {
