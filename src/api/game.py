@@ -96,7 +96,7 @@ class Game:
                     "index": i,
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i][0:2],
+                    "hand": hands[i],
                     "ready": True,
                     "cardsWon": [],
                     "contractBonus": [],

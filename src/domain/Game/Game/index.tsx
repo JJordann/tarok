@@ -122,7 +122,10 @@ const Game = ({match}) => {
     }
 
     if(state.stage === 'gameType')
-      return ''
+      return GameTypes[state.gameType.filter(obj => obj.player === playerIndex)[0].name]
+
+    if(state.gameType.player === playerIndex && (state.gameType.king === undefined))
+      return GameTypes[state.gameType.name]
 
     if(state.gameType.player === playerIndex)
       return GameTypes[state.gameType.name] + ' ' + kingsSuits[state.gameType.king]
