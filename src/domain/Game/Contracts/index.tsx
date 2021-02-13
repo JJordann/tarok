@@ -1,10 +1,10 @@
-import React from 'react'
-
+import React, { useEffect } from 'react'
 import { socket } from '../../../services/Socket'
-
 import { GameTypes } from '../GameTypes'
-
+import _Sound from '../Table/soundEffects'
 import contractStyle from './style.module.scss'
+import Sound from '../Table/soundEffects'
+
 
 const Contracts = ({ contracts, show = true }) => {
 
@@ -12,6 +12,11 @@ const Contracts = ({ contracts, show = true }) => {
     socket.emit('gameType', contract)
     console.log(contract)
   }
+
+  useEffect(
+    () => {
+      Sound.randomShuffleEffect()
+    }, [])
     
   let Items = contracts.map((contract, index) =>
     <div>

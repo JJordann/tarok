@@ -1,14 +1,28 @@
-import React from 'react'
-
+import React, { useEffect } from 'react'
 import { socket } from '../../../services/Socket'
-
 import Card from '../Card'
-
 import tableStyle from './style.module.scss'
+
+import Sound from './soundEffects'
 
 const Table = ({ state }) => {
 
-  const { players, turn, table, myIndex, stage } = state
+  const { 
+    players, 
+    table, 
+    myIndex, 
+    stage 
+  } = state
+
+
+  useEffect(
+    () => {
+      
+      if(stage === "active") 
+        Sound.randomPlayEffect()
+      
+    }, [state.table.length, stage])
+
 
   var handleOnClick = card => {}
   if(stage === "chooseKing") {
@@ -19,6 +33,7 @@ const Table = ({ state }) => {
 
   const modulo = (n: number, mod: number): number => (((n % mod) + mod) % mod)
   const n = players.length
+
 
 
 
