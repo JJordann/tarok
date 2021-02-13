@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { socket } from '../../../services/Socket'
 import { GameTypes } from '../GameTypes'
 import contractStyle from './style.module.scss'
-import Sound from '../Table/soundEffects'
+import Sound from '../../../services/soundEffects'
 
 
 const Contracts = ({ contracts, show = true }) => {
@@ -14,7 +14,7 @@ const Contracts = ({ contracts, show = true }) => {
 
   useEffect(
     () => {
-      Sound.randomShuffleEffect()
+      Sound.shuffleDeck()
     }, [])
     
   let Items = contracts.map((contract, index) =>

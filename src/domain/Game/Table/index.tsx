@@ -3,7 +3,7 @@ import { socket } from '../../../services/Socket'
 import Card from '../Card'
 import tableStyle from './style.module.scss'
 
-import Sound from './soundEffects'
+import Sound from '../../../services/soundEffects'
 
 const Table = ({ state }) => {
 
@@ -19,7 +19,7 @@ const Table = ({ state }) => {
     () => {
       
       if(stage === "active") 
-        Sound.randomPlayEffect()
+        Sound.putCard()
       
     }, [state.table.length, stage])
 

@@ -1,8 +1,8 @@
 
 class Sound {
 
-    static playEffects
-    static shuffleEffects
+    static playEffects: HTMLAudioElement[]
+    static shuffleEffects: HTMLAudioElement[]
 
     constructor() {
         Sound.playEffects = [
@@ -20,19 +20,19 @@ class Sound {
         ].map(f => new Audio(f))
     }
 
-    randomPlayEffect = () => {
+    putCard = () => {
         let index = Math.floor(Math.random() * Sound.playEffects.length)
         Sound.playEffects[index].play()
     }
 
-    randomShuffleEffect = () => {
+    shuffleDeck = () => {
         let index = Math.floor(Math.random() * Sound.shuffleEffects.length)
         Sound.shuffleEffects[index].play()
     }
 }
 
 
-var _Sound = null
+var _Sound: Sound = null
 if (_Sound === null)
     _Sound = new Sound()
 
