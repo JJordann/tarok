@@ -172,6 +172,11 @@ class Game:
         if self.stage == "roundFinished":
             publicState["recentScores"] = self.recentScores
 
+        if self.stage == "active" and self.gameType["name"] == "odprti_berac":
+            beracHand = self.players[self.gameType["player"]]["hand"]
+            publicState["gameType"]["beracHand"] = beracHand
+            self.info("Berač hand: " + str(beracHand))
+
         #if self.stage == "contracts":
             #publicState["playableContracts"] = playableContracts(self) + ["naprej"]
 

@@ -131,7 +131,7 @@ def playableGames(gameType, isPlayerLast, numPlayers):
         # no game was played yet
         if isPlayerLast:
             # player is last and no game was played, every game is playable
-            return [g["name"] for g in _gameTypes] + ["naprej"]
+            return [g["name"] for g in _gameTypes] + ["klop"]
         else:
             return [g["name"] for g in _gameTypes if g["name"] != "tri"] + ["naprej"]
             # player is last and game was played, return all games with equal or higher value
