@@ -118,6 +118,56 @@ def teamScores(self):
 
 
 
+def beracScores(self):
+    assert self.gameType["name"] in ["berac", "odprti_berac"]
+
+    completed = self.players[self.gameType["player"]]["cardsWon"] == []
+
+    def getScore(self, i, completed):
+        if i == self.gameType["player"]:
+            return 70 if completed else -70
+        else:
+            return 0
+
+    return [{
+        "players": [i],
+        "cardsWon": p["cardsWon"],
+        "breakdown": [
+            ["berac", 70 if completed else -70 ] if i == self.gameType["player"] else []
+        ],
+        "sum": getScore(self, i, completed)
+    } for i,p in enumerate(self.players)]
+
+
+
+
+def pikoloScores(self):
+    assert self.gameType["name"] == "pikolo"
+
+    roundsWon = len(self.players[self.gameType["player"]]["cardsWon"]) / len(self.players)
+    completed = roundsWon < 2
+
+    def getScore(self, i, completed):
+        if i == self.gameType["player"]:
+            return 60 if completed else -60
+        else:
+            return 0
+
+    return [{
+        "players": [i],
+        "cardsWon": p["cardsWon"],
+        "breakdown": [
+            ["pikolo", 60 if completed else -60 ] if i == self.gameType["player"] else []
+        ],
+        "sum": getScore(self, i, completed)
+    } for i,p in enumerate(self.players)]
+    return None
+
+
+
+def klopScores(self):
+    assert self.gameType["name"] == "klop"
+    return None
 
 
 
@@ -136,9 +186,17 @@ def concludeGame(self):
     self.info(" - Round finished - ")
     self.stage = "roundFinished"
 
-    if self.gameType["name"] in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri", "solo_brez"]:
+    gt = self.gameType["name"]
+
+    if gt in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri", "solo_brez"]:
         _scores = teamScores(self)
-    else:
+    elif gt in ["berac", "odprti_berac"]:
+        _scores = beracScores(self)
+    elif gt == "pikolo":
+        _scores = pikoloScores(self)
+    elif gt == "klop":
+        _scores = normalScores(self) # TODO
+    else: 
         _scores = normalScores(self)
 
 

@@ -53,7 +53,7 @@ def orderHand(cards):
     + sorted([c for c in cards if suit(c) == "srce"], key=keyRed)
     + sorted([c for c in cards if suit(c) ==  "pik"], key=keyBlack)
     + sorted([c for c in cards if suit(c) == "kriz"], key=keyBlack)
-    + sorted([c for c in cards if suit(c) == "tarok"], key=rank))
+    + sorted([c for c in cards if suit(c) == "tarok"], key=lambda c: int(rank(c))))
 
 
 

@@ -198,11 +198,29 @@ class Game:
 
 
     def handlePlayCard(self, card):
-        self.playCard(card, request.sid)
+        isOver = self.playCard(card, request.sid)
+        self.dispatchPublicState("getState")
 
-        if all(len(p["hand"]) == 0 for p in self.players):
-            results = self.concludeGame()
-            sio.emit("gameOver", results, room=self.room)
+        if self.isOverEarly() or isOver:
+            self.concludeGame()
+
+
+
+
+    def isOverEarly(self):
+        if self.gameType["name"] in ["berac", "odprti_berac"]:
+            if self.players[self.gameType["player"]]["cardsWon"] != []:
+                # Berac player won cards, game is over
+                self.info("Berac player takes - game is over")
+                return True
+
+        elif self.gameType["name"] == "pikolo":
+            numRoundsWon = len(self.players[self.gameType["player"]]["cardsWon"]) / len(self.players)
+            if numRoundsWon > 1:
+                self.info("Pikolo player takes second round - game is over")
+                return True
+
+        return False
 
 
 
@@ -212,11 +230,11 @@ class Game:
 
         if self.turn != playerIndex:
             self.error("Illegal move - It's not your turn")
-            return None
+            return False
 
         if card not in playable(self.players[playerIndex]["hand"], cards(self.table), len(self.players), self.gameType["name"]):
             self.error("Illegal move - Stop Hacking")
-            return None
+            return False
 
         nPlayers = len(self.players)
 
@@ -234,7 +252,7 @@ class Game:
         if len(self.table) < nPlayers:
             # round is not over
             self.dispatchPublicState("getState")
-            return None
+            return False
         
         # round is over, transfer table to round winner
         takesIndex = takes(cards(self.table))
@@ -253,11 +271,12 @@ class Game:
                 pagatPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + pagatIndex) % nPlayers
                 self.players[pagatPlayer]["boni"] += ["pagat_ultimo"]
                 self.info("PAGAT ULTIMO: " + self.players[pagatPlayer]["name"])
+            return True
 
         # player who takes begins next round
         self.turn = takesPlayer
-        self.dispatchPublicState("getState")
         self.table = []
+        return False
 
 
 
