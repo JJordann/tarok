@@ -169,6 +169,9 @@ class Game:
             publicState["playable"] = [c for c in self.players[self.turn]["hand"] if cardValue(c) < 5]
 
 
+        if self.stage == "roundFinished":
+            publicState["recentScores"] = self.recentScores
+
         #if self.stage == "contracts":
             #publicState["playableContracts"] = playableContracts(self) + ["naprej"]
 

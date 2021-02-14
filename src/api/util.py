@@ -71,9 +71,6 @@ def playable(hand, table, nPlayers):
 
 
 
-
-
-
 def dominantSuit(table):
     return suit(next(card for card in table if "tarok" not in card))
 
@@ -133,26 +130,6 @@ tests = [
 
 def score(cards):
     return sum(map(cardValue, cards)) - 2 * int(len(cards) / 3)
-
-
-
-def trula(cards):
-    return "tarok_1" in cards and "tarok_21" in cards and "tarok_22" in cards
-
-
-
-def trulapagat(cards):
-    return trula(cards) and pagatUltimo(cards)
-
-
-
-def kralji(cards):
-    return len([card for card in cards if rank(card) == "kralj"]) == 4
-
-
-
-def valat(cards):
-    return len(cards) == 48
 
 
 

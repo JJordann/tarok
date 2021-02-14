@@ -9,16 +9,15 @@ import roundEndStyle from './style.module.scss'
     player pobrane karte (mogoče)
 */
 
-const RoundEnd = ({ players }) => {
+const RoundEnd = ({ scores }) => {
 
-  let Scores = players.map(p => 
+  let nicejson = o => Object.entries(o).map(entry => `${entry[0]} ~ ${entry[1]}`).join("\n")
+
+  let Scores = scores.map(s => 
     <div className={roundEndStyle.scoreWrapper}>
-      <div>
-        { p.name }
-      </div>
-      <div>
-        { p.scores[p.scores.length - 1] }
-      </div>
+      <pre>
+        { nicejson(s) }
+      </pre>
     </div>
   )
 

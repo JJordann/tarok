@@ -27,9 +27,10 @@ const Game = ({match}) => {
     hand: [],      // cards in hand
     playable: [],  // playable cards in hand
     cardsWon: [], 
-    turn: 0,    // index of player whose turn it is
+    turn: 0,    // index of player whose turn it s
     playableGames: [],
     talon: [[]],
+    recentScores: [{ }]
   })
 
   useEffect(() => {
@@ -159,9 +160,6 @@ const Game = ({match}) => {
   )
 
 
-  let kings = ["srce_kralj", "kara_kralj", "pik_kralj", "kriz_kralj"]
-
-
   // DIY ROUTER
   var Activity = <></>
   switch(state.stage) {
@@ -170,7 +168,7 @@ const Game = ({match}) => {
     case "chooseKing":    Activity = <Kings />                                        ;break;
     case "chooseTalon":   Activity = <Talon cardGroups={state.talon} />               ;break;
     case "talonSwap":     Activity = <Talon cardGroups={state.talon} />               ;break;
-    case "roundFinished": Activity = <RoundEnd players={state.players} />             ;break;
+    case "roundFinished": Activity = <RoundEnd scores={state.recentScores} />         ;break;
     default:              Activity = <Table state={state} />
   }
 

@@ -38,6 +38,22 @@ def addBonus(teams, players):
         if all(t["cardsWon"] == [] for t in teams if t != team):
             team["breakdown"] += [["Valat", 250]]
 
+    # Kralji
+    kings = ["kara_kralj", "srce_kralj", "pik_kralj", "kriz_kralj"]
+    for team in teams:
+        if all(king in team["cardsWon"] for king in kings):
+            team["breakdown"] += [["Kralji", 10]]
+
+    # Trula / TrulaPagat
+    trula = ["tarok_1", "tarok_21", "tarok_22"]
+    for team in teams:
+        if all(card in team["cardsWon"] for card in trula):
+            if pagatPlayer in team["players"]:
+                # replace pagat ultimo bonus with Trulapagat
+                team["breakdown"] = [entry for entry in team["breakdown"] if entry[0] != "Pagat Ultimo"]
+                team["breakdown"] += [["Trulapagat", 50]]
+            else:
+                team["breakdown"] += [["Trula", 10]]
 
     return teams
 
@@ -87,13 +103,12 @@ def teamScores(self):
             playerTeam["breakdown"] += [["Talon", score(talonFlat)]]
             playerTeam["cardsWon"] += talonFlat
     else:
-        # in every other scenario, add it to opposing team
+        # in every other case, add it to opposing team
         opposingTeam["breakdown"] += [["Talon", score(talonFlat)]]
         opposingTeam["cardsWon"] += talonFlat
 
-    # handle other contracts here
+    # handle other contracts 
     addBonus([playerTeam, opposingTeam], self.players)
-
 
     # sum scores
     playerTeam["sum"]   = sumScores(playerTeam)
@@ -128,6 +143,8 @@ def concludeGame(self):
 
 
     self.info("Scores: " + str(_scores))
+
+    self.recentScores = _scores
 
 
     #for (i, player) in enumerate(self.players):
