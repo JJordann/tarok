@@ -3,64 +3,124 @@ from util import score
 import json
 
 
-# handles solo_*, ena, dva, tri
-def teamScores(self): 
-    _scores = [score(p["cardsWon"]) for p in self.players]
-    self.info("Card value: " + str(_scores))
 
-    # player and his (potential) teammate
-    playerTeam = [self.gameType["player"]]
+
+def individualScores(players):
+    return [score(p["cardsWon"]) for p in players]
+
+
+
+def sumScores(s):
+    return sum(item[1] for item in s["breakdown"])
+
+
+# returns index of pagat ultimo player if exists,
+# otherwise -1
+def pagatUltimoIndex(players):
+    for i, p in enumerate(players):
+        if p["boni"] != [] and "pagat_ultimo" in p["boni"]:
+            return i
+    return -1
+
+
+
+# mutates scores, adds earned bonus to each team's scores
+def addBonus(teams, players):
+
+    # Pagat Ultimo
+    pagatPlayer = pagatUltimoIndex(players)
+    for team in teams:
+        if pagatPlayer in team["players"]:
+            team["breakdown"] += [["Pagat Ultimo", 25]]
+
+    # Valat
+    for team in teams:
+        if all(t["cardsWon"] == [] for t in teams if t != team):
+            team["breakdown"] += [["Valat", 250]]
+
+
+    return teams
+
+
+
+
+
+
+def teamScores(self):
+    # player who called gameType
+    playerTeam = {
+        "players": [self.gameType["player"]],
+        "breakdown": [], # ["bonus", amount]
+        "cardsWon": []
+    }
+
+    # and his (potential) teammate
     if "with" in self.gameType and self.gameType["with"] != -1:
-        playerTeam.append(self.gameType["with"])
+        playerTeam["players"].append(self.gameType["with"])
 
     # opposing team: everyone else
-    opposingTeam = [i for i in range(len(self.players)) if i not in playerTeam]
+    opposingTeam = {
+        "players": [i for i in range(len(self.players)) if i not in playerTeam["players"]],
+        "breakdown": [],
+        "cardsWon": []
+    }
 
-    # sum points of each team
-    playerSum   = sum(_scores[i] for i in playerTeam)
-    opposingSum = sum(_scores[i] for i in opposingTeam)
-    talonSum = score([c for pack in self.talon for c in pack])
-    self.info("Talon value: " + str(talonSum))
+    self.info("Teams: " + str(playerTeam["players"]) + " vs " + str(opposingTeam["players"]))
 
-    # if called king was in talon...
-    if "with" in self.gameType and self.gameType["with"] == -1:
-        if self.gameType["king"] in self.players[self.gameType["player"]]["cardsWon"]:
-            # if called king ended up in caller's cardsWon...
-            # add remaining talon score to the player
-            playerSum += talonSum
+    # cards won by either team
+    for i, p in enumerate(self.players):
+        if i in playerTeam["players"]:
+            playerTeam["breakdown"] += [[p["name"], score(p["cardsWon"])]]
+            playerTeam["cardsWon"] += p["cardsWon"]
         else:
-            # otherwise add it to opposing team
-            opposingSum += talonSum
-    elif "solo" in self.gameType["name"]:
-        opposingSum += talonSum
+            opposingTeam["breakdown"] += [[p["name"], score(p["cardsWon"])]]
+            opposingTeam["cardsWon"] += p["cardsWon"]
+
+    # add talon cards
+    talonFlat = self.talon
+    if type(talonFlat[0]) == list:
+        talonFlat = [c for pack in self.talon for c in pack]
+
+    if "king" in self.gameType and len(playerTeam) == 1:
+        if self.gameType["king"] in self.players[playerTeam[0]]["cardsWon"]:
+            # if player played alone and won the called king, add talon to his card pile
+            playerTeam["breakdown"] += [["Talon", score(talonFlat)]]
+            playerTeam["cardsWon"] += talonFlat
+    else:
+        # in every other scenario, add it to opposing team
+        opposingTeam["breakdown"] += [["Talon", score(talonFlat)]]
+        opposingTeam["cardsWon"] += talonFlat
+
+    # handle other contracts here
+    addBonus([playerTeam, opposingTeam], self.players)
 
 
-    # if player is playing solo, add talon to opposing team
+    # sum scores
+    playerTeam["sum"]   = sumScores(playerTeam)
+    opposingTeam["sum"] = sumScores(opposingTeam)
+
+    return [playerTeam, opposingTeam]
 
 
-    # each player's score is equal to his team's
-    for i in playerTeam:
-        _scores[i] = playerSum
 
-    for i in opposingTeam:
-        _scores[i] = opposingSum
 
-    return _scores
 
 
 
 def normalScores(self):
-    _scores = [score(p["cardsWon"]) for p in self.players]
-    self.info("Card value: " + str(_scores))
-    return _scores
+    return [{
+        "players": i,
+        "cardsWon": p["cardsWon"],
+        "breakdown": [[p["name"], score(p["cardsWon"])]]
+    } for i, p in enumerate(self.players)]
 
 
 
 def concludeGame(self):
-    self.info("Game over")
+    self.info("Round finished -- Individual scores: " + str(individualScores(self.players)))
     self.stage = "roundFinished"
 
-    if self.gameType["name"] in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri"]:
+    if self.gameType["name"] in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri", "solo_brez"]:
         _scores = teamScores(self)
 
     else:
@@ -70,8 +130,8 @@ def concludeGame(self):
     self.info("Scores: " + str(_scores))
 
 
-    for (i, player) in enumerate(self.players):
-        player["scores"].append(_scores[i])
+    #for (i, player) in enumerate(self.players):
+        #player["scores"].append(_scores[i])
 
     self.dispatchPublicState("getState")
 

@@ -102,7 +102,7 @@ class Game:
                     "hand": hands[i][0:2],
                     "ready": True,
                     "cardsWon": [],
-                    "contractBonus": [],
+                    "boni": [],
                     "contracts": [],
                     "scores": p["scores"] if "scores" in p.keys() else []
                 } for (i, p) in enumerate(self.players)
@@ -249,9 +249,8 @@ class Game:
             pagatIndex = pagatUltimo(cards(self.table))
             if pagatIndex > -1:
                 pagatPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + pagatIndex) % nPlayers
-                self.players[pagatPlayer]["contractBonus"] += [{"bonus": "pagatUltimo", "value": 25}]
-                msg = "PAGAT ULTIMO: " + self.players[pagatPlayer]["name"]
-                self.info(msg)
+                self.players[pagatPlayer]["boni"] += ["pagat_ultimo"]
+                self.info("PAGAT ULTIMO: " + self.players[pagatPlayer]["name"])
 
         # player who takes begins next round
         self.turn = takesPlayer
