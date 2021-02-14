@@ -99,7 +99,7 @@ class Game:
                     "index": i,
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i][0:2],
+                    "hand": hands[i],
                     "ready": True,
                     "cardsWon": [],
                     "boni": [],
@@ -123,7 +123,7 @@ class Game:
         
         _playable = []
         if self.turn == playerIndex and self.stage == "active":
-            _playable = playable(player["hand"], cards(self.table), len(self.players))
+            _playable = playable(player["hand"], cards(self.table), len(self.players), self.gameType["name"])
         elif self.turn == playerIndex and self.stage == "talonSwap":
             _playable = player["hand"]
         
@@ -209,13 +209,12 @@ class Game:
 
     def playCard(self, card, player):
         playerIndex = self.getPlayerIndex(player)
-        print(self.turn, playerIndex)
 
         if self.turn != playerIndex:
             self.error("Illegal move - It's not your turn")
             return None
 
-        if card not in playable(self.players[playerIndex]["hand"], cards(self.table), len(self.players)):
+        if card not in playable(self.players[playerIndex]["hand"], cards(self.table), len(self.players), self.gameType["name"]):
             self.error("Illegal move - Stop Hacking")
             return None
 

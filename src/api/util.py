@@ -32,50 +32,6 @@ def cardValue(card):
 
 
 
-def dealCards(deck, nPlayers):
-    random.shuffle(deck)
-    talon = deck[0:6]
-    handSize = round(48 / nPlayers)
-    hands = []
-    for i in range(0, nPlayers):
-        start = 6 + i * handSize
-        end = start + handSize
-        hands.append(deck[start:end])
-    return (talon, hands)
-
-
-
-def playable(hand, table, nPlayers):
-    # if table is empty, any card can be played
-    if table == [] or len(table) == nPlayers:
-        return hand
-    
-    if suit(table[0]) != "tarok":
-        if any(suit(table[0]) == suit(card) for card in hand):
-            # if first card on table is not a tarot and player has card of same suit in hand,
-            # return all cards of the same suit
-            return [card for card in hand if suit(card) == suit(table[0])]
-        elif any(suit(card) == "tarok" for card in hand):
-            # else, if player has a tarot card, return all tarot cards in hand
-            return [card for card in hand if suit(card) == "tarok"]
-        else:
-            return hand
-        
-    # card on table is a tarot card
-    # if player has any tarot card in hand, return all tarot cards
-    if any(suit(card) == "tarok" for card in hand):
-        return [card for card in hand if suit(card) == "tarok"]
-    else:
-        # card on table is tarot, player does not have any tarot cards, return all cards
-        return hand
-
-
-
-def dominantSuit(table):
-    return suit(next(card for card in table if "tarok" not in card))
-
-
-
 def keyRed(card):
     if cardValue(card) == 1:
         return -int(rank(card))
@@ -102,6 +58,79 @@ def orderHand(cards):
 
 
 orderedDeck = orderHand(deck)
+
+
+def dealCards(deck, nPlayers):
+    random.shuffle(deck)
+    talon = deck[0:6]
+    handSize = round(48 / nPlayers)
+    hands = []
+    for i in range(0, nPlayers):
+        start = 6 + i * handSize
+        end = start + handSize
+        hands.append(deck[start:end])
+    return (talon, hands)
+
+
+
+def playableRegular(hand, table, nPlayers):
+    # if table is empty, any card can be played
+    if table == [] or len(table) == nPlayers:
+        return hand
+
+    
+    if suit(table[0]) != "tarok":
+        if any(suit(table[0]) == suit(card) for card in hand):
+            # if first card on table is not a tarot and player has card of same suit in hand,
+            # return all cards of the same suit
+            return [card for card in hand if suit(card) == suit(table[0])]
+        elif any(suit(card) == "tarok" for card in hand):
+            # else, if player has a tarot card, return all tarot cards in hand
+            return [card for card in hand if suit(card) == "tarok"]
+        else:
+            return hand
+        
+    # card on table is a tarot card
+    # if player has any tarot card in hand, return all tarot cards
+    if any(suit(card) == "tarok" for card in hand):
+        return [card for card in hand if suit(card) == "tarok"]
+    else:
+        # card on table is tarot, player does not have any tarot cards, return all cards
+        return hand
+
+
+
+def playableNadigravanje(hand, table, nPlayers):
+    # if player has a higher ranking card, they must play it
+    _playable = playableRegular(hand, table, nPlayers)
+    if len(table) == 0:
+        return _playable
+
+    def isHigher(a, b):
+        return suit(a) == suit(b) and orderedDeck.index(a) > orderedDeck.index(b)
+
+    higher = [c for c in _playable if isHigher(c, table[0])]
+
+    if higher != []:
+        return higher
+    else:
+        return _playable
+
+
+def playable(hand, table, nPlayers, gameType):
+    if gameType in ["pikolo", "berac", "odprti_berac", "klop"]:
+        # "pravilo nadigravanja"
+        return playableNadigravanje(hand, table, nPlayers)
+    else:
+        return playableRegular(hand, table, nPlayers)
+
+
+
+def dominantSuit(table):
+    return suit(next(card for card in table if "tarok" not in card))
+
+
+
 
 def takes(table):
     if any("tarok" in card for card in table):

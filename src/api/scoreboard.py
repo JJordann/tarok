@@ -124,20 +124,20 @@ def teamScores(self):
 
 def normalScores(self):
     return [{
-        "players": i,
+        "players": [i],
         "cardsWon": p["cardsWon"],
-        "breakdown": [[p["name"], score(p["cardsWon"])]]
+        "breakdown": [[p["name"], score(p["cardsWon"])]],
+        "sum": score(p["cardsWon"])
     } for i, p in enumerate(self.players)]
 
 
 
 def concludeGame(self):
-    self.info("Round finished -- Individual scores: " + str(individualScores(self.players)))
+    self.info(" - Round finished - ")
     self.stage = "roundFinished"
 
     if self.gameType["name"] in ["ena", "dva", "tri", "solo_ena", "solo_dva", "solo_tri", "solo_brez"]:
         _scores = teamScores(self)
-
     else:
         _scores = normalScores(self)
 
@@ -147,8 +147,10 @@ def concludeGame(self):
     self.recentScores = _scores
 
 
-    #for (i, player) in enumerate(self.players):
-        #player["scores"].append(_scores[i])
+    # append sum of scores to each player's history
+    for team in _scores:
+        for player in team["players"]:
+            self.players[player]["scores"].append(team["sum"])
 
     self.dispatchPublicState("getState")
 

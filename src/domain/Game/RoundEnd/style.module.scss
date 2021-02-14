@@ -11,7 +11,7 @@
     font-size: larger;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .scoreWrapper {
@@ -21,6 +21,7 @@
     border-radius: 5px;
     padding: 10px; 
     margin: 10px;
+    overflow: scroll;
 
     div {
         text-align: center;
