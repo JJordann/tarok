@@ -229,6 +229,13 @@ class Game:
 
 
 
+    def handleKlop(self):
+        assert len(self.table) == len(self.players)
+        if self.gameType["name"] == "klop":
+            if len(self.talon) > 0:
+                # if talon has any cards left, move one to table
+                self.table.append({"card": self.talon.pop(), "player": -1})
+
 
     def playCard(self, card, player):
         playerIndex = self.getPlayerIndex(player)
@@ -258,7 +265,8 @@ class Game:
             # round is not over
             self.dispatchPublicState("getState")
             return False
-        
+
+        self.handleKlop()
         # round is over, transfer table to round winner
         takesIndex = takes(cards(self.table))
         takesPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + takesIndex) % nPlayers

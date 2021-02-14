@@ -161,13 +161,19 @@ def pikoloScores(self):
         ],
         "sum": getScore(self, i, completed)
     } for i,p in enumerate(self.players)]
-    return None
 
 
 
 def klopScores(self):
     assert self.gameType["name"] == "klop"
-    return None
+    return [{
+        "players": [i],
+        "cardsWon": p["cardsWon"],
+        "breakdown": [
+            ["klop", -score(p["cardsWon"])]
+        ],
+        "sum": -score(p["cardsWon"])
+    } for i,p in enumerate(self.players)]
 
 
 
@@ -195,7 +201,7 @@ def concludeGame(self):
     elif gt == "pikolo":
         _scores = pikoloScores(self)
     elif gt == "klop":
-        _scores = normalScores(self) # TODO
+        _scores = klopScores(self)
     else: 
         _scores = normalScores(self)
 

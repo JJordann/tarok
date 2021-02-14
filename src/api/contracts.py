@@ -5,7 +5,7 @@ import json
 
 
 def valueOfGameType(gameType):
-    if gameType["name"] in ["naprej", "choosing"]:
+    if gameType["name"] in ["naprej", "choosing", "klop"]:
         return 0
     global gameTypes
     return next(g for g in gameTypes if g["name"] == gameType["name"])["value"]
@@ -24,6 +24,15 @@ def playGameType(self, gameType):
         "name": gameType,
         "player": playerIndex
     }
+
+    # if klop is played, selection is finished
+    if gameType == "klop": 
+        self.gameType = self.gameType[playerIndex]
+        self.stage = "active"
+        self.turn = self.startingPlayer()
+        self.dispatchPublicState("getState")
+        return
+
 
     if len([g for g in self.gameType if g["name"] != "choosing"]) == len(self.players):
         # every player has played a game type or skipped
