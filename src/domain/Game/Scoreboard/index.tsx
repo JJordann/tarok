@@ -21,12 +21,21 @@ const Scoreboard = ({scores}) => {
 
   const CustomScrollbars = (props) => <Scrollbars renderThumbVertical={renderThumb} {...props} />
 
+
+  let radelciSym = scores => {
+    let nRadelci = scores.radelci ? scores.radelci : 0
+    if (nRadelci > 4)
+      return <> {nRadelci}<FontAwesomeIcon icon={faStar} /></>
+    else
+      return Array(nRadelci).fill("").map( 
+        (_, index) => <FontAwesomeIcon icon={faStar} key={index} />
+      )
+  }
+
   const getScores = (scores) => {
     const Radelci = scores.map(score => 
       <div className={scoreboardStyle.radelci}>
-        {[...Array((score.radelci ? score.radelci : 0))].map((element, index) => 
-          <FontAwesomeIcon icon={faStar} key={index} />
-        )}
+        { radelciSym(score) }
       </div>
     )
 

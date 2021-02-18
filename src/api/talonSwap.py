@@ -61,8 +61,9 @@ def chooseTalon(self, index):
         return None
 
     # move chosen talon to player's hand
+    self.talonIndex = index
     self.players[playerIndex]["hand"] += self.talon[index]
-    del self.talon[index]
+    #del self.talon[index]
 
     self.stage = "talonSwap"
     self.dispatchPublicState("getState")
@@ -89,6 +90,8 @@ def talonSwap(self, card):
     # base hand size is size of any other player's hand
     handSize = len(self.players[(playerIndex + 1) % len(self.players)]["hand"])
     if len(self.players[playerIndex]["hand"]) == handSize:
+        del self.talon[self.talonIndex]
+        del self.talonIndex
         self.stage = "active"
         self.turn = self.startingPlayer()
     self.dispatchPublicState("getState")

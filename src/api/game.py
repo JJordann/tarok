@@ -162,7 +162,10 @@ class Game:
 
         if self.stage in ["chooseTalon", "talonSwap"]:
             publicState["talon"] = self.talon
+            if self.stage == "talonSwap":
+                publicState["talonIndex"] = self.talonIndex
 
+        
         if self.stage == "talonSwap":
             # player can swap any card valued below 5
             publicState["playable"] = [

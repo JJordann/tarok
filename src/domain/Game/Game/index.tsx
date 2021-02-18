@@ -30,6 +30,7 @@ const Game = ({match}) => {
     turn: 0,    // index of player whose turn it s
     playableGames: [],
     talon: [[]],
+    talonIndex: -1,
     recentScores: [{ }]
   })
 
@@ -166,8 +167,10 @@ const Game = ({match}) => {
     case "gameType":      Activity = <Contracts contracts={state.playableGames}
                             show={(state.turn === state.myIndex) ? true : false} />   ;break; 
     case "chooseKing":    Activity = <Kings />                                        ;break;
-    case "chooseTalon":   Activity = <Talon cardGroups={state.talon} />               ;break;
-    case "talonSwap":     Activity = <Talon cardGroups={state.talon} />               ;break;
+    case "chooseTalon":   Activity = <Talon cardGroups={state.talon}               
+                                            chosen={state.talonIndex} />              ;break;
+    case "talonSwap":     Activity = <Talon cardGroups={state.talon} 
+                                            chosen={state.talonIndex} />              ;break;
     case "roundFinished": Activity = <RoundEnd scores={state.recentScores} />         ;break;
     default:              Activity = <Table state={state} />
   }
