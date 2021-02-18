@@ -9,7 +9,10 @@ def individualScores(players):
 
 
 def sumScores(s):
-    return sum(item[1] for item in s["breakdown"])
+    if s == []:
+        return 0
+    else:
+        return sum(item[1] for item in s["breakdown"])
 
 
 def contractBonus(team):
@@ -19,7 +22,7 @@ def contractBonus(team):
 def addfinalScore(self, s):
     if self.gameType["name"] == "klop":
         for team in s:
-            team["finalScore"] = sumScores(s)
+            team["finalScore"] = sumScores(team)
         return s
 
     for team in s:

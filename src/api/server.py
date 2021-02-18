@@ -6,71 +6,84 @@ import logging
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "sekret"
 logging.getLogger("werkzeug").disabled = True
-sio = SocketIO(app, cors_allowed_origins="*")
+
+#TODO: preveri če ima kratek ping interval težave s performanco
+sio = SocketIO(app, cors_allowed_origins="*", ping_timeout=2, ping_interval=2) 
+
 
 from lobby import Lobby
 
-lobby = Lobby("joined")
+
+lobbies = [Lobby("first_lobby")]
+
+# hash table mapping user ID to lobby index
+lobbyTable = dict()
+
+def lobbyLookup(sid):
+    global lobbies
+    return lobbies[lobbyTable[sid]]
+
+#lobby = Lobby("joined")
 
 
 @sio.on("getUsers")
 def handleGetUsers():
-    lobby.dispatchLobbyState()
+    if request.sid in lobbyTable:
+        lobbyLookup(request.sid).dispatchLobbyState()
 
 
 @sio.on("join")
 def handleJoin(name):
-    lobby.join(name)
+    lobbyTable[request.sid] = 0
+    lobbyLookup(request.sid).join(name)
 
 
 @sio.on("ready")
 def handleReady(msg):
-    lobby.ready(msg)
+    lobbyLookup(request.sid).ready(msg)
 
 
 @sio.on("disconnect")
 def handleDisconnect():
-    lobby.disconnect()
+    if request.sid in lobbyTable: 
+        lobbyLookup(request.sid).disconnect()
+        del lobbyTable[request.sid]
 
 
 @sio.on("getState")
 def handleGetState():
-    lobby.game.getCards()
+    lobbyLookup(request.sid).game.getCards()
 
 
 @sio.on("playCard")
 def handlePlayCard(card):
-    lobby.game.handlePlayCard(card)
+    lobbyLookup(request.sid).game.handlePlayCard(card)
 
 
 @sio.on("chat")
 def handleChat(msg):
-    lobby.sendChat(msg)
+    lobbyLookup(request.sid).sendChat(msg)
 
 
 @sio.on("gameType")
 def handleGameType(gameType):
-    lobby.game.playGameType(gameType)
+    lobbyLookup(request.sid).game.playGameType(gameType)
 
 
 @sio.on("chooseKing")
 def handleChooseKing(king):
-    lobby.game.chooseKing(king)
+    lobbyLookup(request.sid).game.chooseKing(king)
 
 
 @sio.on("chooseTalon")
 def handleChooseTalon(index):
-    lobby.game.chooseTalon(index)
+    lobbyLookup(request.sid).game.chooseTalon(index)
 
 
 @sio.on("talonSwap")
 def handleTalonSwap(card):
-    lobby.game.talonSwap(card)
+    lobbyLookup(request.sid).game.talonSwap(card)
 
-
-# @sio.on("contract")
-# def handleContract(contract):
-# lobby.game.playContract(contract)
 
 
 if __name__ == "__main__":

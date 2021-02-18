@@ -29,6 +29,7 @@ class Game:
         self.room = room
         self.players = []
         self.stage = "lobby"
+        self.stageStack = []
 
 
     def error(self, msg):
@@ -42,7 +43,17 @@ class Game:
 
 
     def leave(self):
-        self.players = [u for u in self.players if u["sid"] != request.sid]
+        playername = self.players[self.getPlayerIndex(request.sid)]["name"]
+        self.info(playername + " disconnected. Waiting for reconnect. Type \"!quit\" to abandon.")
+
+        self.stageStack.append(self.stage) 
+        self.stage = "paused"
+        self.dispatchGameLobbyState()
+
+
+    def reconnect(self):
+        assert self.stageStack != []
+        self.stage = self.stageStack.pop()
         self.dispatchGameLobbyState()
 
 
