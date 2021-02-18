@@ -1,5 +1,6 @@
 from __main__ import sio
 from util import score
+from contracts import valueOfGameType, gameTypes
 import json
 
 
@@ -9,6 +10,36 @@ def individualScores(players):
 
 def sumScores(s):
     return sum(item[1] for item in s["breakdown"])
+
+
+def contractBonus(team):
+    return sumScores(team) - score(team["cardsWon"])
+
+
+def addfinalScore(self, s):
+    if self.gameType["name"] == "klop":
+        for team in s:
+            team["finalScore"] = sumScores(s)
+        return s
+
+    for team in s:
+        if self.gameType["player"] in team["players"]:
+            # player's team
+            if score(team["cardsWon"]) > 0:
+                # completed the game
+                team["finalScore"] = valueOfGameType(self.gameType) + contractBonus(
+                    team
+                )
+            else:
+                # did not complete the game
+                team["finalScore"] = -valueOfGameType(self.gameType)
+        else:
+            # opposing team
+            team["finalScore"] = 0
+
+    # TODO: radlc multiplier
+
+    return s
 
 
 # returns index of pagat ultimo player if exists,
@@ -31,7 +62,11 @@ def addBonus(teams, players):
 
     # Valat
     for team in teams:
-        if all(t["cardsWon"] == [] for t in teams if t != team):
+        if all(
+            all(entry[1] == 0 for entry in t["breakdown"] if "player_" in entry[0])
+            for t in teams
+            if t != team
+        ):
             team["breakdown"] += [["Valat", 250]]
 
     # Kralji
@@ -84,10 +119,10 @@ def teamScores(self):
     # cards won by either team
     for i, p in enumerate(self.players):
         if i in playerTeam["players"]:
-            playerTeam["breakdown"] += [[p["name"], score(p["cardsWon"])]]
+            playerTeam["breakdown"] += [["player_" + p["name"], score(p["cardsWon"])]]
             playerTeam["cardsWon"] += p["cardsWon"]
         else:
-            opposingTeam["breakdown"] += [[p["name"], score(p["cardsWon"])]]
+            opposingTeam["breakdown"] += [["player_" + p["name"], score(p["cardsWon"])]]
             opposingTeam["cardsWon"] += p["cardsWon"]
 
     # add talon cards
@@ -181,7 +216,7 @@ def normalScores(self):
         {
             "players": [i],
             "cardsWon": p["cardsWon"],
-            "breakdown": [[p["name"], score(p["cardsWon"])]],
+            "breakdown": [["player_" + p["name"], score(p["cardsWon"])]],
         }
         for i, p in enumerate(self.players)
     ]
@@ -193,14 +228,9 @@ def addScoreSum(scores):
 
 
 # to be called after scores of current round have been appended
+# if a special game was played, add 1 radelc to each player
 def addRadelci(self):
     assert self.players[0]["scores"] != []
-    player = self.players[self.gameType["player"]]
-    if player["radelci"] > 0:
-        # TODO: subtract only if player won
-        # pogoj za zmago igre je: ekipa ima >35 točk (samo od kart)
-        player["radelci"] -= 1
-        player["scores"][-1] *= 2
 
     specialGames = [
         "solo_brez",
@@ -234,6 +264,7 @@ def concludeGame(self):
         _scores = normalScores(self)
 
     addScoreSum(_scores)
+    addfinalScore(self, _scores)
 
     self.info("Scores: " + str(_scores))
 
@@ -241,8 +272,13 @@ def concludeGame(self):
 
     # append sum of scores to each player's history
     for team in _scores:
-        for player in team["players"]:
-            self.players[player]["scores"].append(team["sum"])
+        for p in team["players"]:
+            self.players[p]["scores"].append(team["finalScore"])
+            # if player completed the game and
+            # had at least 1 radlc, double the score
+            if self.players[p]["radelci"] > 0 and team["finalScore"] > 0:
+                self.players[p]["radelci"] -= 1
+                self.players[p]["scores"][-1] *= 2
 
     addRadelci(self)
 

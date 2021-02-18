@@ -30,17 +30,21 @@ class Game:
         self.players = []
         self.stage = "lobby"
 
+
     def error(self, msg):
         print("ERROR>", msg)
         sio.emit("ERROR", msg, room=self.room)
+
 
     def info(self, msg):
         print("INFO>", msg)
         sio.emit("INFO", msg, room=self.room)
 
+
     def leave(self):
         self.players = [u for u in self.players if u["sid"] != request.sid]
         self.dispatchGameLobbyState()
+
 
     def startingPlayer(self):
         return (
@@ -49,11 +53,14 @@ class Game:
             else 0
         )
 
+
     def lastPlayer(self):
         return (self.startingPlayer() - 1) % len(self.players)
 
+
     def passTurn(self):
         self.turn = (self.turn + 1) % len(self.players)
+
 
     def dispatchGameLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.players]
@@ -64,6 +71,7 @@ class Game:
             except IndexError:
                 print("Handled disconnect gracefully")
             msg[i][2] = False
+
 
     def initGame(self, players):
         # Hand over players from lobby to game state
@@ -93,9 +101,11 @@ class Game:
             for (i, p) in enumerate(self.players)
         ]
 
+
     def getCards(self):
         playerState = self.getPublicState(request.sid)
         sio.emit("getState", json.dumps(playerState), room=request.sid)
+
 
     def getPublicState(self, sid):
         playerIndex = next(i for i, v in enumerate(self.players) if v["sid"] == sid)
@@ -172,16 +182,19 @@ class Game:
 
         return publicState
 
+
     def dispatchPublicState(self, event):
         for player in self.players:
             playerState = self.getPublicState(player["sid"])
             sio.emit(event, json.dumps(playerState), room=player["sid"])
+
 
     def getPlayerIndex(self, sid):
         for i, p in enumerate(self.players):
             if p["sid"] == sid:
                 return i
         return -1
+
 
     def handlePlayCard(self, card):
         isOver = self.playCard(card, request.sid)
@@ -191,6 +204,7 @@ class Game:
 
         if self.isOverEarly() or isOver:
             self.concludeGame()
+
 
     def isOverEarly(self):
         if self.gameType["name"] in ["berac", "odprti_berac"]:
@@ -209,12 +223,14 @@ class Game:
 
         return False
 
+
     def handleKlop(self):
         assert len(self.table) == len(self.players)
         if self.gameType["name"] == "klop":
             if len(self.talon) > 0:
                 # if talon has any cards left, move one to table
                 self.table.append({"card": self.talon.pop(), "player": -1})
+
 
     def playCard(self, card, player):
         playerIndex = self.getPlayerIndex(player)
@@ -259,14 +275,13 @@ class Game:
         self.players[takesPlayer]["cardsWon"] += cards(self.table)
 
         # log round
-        msg = (
+        self.info(
             str(self.players[takesPlayer]["name"])
             + " takes -- "
             + self.table[takesIndex]["card"]
             + " takes "
             + str(cards(self.table))
         )
-        self.info(msg)
 
         if all(len(p["hand"]) == 0 for p in self.players):
             # players have no cards, game ends
