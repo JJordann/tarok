@@ -34,6 +34,14 @@ const Table = ({ state }) => {
   const modulo = (n: number, mod: number): number => (((n % mod) + mod) % mod)
   const n = players.length
 
+  const rot = (index, card) => {
+    if (index >= players.length) 
+      // talon card (klop)
+      return players.length === 3 ? 90 : 60
+    else 
+      // player card
+      return modulo((card.player - myIndex), n) * (360 / n) 
+  }
 
 
 
@@ -42,7 +50,7 @@ const Table = ({ state }) => {
       className={tableStyle.card}
       playable={stage === "chooseKing"}
       value={card.card} 
-      rotation={ modulo((card.player - myIndex), n) * (360 / n) } 
+      rotation={ rot(index, card) } 
       id={index} 
       key={index}
       onClick={() => handleOnClick(card.card)}

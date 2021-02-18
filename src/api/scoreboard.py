@@ -110,10 +110,6 @@ def teamScores(self):
     # handle other contracts 
     addBonus([playerTeam, opposingTeam], self.players)
 
-    # sum scores
-    playerTeam["sum"]   = sumScores(playerTeam)
-    opposingTeam["sum"] = sumScores(opposingTeam)
-
     return [playerTeam, opposingTeam]
 
 
@@ -134,8 +130,7 @@ def beracScores(self):
         "cardsWon": p["cardsWon"],
         "breakdown": [
             ["berac", 70 if completed else -70 ] if i == self.gameType["player"] else []
-        ],
-        "sum": getScore(self, i, completed)
+        ]
     } for i,p in enumerate(self.players)]
 
 
@@ -159,7 +154,6 @@ def pikoloScores(self):
         "breakdown": [
             ["pikolo", 60 if completed else -60 ] if i == self.gameType["player"] else []
         ],
-        "sum": getScore(self, i, completed)
     } for i,p in enumerate(self.players)]
 
 
@@ -172,7 +166,6 @@ def klopScores(self):
         "breakdown": [
             ["klop", -score(p["cardsWon"])]
         ],
-        "sum": -score(p["cardsWon"])
     } for i,p in enumerate(self.players)]
 
 
@@ -183,8 +176,34 @@ def normalScores(self):
         "players": [i],
         "cardsWon": p["cardsWon"],
         "breakdown": [[p["name"], score(p["cardsWon"])]],
-        "sum": score(p["cardsWon"])
     } for i, p in enumerate(self.players)]
+
+
+
+
+def addScoreSum(scores):
+    for score in scores:
+        score["sum"] = sumScores(score)
+
+
+
+# to be called after scores of current round have been appended
+def addRadelci(self):
+    assert self.players[0]["scores"] != []
+    player = self.players[self.gameType["player"]]
+    if player["radelci"] > 0:
+        # TODO: subtract only if player won
+        # pogoj za zmago igre je: ekipa ima >35 točk (samo od kart)
+        player["radelci"] -= 1
+        player["scores"][-1] *= 2
+
+    specialGames = ["solo_brez", "berac", "odprti_berac", "valat", "barvni_valat", "klop"]
+    if self.gameType["name"] in specialGames:
+        # if special game was played, every player gains 1 radelc
+        for p in self.players:
+            p["radelci"] += 1
+
+
 
 
 
@@ -205,6 +224,7 @@ def concludeGame(self):
     else: 
         _scores = normalScores(self)
 
+    addScoreSum(_scores)
 
     self.info("Scores: " + str(_scores))
 
@@ -215,6 +235,8 @@ def concludeGame(self):
     for team in _scores:
         for player in team["players"]:
             self.players[player]["scores"].append(team["sum"])
+
+    addRadelci(self)
 
     self.dispatchPublicState("getState")
 

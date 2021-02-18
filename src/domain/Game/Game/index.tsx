@@ -88,14 +88,14 @@ const Game = ({match}) => {
 
   useEffect(() => {
     let clearTable = () => {
-      if(state.table.length === state.players.length)
+      if(state.table.length >= state.players.length)
         setState(oldState => ({
           ...oldState,
           table: []
         }))
     }
 
-    if(state.table.length === state.players.length) {
+    if(state.table.length >= state.players.length) {
       setTimeout(clearTable, 750)
     }
 

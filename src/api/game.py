@@ -99,12 +99,13 @@ class Game:
                     "index": i,
                     "name": p["name"],
                     "sid": p["sid"],
-                    "hand": hands[i],
+                    "hand": hands[i][0:2],
                     "ready": True,
                     "cardsWon": [],
                     "boni": [],
                     "contracts": [],
-                    "scores": p["scores"] if "scores" in p.keys() else []
+                    "scores": p["scores"] if "scores" in p.keys() else [],
+                    "radelci": 2
                 } for (i, p) in enumerate(self.players)
         ]
 
@@ -136,7 +137,8 @@ class Game:
                 "index": p["index"],
                 "name": p["name"],
                 "contracts": p["contracts"],
-                "scores": p["scores"] if "scores" in p.keys() else []
+                "scores": p["scores"] if "scores" in p.keys() else [],
+                "radelci": p["radelci"]
             } for p in self.players],
             "hand": player["hand"],
             "playable": _playable,
@@ -205,6 +207,8 @@ class Game:
     def handlePlayCard(self, card):
         isOver = self.playCard(card, request.sid)
         self.dispatchPublicState("getState")
+        if len(self.table) >= len(self.players):
+            self.table = []
 
         if self.isOverEarly() or isOver:
             self.concludeGame()
@@ -288,7 +292,6 @@ class Game:
 
         # player who takes begins next round
         self.turn = takesPlayer
-        self.table = []
         return False
 
 
