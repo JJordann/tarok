@@ -4,18 +4,18 @@ import json
 import logging
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'sekret'
-logging.getLogger('werkzeug').disabled = True
+app.config["SECRET_KEY"] = "sekret"
+logging.getLogger("werkzeug").disabled = True
 sio = SocketIO(app, cors_allowed_origins="*")
 
 from lobby import Lobby
 
 lobby = Lobby("joined")
 
+
 @sio.on("getUsers")
 def handleGetUsers():
     lobby.dispatchLobbyState()
-
 
 
 @sio.on("join")
@@ -23,11 +23,9 @@ def handleJoin(name):
     lobby.join(name)
 
 
-
 @sio.on("ready")
 def handleReady(msg):
     lobby.ready(msg)
-
 
 
 @sio.on("disconnect")
@@ -49,27 +47,31 @@ def handlePlayCard(card):
 def handleChat(msg):
     lobby.sendChat(msg)
 
+
 @sio.on("gameType")
 def handleGameType(gameType):
     lobby.game.playGameType(gameType)
+
 
 @sio.on("chooseKing")
 def handleChooseKing(king):
     lobby.game.chooseKing(king)
 
+
 @sio.on("chooseTalon")
 def handleChooseTalon(index):
     lobby.game.chooseTalon(index)
+
 
 @sio.on("talonSwap")
 def handleTalonSwap(card):
     lobby.game.talonSwap(card)
 
 
-#@sio.on("contract")
-#def handleContract(contract):
-    #lobby.game.playContract(contract)
+# @sio.on("contract")
+# def handleContract(contract):
+# lobby.game.playContract(contract)
 
 
-if __name__ == '__main__':
-    sio.run(app, host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    sio.run(app, host="0.0.0.0", port=5000)

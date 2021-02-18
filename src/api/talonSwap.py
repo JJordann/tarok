@@ -4,11 +4,10 @@ from util import cardValue
 import json
 
 
-
 def chooseKing(self, king):
     playerIndex = self.getPlayerIndex(request.sid)
 
-    if playerIndex != self.turn or self.stage != "chooseKing": 
+    if playerIndex != self.turn or self.stage != "chooseKing":
         self.error("Illegal move - It's not your turn")
         return None
 
@@ -17,8 +16,6 @@ def chooseKing(self, king):
         return None
 
     self.gameType["king"] = king
-
-
 
     kingHolder = playerIndex
     for (i, player) in enumerate(self.players):
@@ -33,9 +30,6 @@ def chooseKing(self, king):
     self.showTalon()
 
 
-
-
-
 def showTalon(self):
 
     if self.stage not in ["chooseTalon", "talonSwap"]:
@@ -45,17 +39,14 @@ def showTalon(self):
     if self.gameType["name"] in ["ena", "solo_ena"]:
         self.talon = [[t] for t in self.talon]
     elif self.gameType["name"] in ["dva", "solo_dva"]:
-        self.talon = [self.talon[i:i+2] for i in [0, 2, 4]]
+        self.talon = [self.talon[i : i + 2] for i in [0, 2, 4]]
     elif self.gameType["name"] in ["tri", "solo_tri"]:
-        self.talon = [self.talon[i:i+3] for i in [0, 3]]
+        self.talon = [self.talon[i : i + 3] for i in [0, 3]]
     else:
         print("illegal move")
         return None
 
     self.dispatchPublicState("getState")
-
-
-
 
 
 def chooseTalon(self, index):
@@ -77,9 +68,6 @@ def chooseTalon(self, index):
     self.dispatchPublicState("getState")
 
 
-
-
-
 def talonSwap(self, card):
     playerIndex = self.getPlayerIndex(request.sid)
 
@@ -91,29 +79,19 @@ def talonSwap(self, card):
         self.error("Illegal move - Stop Hacking")
         return None
 
-    
     # transfer chosen card to player's cardWon list
     cardIndex = self.players[playerIndex]["hand"].index(card)
-    self.players[playerIndex]["cardsWon"].append(self.players[playerIndex]["hand"][cardIndex])
+    self.players[playerIndex]["cardsWon"].append(
+        self.players[playerIndex]["hand"][cardIndex]
+    )
     del self.players[playerIndex]["hand"][cardIndex]
 
-
     # base hand size is size of any other player's hand
-    handSize = len(self.players[(playerIndex + 1) % len(self.players)]["hand"]) 
+    handSize = len(self.players[(playerIndex + 1) % len(self.players)]["hand"])
     if len(self.players[playerIndex]["hand"]) == handSize:
         self.stage = "active"
         self.turn = self.startingPlayer()
     self.dispatchPublicState("getState")
 
 
-
-
 # TODO: self.startingPlayer()
-
-
-
-
-
-
-
-

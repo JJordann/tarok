@@ -4,18 +4,15 @@ from functools import reduce
 
 
 def suit(card):
-    return card.split('_')[0]
+    return card.split("_")[0]
 
 
-
-def rank(card): 
-    return card.split('_')[1]
-
+def rank(card):
+    return card.split("_")[1]
 
 
 def cards(table):
     return [c["card"] for c in table]
-
 
 
 def cardValue(card):
@@ -31,13 +28,11 @@ def cardValue(card):
         return 1
 
 
-
 def keyRed(card):
     if cardValue(card) == 1:
         return -int(rank(card))
     else:
         return cardValue(card)
-
 
 
 def keyBlack(card):
@@ -47,14 +42,14 @@ def keyBlack(card):
         return 10 + cardValue(card)
 
 
-
 def orderHand(cards):
-    return (sorted([c for c in cards if suit(c) == "kara"], key=keyRed)
-    + sorted([c for c in cards if suit(c) == "srce"], key=keyRed)
-    + sorted([c for c in cards if suit(c) ==  "pik"], key=keyBlack)
-    + sorted([c for c in cards if suit(c) == "kriz"], key=keyBlack)
-    + sorted([c for c in cards if suit(c) == "tarok"], key=lambda c: int(rank(c))))
-
+    return (
+        sorted([c for c in cards if suit(c) == "kara"], key=keyRed)
+        + sorted([c for c in cards if suit(c) == "srce"], key=keyRed)
+        + sorted([c for c in cards if suit(c) == "pik"], key=keyBlack)
+        + sorted([c for c in cards if suit(c) == "kriz"], key=keyBlack)
+        + sorted([c for c in cards if suit(c) == "tarok"], key=lambda c: int(rank(c)))
+    )
 
 
 orderedDeck = orderHand(deck)
@@ -72,13 +67,11 @@ def dealCards(deck, nPlayers):
     return (talon, hands)
 
 
-
 def playableRegular(hand, table, nPlayers):
     # if table is empty, any card can be played
     if table == [] or len(table) == nPlayers:
         return hand
 
-    
     if suit(table[0]) != "tarok":
         if any(suit(table[0]) == suit(card) for card in hand):
             # if first card on table is not a tarot and player has card of same suit in hand,
@@ -89,7 +82,7 @@ def playableRegular(hand, table, nPlayers):
             return [card for card in hand if suit(card) == "tarok"]
         else:
             return hand
-        
+
     # card on table is a tarot card
     # if player has any tarot card in hand, return all tarot cards
     if any(suit(card) == "tarok" for card in hand):
@@ -97,7 +90,6 @@ def playableRegular(hand, table, nPlayers):
     else:
         # card on table is tarot, player does not have any tarot cards, return all cards
         return hand
-
 
 
 def playableNadigravanje(hand, table, nPlayers):
@@ -125,11 +117,8 @@ def playable(hand, table, nPlayers, gameType):
         return playableRegular(hand, table, nPlayers)
 
 
-
 def dominantSuit(table):
     return suit(next(card for card in table if "tarok" not in card))
-
-
 
 
 def takes(table):
@@ -137,13 +126,12 @@ def takes(table):
         # if table contains tarot card, return highest rank among tarot cards
         cand = [c for c in table if "tarok" in c]
         return table.index(max(cand, key=lambda c: int(rank(c))))
-    
-    # if table does not contain tarot card, return maximum for the 
+
+    # if table does not contain tarot card, return maximum for the
     # among cards of dominant suit orderHand ordering
     global orderedDeck
     cand = [c for c in table if suit(c) == dominantSuit(table)]
     return table.index(max(cand, key=orderedDeck.index))
-
 
 
 tests = [
@@ -152,14 +140,12 @@ tests = [
     ["pik_konj", "srce_kralj", "kara_kralj", "pik_7"],
     ["tarok_1", "tarok_2", "tarok_12", "tarok_3"],
     ["kara_1", "pik_kralj", "pik_poba", "pik_kraljica"],
-    ["kara_4", "kara_3"]
+    ["kara_4", "kara_3"],
 ]
-
 
 
 def score(cards):
     return sum(map(cardValue, cards)) - 2 * int(len(cards) / 3)
-
 
 
 def pagatUltimo(table):

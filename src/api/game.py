@@ -12,7 +12,6 @@ from scoreboard import *
 
 
 class Game:
-
     def __init__(self, room):
         # contracts
         Game.playGameType = playGameType
@@ -31,118 +30,106 @@ class Game:
         self.players = []
         self.stage = "lobby"
 
-
-
     def error(self, msg):
         print("ERROR>", msg)
         sio.emit("ERROR", msg, room=self.room)
-
-
 
     def info(self, msg):
         print("INFO>", msg)
         sio.emit("INFO", msg, room=self.room)
 
-
-
     def leave(self):
         self.players = [u for u in self.players if u["sid"] != request.sid]
         self.dispatchGameLobbyState()
-    
-
 
     def startingPlayer(self):
-        return len(self.players[0]["scores"]) % len(self.players) if "scores" in self.players[0] else 0
-
-
+        return (
+            len(self.players[0]["scores"]) % len(self.players)
+            if "scores" in self.players[0]
+            else 0
+        )
 
     def lastPlayer(self):
         return (self.startingPlayer() - 1) % len(self.players)
 
-
-
     def passTurn(self):
         self.turn = (self.turn + 1) % len(self.players)
-
-
 
     def dispatchGameLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.players]
         for i in range(0, len(self.players)):
             msg[i][2] = True
-            try: 
+            try:
                 sio.emit("getUsers", msg, room=self.players[i]["sid"])
             except IndexError:
                 print("Handled disconnect gracefully")
             msg[i][2] = False
 
-
-
-
     def initGame(self, players):
-        # Hand over players from lobby to game state 
+        # Hand over players from lobby to game state
         self.players = players
 
         (talon, hands) = dealCards(deck, len(self.players))
         self.turn = self.startingPlayer()
         self.talon = talon
         self.gameType = [
-            {
-                "name": "choosing",
-                "player": i
-            } for (i, p) in enumerate(self.players)
+            {"name": "choosing", "player": i} for (i, p) in enumerate(self.players)
         ]
         self.table = []
         self.stage = "gameType"
         self.players = [
-                {
-                    "index": i,
-                    "name": p["name"],
-                    "sid": p["sid"],
-                    "hand": hands[i][0:2],
-                    "ready": True,
-                    "cardsWon": [],
-                    "boni": [],
-                    "contracts": [],
-                    "scores": p["scores"] if "scores" in p.keys() else [],
-                    "radelci": 2
-                } for (i, p) in enumerate(self.players)
+            {
+                "index": i,
+                "name": p["name"],
+                "sid": p["sid"],
+                "hand": hands[i][0:2],
+                "ready": True,
+                "cardsWon": [],
+                "boni": [],
+                "contracts": [],
+                "scores": p["scores"] if "scores" in p else [],
+                "radelci": p["radelci"] if "radelci" in p else 0,
+            }
+            for (i, p) in enumerate(self.players)
         ]
-
-
 
     def getCards(self):
         playerState = self.getPublicState(request.sid)
         sio.emit("getState", json.dumps(playerState), room=request.sid)
 
-
-
-
     def getPublicState(self, sid):
-        playerIndex = next(i for i,v in enumerate(self.players) if v["sid"] == sid)
+        playerIndex = next(i for i, v in enumerate(self.players) if v["sid"] == sid)
         player = self.players[playerIndex]
-        
+
         _playable = []
         if self.turn == playerIndex and self.stage == "active":
-            _playable = playable(player["hand"], cards(self.table), len(self.players), self.gameType["name"])
+            _playable = playable(
+                player["hand"],
+                cards(self.table),
+                len(self.players),
+                self.gameType["name"],
+            )
         elif self.turn == playerIndex and self.stage == "talonSwap":
             _playable = player["hand"]
-        
-        publicState =  {
+
+        publicState = {
             "stage": self.stage,
             "turn": self.turn,
             "myIndex": playerIndex,
             "table": self.table,
-            "players": [{
-                "index": p["index"],
-                "name": p["name"],
-                "contracts": p["contracts"],
-                "scores": p["scores"] if "scores" in p.keys() else [],
-                "radelci": p["radelci"]
-            } for p in self.players],
+            "players": [
+                {
+                    "index": p["index"],
+                    "name": p["name"],
+                    "contracts": p["contracts"],
+                    "scores": p["scores"] if "scores" in p.keys() else [],
+                    "radelci": p["radelci"],
+                }
+                for p in self.players
+            ],
             "hand": player["hand"],
             "playable": _playable,
-            "cardsWon": player["cardsWon"]
+            "cardsWon": player["cardsWon"],
         }
 
         if type(self.gameType) == list:
@@ -157,19 +144,20 @@ class Game:
             if "revealed" in self.gameType and self.gameType["revealed"] == True:
                 publicState["gameType"]["with"] = self.gameType["with"]
 
-
         if self.stage == "gameType":
             isPlayerLast = self.turn == self.lastPlayer()
-            publicState["playableGames"] = playableGames(self.gameType, isPlayerLast, len(self.players))
-
+            publicState["playableGames"] = playableGames(
+                self.gameType, isPlayerLast, len(self.players)
+            )
 
         if self.stage in ["chooseTalon", "talonSwap"]:
             publicState["talon"] = self.talon
 
         if self.stage == "talonSwap":
             # player can swap any card valued below 5
-            publicState["playable"] = [c for c in self.players[self.turn]["hand"] if cardValue(c) < 5]
-
+            publicState["playable"] = [
+                c for c in self.players[self.turn]["hand"] if cardValue(c) < 5
+            ]
 
         if self.stage == "roundFinished":
             publicState["recentScores"] = self.recentScores
@@ -179,30 +167,21 @@ class Game:
             publicState["gameType"]["beracHand"] = beracHand
             self.info("Berač hand: " + str(beracHand))
 
-        #if self.stage == "contracts":
-            #publicState["playableContracts"] = playableContracts(self) + ["naprej"]
+        # if self.stage == "contracts":
+        # publicState["playableContracts"] = playableContracts(self) + ["naprej"]
 
         return publicState
-
-
-
 
     def dispatchPublicState(self, event):
         for player in self.players:
             playerState = self.getPublicState(player["sid"])
             sio.emit(event, json.dumps(playerState), room=player["sid"])
 
-
-
-
     def getPlayerIndex(self, sid):
         for i, p in enumerate(self.players):
             if p["sid"] == sid:
                 return i
         return -1
-
-
-
 
     def handlePlayCard(self, card):
         isOver = self.playCard(card, request.sid)
@@ -213,9 +192,6 @@ class Game:
         if self.isOverEarly() or isOver:
             self.concludeGame()
 
-
-
-
     def isOverEarly(self):
         if self.gameType["name"] in ["berac", "odprti_berac"]:
             if self.players[self.gameType["player"]]["cardsWon"] != []:
@@ -224,14 +200,14 @@ class Game:
                 return True
 
         elif self.gameType["name"] == "pikolo":
-            numRoundsWon = len(self.players[self.gameType["player"]]["cardsWon"]) / len(self.players)
+            numRoundsWon = len(self.players[self.gameType["player"]]["cardsWon"]) / len(
+                self.players
+            )
             if numRoundsWon > 1:
                 self.info("Pikolo player takes second round - game is over")
                 return True
 
         return False
-
-
 
     def handleKlop(self):
         assert len(self.table) == len(self.players)
@@ -240,7 +216,6 @@ class Game:
                 # if talon has any cards left, move one to table
                 self.table.append({"card": self.talon.pop(), "player": -1})
 
-
     def playCard(self, card, player):
         playerIndex = self.getPlayerIndex(player)
 
@@ -248,7 +223,12 @@ class Game:
             self.error("Illegal move - It's not your turn")
             return False
 
-        if card not in playable(self.players[playerIndex]["hand"], cards(self.table), len(self.players), self.gameType["name"]):
+        if card not in playable(
+            self.players[playerIndex]["hand"],
+            cards(self.table),
+            len(self.players),
+            self.gameType["name"],
+        ):
             self.error("Illegal move - Stop Hacking")
             return False
 
@@ -273,11 +253,19 @@ class Game:
         self.handleKlop()
         # round is over, transfer table to round winner
         takesIndex = takes(cards(self.table))
-        takesPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + takesIndex) % nPlayers
+        takesPlayer = (
+            (playerIndex - (nPlayers - 1)) % nPlayers + takesIndex
+        ) % nPlayers
         self.players[takesPlayer]["cardsWon"] += cards(self.table)
 
         # log round
-        msg = str(self.players[takesPlayer]["name"]) + " takes -- " + self.table[takesIndex]["card"] + " takes " + str(cards(self.table))
+        msg = (
+            str(self.players[takesPlayer]["name"])
+            + " takes -- "
+            + self.table[takesIndex]["card"]
+            + " takes "
+            + str(cards(self.table))
+        )
         self.info(msg)
 
         if all(len(p["hand"]) == 0 for p in self.players):
@@ -285,7 +273,9 @@ class Game:
             # check for pagat ultimo
             pagatIndex = pagatUltimo(cards(self.table))
             if pagatIndex > -1:
-                pagatPlayer = ((playerIndex - (nPlayers - 1)) % nPlayers + pagatIndex) % nPlayers
+                pagatPlayer = (
+                    (playerIndex - (nPlayers - 1)) % nPlayers + pagatIndex
+                ) % nPlayers
                 self.players[pagatPlayer]["boni"] += ["pagat_ultimo"]
                 self.info("PAGAT ULTIMO: " + self.players[pagatPlayer]["name"])
             return True
@@ -293,9 +283,3 @@ class Game:
         # player who takes begins next round
         self.turn = takesPlayer
         return False
-
-
-
-
-
-

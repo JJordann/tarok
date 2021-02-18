@@ -3,11 +3,8 @@ from util import score
 import json
 
 
-
-
 def individualScores(players):
     return [score(p["cardsWon"]) for p in players]
-
 
 
 def sumScores(s):
@@ -21,7 +18,6 @@ def pagatUltimoIndex(players):
         if p["boni"] != [] and "pagat_ultimo" in p["boni"]:
             return i
     return -1
-
 
 
 # mutates scores, adds earned bonus to each team's scores
@@ -50,7 +46,9 @@ def addBonus(teams, players):
         if all(card in team["cardsWon"] for card in trula):
             if pagatPlayer in team["players"]:
                 # replace pagat ultimo bonus with Trulapagat
-                team["breakdown"] = [entry for entry in team["breakdown"] if entry[0] != "Pagat Ultimo"]
+                team["breakdown"] = [
+                    entry for entry in team["breakdown"] if entry[0] != "Pagat Ultimo"
+                ]
                 team["breakdown"] += [["Trulapagat", 50]]
             else:
                 team["breakdown"] += [["Trula", 10]]
@@ -58,16 +56,12 @@ def addBonus(teams, players):
     return teams
 
 
-
-
-
-
 def teamScores(self):
     # player who called gameType
     playerTeam = {
         "players": [self.gameType["player"]],
-        "breakdown": [], # ["bonus", amount]
-        "cardsWon": []
+        "breakdown": [],  # ["bonus", amount]
+        "cardsWon": [],
     }
 
     # and his (potential) teammate
@@ -76,12 +70,16 @@ def teamScores(self):
 
     # opposing team: everyone else
     opposingTeam = {
-        "players": [i for i in range(len(self.players)) if i not in playerTeam["players"]],
+        "players": [
+            i for i in range(len(self.players)) if i not in playerTeam["players"]
+        ],
         "breakdown": [],
-        "cardsWon": []
+        "cardsWon": [],
     }
 
-    self.info("Teams: " + str(playerTeam["players"]) + " vs " + str(opposingTeam["players"]))
+    self.info(
+        "Teams: " + str(playerTeam["players"]) + " vs " + str(opposingTeam["players"])
+    )
 
     # cards won by either team
     for i, p in enumerate(self.players):
@@ -107,11 +105,10 @@ def teamScores(self):
         opposingTeam["breakdown"] += [["Talon", score(talonFlat)]]
         opposingTeam["cardsWon"] += talonFlat
 
-    # handle other contracts 
+    # handle other contracts
     addBonus([playerTeam, opposingTeam], self.players)
 
     return [playerTeam, opposingTeam]
-
 
 
 def beracScores(self):
@@ -125,21 +122,26 @@ def beracScores(self):
         else:
             return 0
 
-    return [{
-        "players": [i],
-        "cardsWon": p["cardsWon"],
-        "breakdown": [
-            ["berac", 70 if completed else -70 ] if i == self.gameType["player"] else []
-        ]
-    } for i,p in enumerate(self.players)]
-
-
+    return [
+        {
+            "players": [i],
+            "cardsWon": p["cardsWon"],
+            "breakdown": [
+                ["berac", 70 if completed else -70]
+                if i == self.gameType["player"]
+                else []
+            ],
+        }
+        for i, p in enumerate(self.players)
+    ]
 
 
 def pikoloScores(self):
     assert self.gameType["name"] == "pikolo"
 
-    roundsWon = len(self.players[self.gameType["player"]]["cardsWon"]) / len(self.players)
+    roundsWon = len(self.players[self.gameType["player"]]["cardsWon"]) / len(
+        self.players
+    )
     completed = roundsWon < 2
 
     def getScore(self, i, completed):
@@ -148,43 +150,46 @@ def pikoloScores(self):
         else:
             return 0
 
-    return [{
-        "players": [i],
-        "cardsWon": p["cardsWon"],
-        "breakdown": [
-            ["pikolo", 60 if completed else -60 ] if i == self.gameType["player"] else []
-        ],
-    } for i,p in enumerate(self.players)]
-
+    return [
+        {
+            "players": [i],
+            "cardsWon": p["cardsWon"],
+            "breakdown": [
+                ["pikolo", 60 if completed else -60]
+                if i == self.gameType["player"]
+                else []
+            ],
+        }
+        for i, p in enumerate(self.players)
+    ]
 
 
 def klopScores(self):
     assert self.gameType["name"] == "klop"
-    return [{
-        "players": [i],
-        "cardsWon": p["cardsWon"],
-        "breakdown": [
-            ["klop", -score(p["cardsWon"])]
-        ],
-    } for i,p in enumerate(self.players)]
-
-
+    return [
+        {
+            "players": [i],
+            "cardsWon": p["cardsWon"],
+            "breakdown": [["klop", -score(p["cardsWon"])]],
+        }
+        for i, p in enumerate(self.players)
+    ]
 
 
 def normalScores(self):
-    return [{
-        "players": [i],
-        "cardsWon": p["cardsWon"],
-        "breakdown": [[p["name"], score(p["cardsWon"])]],
-    } for i, p in enumerate(self.players)]
-
-
+    return [
+        {
+            "players": [i],
+            "cardsWon": p["cardsWon"],
+            "breakdown": [[p["name"], score(p["cardsWon"])]],
+        }
+        for i, p in enumerate(self.players)
+    ]
 
 
 def addScoreSum(scores):
     for score in scores:
         score["sum"] = sumScores(score)
-
 
 
 # to be called after scores of current round have been appended
@@ -197,14 +202,18 @@ def addRadelci(self):
         player["radelci"] -= 1
         player["scores"][-1] *= 2
 
-    specialGames = ["solo_brez", "berac", "odprti_berac", "valat", "barvni_valat", "klop"]
+    specialGames = [
+        "solo_brez",
+        "berac",
+        "odprti_berac",
+        "valat",
+        "barvni_valat",
+        "klop",
+    ]
     if self.gameType["name"] in specialGames:
         # if special game was played, every player gains 1 radelc
         for p in self.players:
             p["radelci"] += 1
-
-
-
 
 
 def concludeGame(self):
@@ -221,7 +230,7 @@ def concludeGame(self):
         _scores = pikoloScores(self)
     elif gt == "klop":
         _scores = klopScores(self)
-    else: 
+    else:
         _scores = normalScores(self)
 
     addScoreSum(_scores)
@@ -229,7 +238,6 @@ def concludeGame(self):
     self.info("Scores: " + str(_scores))
 
     self.recentScores = _scores
-
 
     # append sum of scores to each player's history
     for team in _scores:
@@ -241,12 +249,9 @@ def concludeGame(self):
     self.dispatchPublicState("getState")
 
 
-
-
-
 def nextGame(self):
     if self.stage != "roundFinished":
-        self.error("Illegal request - game is not finished")       
+        self.error("Illegal request - game is not finished")
         return None
 
     self.info("Starting new game")

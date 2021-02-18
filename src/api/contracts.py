@@ -11,32 +11,31 @@ def valueOfGameType(gameType):
     return next(g for g in gameTypes if g["name"] == gameType["name"])["value"]
 
 
-
 def playGameType(self, gameType):
     playerIndex = self.getPlayerIndex(request.sid)
     isPlayerLast = playerIndex == self.lastPlayer()
 
-    if self.turn != playerIndex or gameType not in playableGames(self.gameType, isPlayerLast, len(self.players)):
+    _playable = playableGames(self.gameType, isPlayerLast, len(self.players))
+    if self.turn != playerIndex or gameType not in _playable:
         self.error("Illegal move - It's not your turn")
         return None
 
-    self.gameType[playerIndex] = {
-        "name": gameType,
-        "player": playerIndex
-    }
+    self.gameType[playerIndex] = {"name": gameType, "player": playerIndex}
 
     # if klop is played, selection is finished
-    if gameType == "klop": 
+    if gameType == "klop":
         self.gameType = self.gameType[playerIndex]
         self.stage = "active"
         self.turn = self.startingPlayer()
         self.dispatchPublicState("getState")
         return
 
-
     if len([g for g in self.gameType if g["name"] != "choosing"]) == len(self.players):
         # every player has played a game type or skipped
-        if len([g for g in self.gameType if g["name"] == "naprej"]) >= len(self.players) - 1:
+        if (
+            len([g for g in self.gameType if g["name"] == "naprej"])
+            >= len(self.players) - 1
+        ):
             # every player but one skipped, game type is determined
             # set self.gameType to a single dict
             finishGameType(self)
@@ -51,15 +50,11 @@ def playGameType(self, gameType):
     self.dispatchPublicState("getState")
 
 
-
 def finishGameType(self):
     if all([g["name"] == "naprej" for g in self.gameType]):
         # every player skipped
-        self.gameType = {
-            "name": "normal",
-            "player": -1
-        }
-    else: 
+        self.gameType = {"name": "normal", "player": -1}
+    else:
         # set game type of highest value
         self.gameType = max(self.gameType, key=valueOfGameType)
 
@@ -79,54 +74,18 @@ def finishGameType(self):
         self.turn = self.startingPlayer()
 
 
-
-
-
-
 gameTypes = [
-        {
-            "name": "tri",
-            "value": 10
-        },
-        {
-            "name": "solo_tri",
-            "value": 20
-        },
-        {
-            "name": "dva",
-            "value": 20
-        },
-        {
-            "name": "ena",
-            "value": 30
-        },
-        {
-            "name": "solo_dva",
-            "value": 30
-        },
-        {
-            "name": "solo_ena",
-            "value": 40
-        },
-        {
-            "name": "solo_brez",
-            "value": 50
-        },
-        {
-            "name": "pikolo",
-            "value": 60
-        },
-        {
-            "name": "berac",
-            "value": 70
-        },
-        {
-            "name": "odprti_berac",
-            "value": 80
-        }
+    {"name": "tri", "value": 10},
+    {"name": "solo_tri", "value": 20},
+    {"name": "dva", "value": 20},
+    {"name": "ena", "value": 30},
+    {"name": "solo_dva", "value": 30},
+    {"name": "solo_ena", "value": 40},
+    {"name": "solo_brez", "value": 50},
+    {"name": "pikolo", "value": 60},
+    {"name": "berac", "value": 70},
+    {"name": "odprti_berac", "value": 80},
 ]
-
-
 
 
 def playableGames(gameType, isPlayerLast, numPlayers):
@@ -147,8 +106,14 @@ def playableGames(gameType, isPlayerLast, numPlayers):
 
     # a game was played already
     currentGameValue = valueOfGameType(max(gameType, key=valueOfGameType))
-    
-    if isPlayerLast: 
-        return [g["name"] for g in _gameTypes if g["value"] >= currentGameValue] + ["naprej"]
+
+    if isPlayerLast:
+        return [g["name"] for g in _gameTypes if g["value"] >= currentGameValue] + [
+            "naprej"
+        ]
     else:
-        return [g["name"] for g in _gameTypes if g["value"] > currentGameValue and g["name"] != "tri"] + ["naprej"]
+        return [
+            g["name"]
+            for g in _gameTypes
+            if g["value"] > currentGameValue and g["name"] != "tri"
+        ] + ["naprej"]

@@ -4,26 +4,21 @@ from flask_socketio import join_room, leave_room
 import json
 from game import Game
 
+
 class Lobby:
     def __init__(self, room):
         self.room = room
         self.lobby = []
         self.game = Game(room)
-    
-
 
     def join(self, name):
         if self.game.stage == "lobby":
-            self.lobby.append({"name": name, 
-                                "sid": request.sid,
-                                "ready": False})
+            self.lobby.append({"name": name, "sid": request.sid, "ready": False})
             self.dispatchLobbyState()
             join_room(self.room)
         else:
             self.game.error("Unable to join -- Game has already started")
             return None
-    
-
 
     def disconnect(self):
         # If game has not started yet leave lobby
@@ -32,10 +27,8 @@ class Lobby:
             self.dispatchLobbyState()
         else:
             self.game.leave()
-        
-        leave_room(self.room)
-    
 
+        leave_room(self.room)
 
     def ready(self, msg):
         for u in self.lobby:
@@ -44,13 +37,9 @@ class Lobby:
                 if self.allReady() == True:
                     self.handleAllReady()
         self.dispatchLobbyState()
-    
-
 
     def allReady(self):
         return all(map(lambda x: x["ready"], self.lobby))
-    
-
 
     def handleAllReady(self):
         if len(self.lobby) in [3, 4]:
@@ -63,8 +52,6 @@ class Lobby:
                 self.game.info("waiting for " + str(3 - len(self.lobby)) + " more players to join")
             else:
                 self.game.info("waiting for " + str(len(self.lobby) - 4) + " players to leave")
-    
-
 
     def dispatchLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.lobby]
@@ -73,11 +60,9 @@ class Lobby:
             sio.emit("getUsers", msg, room=self.lobby[i]["sid"])
             msg[i][2] = False
 
-
-    
     def sendChat(self, msg):
         sender = next(p for p in self.lobby if p["sid"] == request.sid)["name"]
-        print(sender,"> ", msg)
+        print(sender, "> ", msg)
         sio.emit("chat", json.dumps({"sender": sender, "message": msg}), room=self.room)
 
         if msg == "!next":
