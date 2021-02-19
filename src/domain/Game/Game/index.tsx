@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
-
 import { socket } from '../../../services/Socket'
-
 import { GameTypes } from '../GameTypes'
-
 import Hand from '../Hand'
 import Table from '../Table'
 import Chat from '../Chat'

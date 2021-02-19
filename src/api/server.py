@@ -12,77 +12,75 @@ sio = SocketIO(app, cors_allowed_origins="*", ping_timeout=2, ping_interval=2)
 
 
 from lobby import Lobby
+from router import Router
+
+R = Router()
 
 
-lobbies = [Lobby("first_lobby")]
+#@sio.on("connect")
+#def handleConnect():
+    #print("User connected")
 
-# hash table mapping user ID to lobby index
-lobbyTable = dict()
 
-def lobbyLookup(sid):
-    global lobbies
-    return lobbies[lobbyTable[sid]]
-
-#lobby = Lobby("joined")
+@sio.on("getLobbies")
+def handleGetLobbies():
+    lobbies = json.dumps(R.getLobbies())
+    sio.emit("getLobbies", lobbies, room=request.sid)
 
 
 @sio.on("getUsers")
 def handleGetUsers():
-    if request.sid in lobbyTable:
-        lobbyLookup(request.sid).dispatchLobbyState()
+    R.getUsers()
 
 
 @sio.on("join")
 def handleJoin(name):
-    lobbyTable[request.sid] = 0
-    lobbyLookup(request.sid).join(name)
+    R.joinLobby(name, "first_lobby")
 
 
 @sio.on("ready")
 def handleReady(msg):
-    lobbyLookup(request.sid).ready(msg)
+    R.ready(msg)
 
 
 @sio.on("disconnect")
 def handleDisconnect():
-    if request.sid in lobbyTable: 
-        lobbyLookup(request.sid).disconnect()
-        del lobbyTable[request.sid]
+    R.leaveLobby()
 
 
 @sio.on("getState")
 def handleGetState():
-    lobbyLookup(request.sid).game.getCards()
+    R.getState()
 
 
 @sio.on("playCard")
 def handlePlayCard(card):
-    lobbyLookup(request.sid).game.handlePlayCard(card)
+    R.playCard(card)
 
 
 @sio.on("chat")
 def handleChat(msg):
-    lobbyLookup(request.sid).sendChat(msg)
+    R.chat(msg)
 
 
 @sio.on("gameType")
 def handleGameType(gameType):
-    lobbyLookup(request.sid).game.playGameType(gameType)
+    R.playGameType(gameType)
 
 
 @sio.on("chooseKing")
 def handleChooseKing(king):
-    lobbyLookup(request.sid).game.chooseKing(king)
+    R.chooseKing(king)
 
 
 @sio.on("chooseTalon")
 def handleChooseTalon(index):
-    lobbyLookup(request.sid).game.chooseTalon(index)
+    R.chooseTalon(index)
 
 
 @sio.on("talonSwap")
 def handleTalonSwap(card):
-    lobbyLookup(request.sid).game.talonSwap(card)
+    R.talonSwap(card)
 
 
 
