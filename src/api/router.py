@@ -11,7 +11,10 @@ class Router:
 
         # hash table mapping user ID to lobby index
         self.lobbyTable = dict()
+
         self.lobbies.append(Lobby("first_lobby"))
+        self.lobbies.append(Lobby("lobby2"))
+        self.lobbies.append(Lobby("lobby3"))
 
 
     

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { socket } from '../../../services/Socket'
 import { GET_USERS, ALL_READY } from '../actions'
 import { GAME_ROUTE } from '../../../routes'
@@ -12,6 +12,16 @@ const Lobby = () => {
   const [users, setUsers] = useState([])
 
   const history = useHistory()
+
+  interface Params {
+    id?: string
+  }
+
+  const { id }: Params = useParams()
+  
+  console.log(id)
+
+
 
   useEffect(() => {
     socket.emit(GET_USERS)

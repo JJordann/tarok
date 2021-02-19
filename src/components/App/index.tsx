@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-
 import { HOME_ROUTE, GAME_ROUTE, LOBBY_ROUTE } from '../../routes'
 
 import Home from '../Home'
@@ -15,8 +14,8 @@ const App = () => {
       <Switch>
           <Route path={HOME_ROUTE} exact component={Home} />
           <Route path={GAME_ROUTE} exact component={Game} />
-          <Route path={LOBBY_ROUTE} exact component={Lobby} />
-          <Route path={"/rooms"} exact component={Rooms} />
+          <Route path={"/lobby/:id"}  exact   component={Lobby} />
+          <Route path={"/rooms"}   exact component={Rooms} />
       </Switch>
     </BrowserRouter>
   )
