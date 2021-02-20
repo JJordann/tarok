@@ -21,10 +21,16 @@ const Lobby = () => {
   
   console.log(id)
 
-
+  /* TODO:
+    fetch lobby data, 
+    if lobby exists
+      display users
+    else 
+      display empty lobby message
+  */
 
   useEffect(() => {
-    socket.emit(GET_USERS)
+    socket.emit("getUsers", id)
 
     socket.on(GET_USERS, (usersData) => {
       setUsers(usersData)

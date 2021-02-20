@@ -56,9 +56,12 @@ class Lobby:
     def dispatchLobbyState(self):
         msg = [[u["name"], u["ready"], False] for u in self.lobby]
         for i in range(0, len(self.lobby)):
-            msg[i][2] = True
-            sio.emit("getUsers", msg, room=self.lobby[i]["sid"])
-            msg[i][2] = False
+            try:
+                msg[i][2] = True
+                sio.emit("getUsers", msg, room=self.lobby[i]["sid"])
+                msg[i][2] = False
+            except IndexError:
+                pass
 
     def sendChat(self, msg):
         sender = next(p for p in self.lobby if p["sid"] == request.sid)["name"]

@@ -17,11 +17,6 @@ from router import Router
 R = Router()
 
 
-#@sio.on("connect")
-#def handleConnect():
-    #print("User connected")
-
-
 @sio.on("getLobbies")
 def handleGetLobbies():
     lobbies = json.dumps(R.getLobbies())
@@ -29,8 +24,14 @@ def handleGetLobbies():
 
 
 @sio.on("getUsers")
-def handleGetUsers():
-    R.getUsers()
+def handleGetLobby(id):
+    lobby = R.getLobby(id)
+    sio.emit("getUsers", lobby, room=request.sid)
+
+
+#@sio.on("getUsers")
+#def handleGetUsers():
+    #R.getUsers()
 
 
 @sio.on("join")

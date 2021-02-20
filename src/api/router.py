@@ -10,6 +10,7 @@ class Router:
         self.lobbies = []
 
         # hash table mapping user ID to lobby index
+        #TODO: spremeni hash table v sid -> Lobby (lažje brisanje)
         self.lobbyTable = dict()
 
         self.lobbies.append(Lobby("first_lobby"))
@@ -39,6 +40,16 @@ class Router:
         ]
 
 
+    def getLobby(self, id):
+        for lob in self.lobbies:
+            if lob.room == id:
+                return [
+                    [u["name"], u["ready"], False]
+                    for u in lob.lobby
+                ]
+        return []
+
+
 
 
     def joinLobby(self, name, lobbyId):
@@ -53,12 +64,12 @@ class Router:
             self.lobbyTable[request.sid] = lobbyIndex
             self.lobbies[lobbyIndex].join(name)
         else:
-            # TODO: lobby does not exist, create it instead
-            print("Lobby does not exist. Creating new lobby.")
-            self.lobbies.append(Lobby(lobbyId))
-            lobbyIndex = len(self.lobbies) - 1
-            self.lobbyTable[request.sid] = lobbyIndex
-            self.lobbies[lobbyIndex].join(name)
+            # TODO: separate function to create lobby
+            print("Lobby does not exist.")
+            #self.lobbies.append(Lobby(lobbyId))
+            #lobbyIndex = len(self.lobbies) - 1
+            #self.lobbyTable[request.sid] = lobbyIndex
+            #self.lobbies[lobbyIndex].join(name)
 
 
 

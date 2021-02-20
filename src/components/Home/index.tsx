@@ -19,7 +19,7 @@ const Home = () => {
         </div>
       </header>
       <main>
-        <Link to={LOBBY_ROUTE}>
+        <Link to={"/rooms"}>
           <div className={homeStyle.startButton}>
             <FontAwesomeIcon icon={faPlayCircle} />
             <span>Začni</span>
