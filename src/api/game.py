@@ -31,6 +31,8 @@ class Game:
         self.stage = "lobby"
         self.stageStack = []
 
+    def isInactive(self):
+        return len(self.players) == len(self.stageStack)
 
     def error(self, msg):
         print("ERROR>", msg)

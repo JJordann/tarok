@@ -1,5 +1,9 @@
+import json
 from lobby import Lobby
 from flask import request
+from flask_socketio import leave_room
+from __main__ import sio
+
 
 class Router:
 
@@ -13,19 +17,14 @@ class Router:
         #TODO: spremeni hash table v sid -> Lobby (lažje brisanje)
         self.lobbyTable = dict()
 
-        self.lobbies.append(Lobby("first_lobby"))
-        self.lobbies.append(Lobby("lobby2"))
-        self.lobbies.append(Lobby("lobby3"))
-
-
-    
-    def createRoom():
-        id = "first_room" # TODO: randomly generate
-        self.lobbies.append(Lobby(id))
+        #self.lobbies.append(Lobby("first_lobby"))
+        #self.lobbies.append(Lobby("lobby2"))
+        #self.lobbies.append(Lobby("lobby3"))
 
 
     def lobbyLookup(self, sid):
-        return self.lobbies[self.lobbyTable[sid]]
+        #return self.lobbies[self.lobbyTable[sid]]
+        return self.lobbyTable[sid]
 
 
     def getLobbies(self):
@@ -57,6 +56,7 @@ class Router:
         #self.lobbyTable[request.sid] = lobbyIndex
         #self.lobbies[lobbyIndex].join(name)
         # return new ID to be emitted
+        self.broadcastLobbyChange()
         return newID
         
 
@@ -70,22 +70,36 @@ class Router:
 
         if lobbyIndex != -1:
             # lobby exists, add user to lobby
-            self.lobbyTable[request.sid] = lobbyIndex
+            self.lobbyTable[request.sid] = self.lobbies[lobbyIndex]
             self.lobbies[lobbyIndex].join(name)
+            leave_room("watchingLobbies")
+            self.broadcastLobbyChange()
         else:
-            # TODO: separate function to create lobby
             print("Lobby does not exist.")
-            #self.lobbies.append(Lobby(lobbyId))
-            #lobbyIndex = len(self.lobbies) - 1
-            #self.lobbyTable[request.sid] = lobbyIndex
-            #self.lobbies[lobbyIndex].join(name)
 
+
+    def broadcastLobbyChange(self):
+        sio.emit("getLobbies", json.dumps(self.getLobbies()), room="watchingLobbies")
 
 
     def leaveLobby(self):
         if request.sid in self.lobbyTable:
             self.lobbyLookup(request.sid).disconnect()
             #del lobbyTable[request.sid]
+            # TODO: if room ends up empty, remove it
+            if self.lobbyLookup(request.sid).isInactive():
+                # game is inactive, remove it 
+                # along with all associated hash table entries
+                idToRemove = self.lobbyLookup(request.sid).room
+                self.lobbyTable = {
+                    k:v 
+                    for k,v in self.lobbyTable.items()
+                    if v.room == idToRemove
+                }
+                self.lobbies = [l for l in self.lobbies if l.room != idToRemove]
+        self.broadcastLobbyChange()
+                
+
 
     #def getUsers(self):
         #if request.sid in self.lobbyTable:

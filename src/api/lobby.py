@@ -11,6 +11,12 @@ class Lobby:
         self.lobby = []
         self.game = Game(room)
 
+    def isInactive(self):
+        if self.lobby == []:
+            return True
+        else:
+            return self.game.isInactive()
+
     def join(self, name):
         if self.game.stage == "lobby":
             self.lobby.append({"name": name, "sid": request.sid, "ready": False})
