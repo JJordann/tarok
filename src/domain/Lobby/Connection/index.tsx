@@ -6,13 +6,13 @@ import { JOIN, READY } from '../actions'
 
 import connectionStyle from './style.module.scss'
 
-const Connection = ({isConnected, isReady}) => {
+const Connection = ({isConnected, isReady, lobbyId}) => {
   const [name, setName] = useState('')
 
   const connect = (e) => {
     e.preventDefault()
 
-    socket.emit(JOIN, name)
+    socket.emit(JOIN, name, lobbyId)
   }
 
   const ready = () => {

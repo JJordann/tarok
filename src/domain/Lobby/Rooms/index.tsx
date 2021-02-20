@@ -13,9 +13,11 @@ const Rooms = () => {
     useEffect(
         () => {
             socket.on("getLobbies", handleGetLobbies)
+            socket.on("createLobby", handleCreateLobby)
             socket.emit("getLobbies")
             return () => {
                 socket.off("getLobbies")
+                socket.off("createLobby")
             }
         }, [])
 
@@ -25,6 +27,16 @@ const Rooms = () => {
         setRooms(JSON.parse(msg))
     }
 
+
+    const history = useHistory()
+
+    const handleCreateLobby = msg => {
+        // on new lobby request,
+        // server creates new lobby 
+        // and responds with its unique ID
+        history.push(`/lobby/${msg}`)
+    }
+
     /* TODO:
         - renderi rooms kot grid
         - vsaka soba naj ima onClick = redirect v sobo
@@ -32,10 +44,9 @@ const Rooms = () => {
     */
 
     const handleNewRoom = () => {
-        socket.emit("createRoom")
+        socket.emit("createLobby")
     }
 
-    const history = useHistory()
     const handleJoinRoom = (roomId) => {
       history.push(`/lobby/${roomId}`)
     }

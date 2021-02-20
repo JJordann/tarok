@@ -50,6 +50,15 @@ class Router:
         return []
 
 
+    def createLobby(self):
+        newID = "room" + str(len(self.lobbies))
+        self.lobbies.append(Lobby(newID))
+        #lobbyIndex = len(self.lobbies) - 1
+        #self.lobbyTable[request.sid] = lobbyIndex
+        #self.lobbies[lobbyIndex].join(name)
+        # return new ID to be emitted
+        return newID
+        
 
 
     def joinLobby(self, name, lobbyId):
@@ -78,9 +87,9 @@ class Router:
             self.lobbyLookup(request.sid).disconnect()
             #del lobbyTable[request.sid]
 
-    def getUsers(self):
-        if request.sid in self.lobbyTable:
-            self.lobbyLookup(request.sid).dispatchLobbyState()
+    #def getUsers(self):
+        #if request.sid in self.lobbyTable:
+            #self.lobbyLookup(request.sid).dispatchLobbyState()
 
 
     def ready(self, msg):

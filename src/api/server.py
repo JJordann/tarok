@@ -33,10 +33,14 @@ def handleGetLobby(id):
 #def handleGetUsers():
     #R.getUsers()
 
+@sio.on("createLobby")
+def handleCreateLobby():
+    newID = R.createLobby()
+    sio.emit("createLobby", newID, room=request.sid)
 
 @sio.on("join")
-def handleJoin(name):
-    R.joinLobby(name, "first_lobby")
+def handleJoin(name, lobbyId):
+    R.joinLobby(name, lobbyId)
 
 
 @sio.on("ready")

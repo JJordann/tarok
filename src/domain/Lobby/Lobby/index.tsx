@@ -57,7 +57,11 @@ const Lobby = () => {
 
   return (
     <div className={lobbyStyle.container}>
-      <Connection isConnected={clientIsJoined()} isReady={clientIsReady()} />
+      <Connection 
+        isConnected={clientIsJoined()} 
+        isReady={clientIsReady()} 
+        lobbyId={id}
+      />
       <div className={lobbyStyle.cards}>
         { (users.length) ? LobbyCards : '' }
       </div>
