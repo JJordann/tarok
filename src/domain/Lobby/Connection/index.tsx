@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-
 import { socket } from '../../../services/Socket'
-
 import { JOIN, READY } from '../actions'
-
 import connectionStyle from './style.module.scss'
+
 
 const Connection = ({isConnected, isReady, lobbyId}) => {
   const [name, setName] = useState('')

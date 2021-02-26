@@ -17,9 +17,14 @@ class Lobby:
         else:
             return self.game.isInactive()
 
-    def join(self, name):
+    def join(self, name, uid):
         if self.game.stage == "lobby":
-            self.lobby.append({"name": name, "sid": request.sid, "ready": False})
+            self.lobby.append({
+                "name": name, 
+                "uid": uid, 
+                "sid": request.sid, 
+                "ready": False
+            })
             self.dispatchLobbyState()
             join_room(self.room)
         else:
@@ -35,6 +40,22 @@ class Lobby:
             self.game.leave()
 
         leave_room(self.room)
+
+    # reconnect user with provided uid
+    # returns old SID if successful
+    def reconnect(self, uid):
+        for player in self.lobby:
+            if player["uid"] == uid:
+                player["sid"] = request.sid
+                # TODO: remove self.lobby, 
+                # use self.game.players instead
+                for p in self.game.players:
+                    if p["uid"] == uid:
+                        oldSID = p["sid"]
+                        p["sid"] = request.sid
+                        return oldSID
+        return ""
+
 
     def ready(self, msg):
         for u in self.lobby:

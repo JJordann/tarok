@@ -58,6 +58,10 @@ def handleReady(msg):
 def handleDisconnect():
     R.leaveLobby()
 
+@sio.on("reconnect")
+def handleReconnect(uid):
+    R.reconnect(uid)
+
 
 @sio.on("getState")
 def handleGetState():

@@ -8,6 +8,7 @@ import LobbyCard from '../LobbyCard'
 import lobbyStyle from './style.module.scss'
 import Chat from '../../Game/Chat'
 
+
 const Lobby = () => {
   const [users, setUsers] = useState([])
 
@@ -18,16 +19,7 @@ const Lobby = () => {
   }
 
   const { id }: Params = useParams()
-  
   console.log(id)
-
-  /* TODO:
-    fetch lobby data, 
-    if lobby exists
-      display users
-    else 
-      display empty lobby message
-  */
 
   useEffect(() => {
     socket.emit("getUsers", id)

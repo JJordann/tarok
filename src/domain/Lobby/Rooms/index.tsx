@@ -66,12 +66,13 @@ const Rooms = () => {
             <div 
                 className={roomsStyles.item}
                 onClick={() => handleJoinRoom(room.id)}
+                key={i}
             >
                 { room.id }
                 <hr />
                 { 
                     room.players.map(
-                        player => <p>{player}</p>
+                        (player, i) => <p key={i}>{player}</p>
                     ) 
                 }
             </div>
