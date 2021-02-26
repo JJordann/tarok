@@ -5,7 +5,6 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import scoreboardStyle from './style.module.scss'
 
 
-
 const Scoreboard = ({scores}) => {
 
   const renderThumb = ({ style, ...props }) => {
@@ -19,7 +18,8 @@ const Scoreboard = ({scores}) => {
     )
   }
 
-  const CustomScrollbars = (props) => <Scrollbars renderThumbVertical={renderThumb} {...props} />
+  const CustomScrollbars = (props) => 
+    <Scrollbars renderThumbVertical={renderThumb} {...props} />
 
 
   let radelciSym = scores => {
@@ -33,21 +33,37 @@ const Scoreboard = ({scores}) => {
   }
 
   const getScores = (scores) => {
-    const Radelci = scores.map(score => 
-      <div className={scoreboardStyle.radelci}>
-        { radelciSym(score) }
-      </div>
+    const Radelci = scores.map(
+      (score, index) => 
+        <div className={scoreboardStyle.radelci} key={index}>
+          { radelciSym(score) }
+        </div>
     )
 
-    const Names = scores.map(score => <div className={scoreboardStyle.name}>{score.name}</div>)
+    const Names = scores.map(
+      score => 
+        <div className={scoreboardStyle.name} key={score.name}>
+          {score.name}
+        </div>)
 
     const Points = scores.map(score =>
       <div className={scoreboardStyle.points}>
-        {score.points.map(point => <div className={scoreboardStyle.point}>{point}</div>)}
+        {
+          score.points.map(
+            (point, index) => 
+              <div className={scoreboardStyle.point} key={index}>
+                {point}
+              </div>
+          )
+        }
       </div>
     )
 
-    const Sums = scores.map(score => <div className={scoreboardStyle.sum}>{score.sum}</div>)
+    const Sums = scores.map(
+      (score, index) => 
+        <div className={scoreboardStyle.sum} key={index}>
+          {score.sum}
+        </div>)
 
     return (
       <div className={scoreboardStyle.container}>
@@ -74,7 +90,7 @@ const Scoreboard = ({scores}) => {
 
   return (
     <div className={scoreboardStyle.scoreboard}>
-      {getScores(scores)}
+      { getScores(scores) }
     </div>
   )
 }

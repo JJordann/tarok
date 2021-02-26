@@ -121,7 +121,9 @@ class Game:
 
 
     def getPublicState(self, sid):
-        playerIndex = next(i for i, v in enumerate(self.players) if v["sid"] == sid)
+        playerIndex = self.getPlayerIndex(sid)
+        if playerIndex == -1:
+            return
         player = self.players[playerIndex]
 
         _playable = []

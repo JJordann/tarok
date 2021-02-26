@@ -7,7 +7,7 @@ import Sound from '../../../services/soundEffects'
 
 const Contracts = ({ contracts, show = true }) => {
 
-  const handleContract = contract => {
+  const handleContract = (contract: string) => {
     socket.emit('gameType', contract)
     console.log(contract)
   }
@@ -18,7 +18,7 @@ const Contracts = ({ contracts, show = true }) => {
     }, [])
     
   let Items = contracts.map((contract, index) =>
-    <div>
+    <div key={contract}>
       <button onClick={() => handleContract(contract)} key={index}>{GameTypes[contract]}</button>
     </div>
   )

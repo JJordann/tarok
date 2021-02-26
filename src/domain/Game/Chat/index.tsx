@@ -49,7 +49,17 @@ const Chat = () => {
 
   const [mymessage, setMymessage] = useState('')
 
-  let History = history.map(m => <div><span>{m['sender']}</span><p>{m['message']}</p></div>)
+  let History = history.map(
+    (m, index) => 
+      <div key={`${m['sender']}${index}`}>
+        <span>
+          {m['sender']}
+        </span>
+        <p>
+          {m['message']}
+        </p>
+      </div>
+  )
 
   const renderThumb = ({ style, ...props }) => {
     const thumbStyle = {
