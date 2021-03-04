@@ -43,13 +43,6 @@ const Home = () => {
       <div className={homeStyle.handContainer}>
         <Hand cards={['srce_4', 'srce_3', 'srce_2', 'pik_7', 'pik_8', 'pik_9', 'kara_4', 'kara_3', 'kara_2', 'kriz_7', 'kriz_8', 'tarok_2']} />
       </div>
-
-      <section className={homeStyle.section}>
-        <div className={homeStyle.rooms}>
-          <h2>Igraj</h2>
-          <Rooms />
-        </div>
-      </section>
     </div>
   )
 }
