@@ -4,12 +4,15 @@ import Hand from '../Hand'
 import Contracts from '../Activity/Contracts'
 import Kings from '../Activity/Kings'
 
+import Players from '../Players'
+
 import layoutStyle from './style.module.scss'
 
 const Layout = () => {
 
   return (
     <div className={layoutStyle.container}>
+      <Players players={[['Player 2', 'Naprej'], ['Player 3', 'Naprej'], ['Player 4', 'Naprej']]} activeIndex={2} />
 
       <div className={layoutStyle.activityArea}>
         <Contracts contracts={['Klop', 'Tri', 'Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Valat']} />
