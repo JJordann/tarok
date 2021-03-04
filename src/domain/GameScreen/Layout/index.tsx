@@ -1,6 +1,7 @@
 import React from 'react'
 import Talon from '../Talon'
 import Hand from '../Hand'
+import Kings from '../Kings'
 
 import layoutStyle from './style.module.scss'
 
@@ -10,7 +11,8 @@ const Layout = () => {
     <div className={layoutStyle.container}>
 
       <div className={layoutStyle.activityArea}>
-        <Talon cards={[['tarok_16', 'tarok_17'], ['srce_poba', 'kriz_kraljica'], ['kriz_konj', 'kara_kraljica']]} />
+        <Kings />
+        {/*<Talon cards={[['tarok_16', 'tarok_17'], ['srce_poba', 'kriz_kraljica'], ['kriz_konj', 'kara_kraljica']]} />*/}
       </div>
 
       <div className={layoutStyle.handContainer}>
