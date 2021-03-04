@@ -9,10 +9,35 @@
   >header {
     position: relative;
     width: 100%;
-    height: 62vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    height: 4em;
+    line-height: 4em;
+
+    ul.navbar {
+      margin: 0;
+      padding: 0;
+      float: right;
+      list-style-type: none;
+
+      li {
+        display: inline-block;
+
+        a {
+          font-family: $roboto;
+          text-transform: uppercase;
+          font-weight: bold;
+          transition: color .2s ease-in;
+          display: block;
+          padding: 0 1em;
+          height: 100%;
+          color: $white;
+          font-size: 1.75em;
+
+          &:hover {
+            color: $red;
+          }
+        }
+      }
+    }
 
     background:
       linear-gradient(135deg, $blue 21px, #0AB6FF 22px, #0AB6FF 24px,
@@ -35,44 +60,30 @@
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.1) 40%, transparent);
     }
 
-    >div {
-      >h1 {
-        position: relative;
-        z-index: 1;
-        margin: 0 auto;
-        max-width: 1200px;
-        font-size: 6em;
-        color: $white;
-        text-align: center;
-      }
-  
-      >p {
-        position: relative;
-        z-index: 1;
-        margin: 0 auto;
-        max-width: 1200px;
-        font-size: 2.5em;
-        color: $white;
-        text-align: center;
+    .logo {
+      display: inline-block;
+
+      h1 {
         font-family: $roboto;
-  
-        >span {
-          color: $red;
-          text-shadow: 0 0 2px $white;
-          padding-right: 0.25em;
-        }
+        margin: 0;
+        padding: 0;
+        color: $white;
       }
     }
-
-    
   }
 
   .handContainer {
+    width: 100%;
+    margin: 0 auto;
     padding-top: 8em;
     background-color: $white;
 
     &:nth-of-type(2) {
       padding-top: 3em;
+    }
+
+    @media screen and (max-width: 1500px) {
+      width: 90%;
     }
   }
 
@@ -95,18 +106,20 @@
   }
 
   .berac {
-    color: $darkGrey;
-    text-align: center;
+    h2 {
+      color: $darkGrey;
+      text-align: center;
 
-    span {
-      color: $blue;
+      span {
+        color: $blue;
 
-      border-bottom: 4px solid $darkGrey;
+        border-bottom: 4px solid $darkGrey;
 
-      &:hover {
-        cursor: pointer;
+        &:hover {
+          cursor: pointer;
 
-        border-bottom: 4px solid $blue;
+          border-bottom: 4px solid $blue;
+        }
       }
     }
   }

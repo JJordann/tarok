@@ -15,9 +15,14 @@ const Home = () => {
   return (
     <div className={homeStyle.container}>
       <header>
-        <div>
-          <h1>Berač.si</h1>
-          <p><span>Brez omejitev.</span>Enostavno Tarok.</p>
+        <div className={homeStyle.textContainer}>
+          <div className={homeStyle.logo}>
+            <h1>Berač.si</h1>
+          </div>
+
+          <ul className={homeStyle.navbar}>
+            <li><Link to='/rooms'>Igraj</Link></li>
+          </ul>
         </div>
       </header>
 
@@ -28,7 +33,9 @@ const Home = () => {
       <section className={homeStyle.section}>
         <div className={homeStyle.textContainer}>
           <h2 className={homeStyle.valati}>Valati so stvar preteklosti</h2>
-          <h2 className={homeStyle.berac}>To je <span>Berač.si</span></h2>
+          <div className={homeStyle.berac}>
+            <h2>To je <Link to='/rooms'><span>Berač.si</span></Link></h2>
+          </div>
         </div>
       </section>
       
