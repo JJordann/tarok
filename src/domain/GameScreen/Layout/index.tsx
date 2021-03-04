@@ -1,7 +1,8 @@
 import React from 'react'
-import Talon from '../Talon'
+import Talon from '../Activity/Talon'
 import Hand from '../Hand'
-import Kings from '../Kings'
+import Contracts from '../Activity/Contracts'
+import Kings from '../Activity/Kings'
 
 import layoutStyle from './style.module.scss'
 
@@ -11,7 +12,8 @@ const Layout = () => {
     <div className={layoutStyle.container}>
 
       <div className={layoutStyle.activityArea}>
-        <Kings />
+        <Contracts contracts={['Klop', 'Tri', 'Dve', 'Ena', 'Solo tri', 'Solo dve', 'Solo ena', 'Solo brez', 'Pikolo', 'Berač', 'Odprti berač', 'Valat']} />
+        {/*<Kings />*/}
         {/*<Talon cards={[['tarok_16', 'tarok_17'], ['srce_poba', 'kriz_kraljica'], ['kriz_konj', 'kara_kraljica']]} />*/}
       </div>
 

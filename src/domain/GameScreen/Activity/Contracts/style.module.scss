@@ -1,0 +1,36 @@
+@import '../../../../variables';
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 50%;
+
+    .contract {
+      transition: all .2s ease-in-out;
+      border-radius: 10px;
+      box-sizing: border-box;
+      background: $lightBlue;
+      padding: 4%;
+      width: calc(25%);
+      text-align: center;
+      font-size: 1.5em;
+      font-family: $roboto;
+      color: $black;
+      border: 2px solid white;
+
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.25);
+        color: $red;
+      }
+    }
+  }
+}
