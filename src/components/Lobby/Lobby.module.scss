@@ -1,0 +1,17 @@
+@import '../../variables';
+
+.lobbyContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: 2em;
+}
+
+@media only screen and (max-width: 768px) {
+  .lobbyContainer {
+    flex-wrap: wrap;
+
+    >div {
+      flex: 50%;
+    }
+  }
+}

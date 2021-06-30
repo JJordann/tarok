@@ -1,0 +1,53 @@
+@import '../../variables';
+
+.playerCard {
+  position: relative;
+  width: 100%;
+  display: table;
+  background: $white;
+  border-bottom: 2px solid $darkGrey;
+
+  transition: background-color .2s ease-in-out;
+
+  p, div {
+    display: table-cell;
+  }
+
+  p {
+    transition: all .2s ease-in-out;
+    margin: 0;
+    padding: 1em;
+    font-size: 1.5em;
+    font-family: $roboto;
+    letter-spacing: 1px;
+
+    color: $darkGrey;
+  }
+
+  div {
+    width: 4px;
+    height: 50px;
+
+    transition: width .2s ease-in-out;
+  
+    &.active {
+      background: $blue;
+    }
+
+    &.inactive {
+      background: $red;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    background: $translucentWhite;
+
+    p {
+    }
+
+    div {
+      width: 10px;
+    }
+  }
+}
