@@ -12,7 +12,15 @@ const Header = () => {
   return (
     <header className={headerStyles.wrapper}>
       <div className={headerStyles.container}>
-        <Link to={HOME_ROUTE}><h1 className={headerStyles.logo}>Berač.si</h1></Link>
+        <Link to={HOME_ROUTE}>
+          <h1 className={headerStyles.logo}>
+            Berač.si
+            <div className={headerStyles.slogan}>
+              <p>Brez Omejitev</p>
+              <p>Enostavno Tarok</p>
+            </div>
+          </h1>
+          </Link>
 
         <Navigation className={headerStyles.navigation} routes={[{route: '/', name: 'Domov'}]} />
       </div>

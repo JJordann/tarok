@@ -1,0 +1,36 @@
+.wrapper {
+  width: 90%;
+  padding: 100px 5% 0 5%;
+  overflow: hidden;
+
+  .container {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+
+      >div.cardContainer {
+
+        transition: all .1s ease-in-out;
+        transform-origin: center;
+  
+        &:not(:first-child) {
+          margin-left: -40px;
+        }
+
+        // Card styling
+        >div {
+          position: relative;
+          transition: all .1s ease-in-out;
+          transform-origin: bottom center;
+
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.25);
+            z-index: 99; // Bring card to top immediatelly to avoid awkward swapping
+          }
+        }
+    }
+  }
+}

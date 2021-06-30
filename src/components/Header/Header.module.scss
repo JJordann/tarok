@@ -17,13 +17,35 @@ $height: 60px;
 
 .logo {
   margin: 0;
-  font-size: 2.5em;
+  font-size: 2.8em;
   font-family: $roboto;
   display: inline-block;
   color: $red;
 
+  .slogan {
+    transition: opacity .75s ease-in-out;
+    margin-left: 5px;
+    padding-left: 5px;
+    display: inline-block;
+    font-size: 0.4em;
+    opacity: 0.1;
+
+    border-left: 2px solid $red;
+
+    p {
+      color: $darkGrey;
+      line-height: 18px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
   &:hover {
     color: $blue;
+
+    .slogan {
+      opacity: 0.9;
+    }
   }
 }
 
