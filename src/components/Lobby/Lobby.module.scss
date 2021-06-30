@@ -3,7 +3,15 @@
 .lobbyContainer {
   display: flex;
   flex-wrap: nowrap;
-  margin-bottom: 2em;
+  margin-bottom: 3em;
+
+  >div {
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -11,7 +19,12 @@
     flex-wrap: wrap;
 
     >div {
-      flex: 50%;
+      margin-right: 0;
+      flex: calc(50% - 10px);
+
+      &:nth-child(2n + 1) {
+        margin-right: 10px;
+      }
     }
   }
 }
