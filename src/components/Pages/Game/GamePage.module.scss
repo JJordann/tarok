@@ -1,0 +1,21 @@
+.wrapper {
+  height: 100%;
+  overflow: hidden;
+
+  .container {
+    height: calc(100% - 62px); // Header height = 60px, +2px border-bottom
+    display: flex;
+    flex-direction: column;
+    align-content: stretch;
+
+    .gameContainer {
+      flex-grow: 1;
+    }
+
+    .handContainer {
+      border-top: 4px dotted red;
+    }
+  }
+
+  
+}

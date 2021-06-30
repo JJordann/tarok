@@ -7,7 +7,7 @@ import Navigation from './Navigation'
 
 import { HOME_ROUTE } from '../../routes'
 
-const Header = ({routes}) => {
+const Header = ({routes = []}) => {
 
   return (
     <header className={headerStyles.wrapper}>

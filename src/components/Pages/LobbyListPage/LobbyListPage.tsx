@@ -44,7 +44,7 @@ const LobbyListPage = () => {
 
   return (
     <div className={lobbyListPageStyles.wrapper}>
-      <Header routes={[]} />
+      <Header />
       <div className={lobbyListPageStyles.container}>
         <h1><span>Tarok sobe</span></h1>
 
