@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Hand from '../Hand/Hand'
+import Hand from '../../Hand/Hand'
 
-import Header from '../Header/Header'
+import Header from '../../Header/Header'
 
 import landingPageStyles from './LandingPage.module.scss'
 

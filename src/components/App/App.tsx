@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import { HOME_ROUTE, GAME_ROUTE, LOBBY_ROUTE, GAME_SCREEN_ROUTE } from '../../routes'
 
-import LandingPage from '../LandingPage/LandingPage'
+import LandingPage from '../Pages/LandingPage/LandingPage'
 
 const App = () => {
 
