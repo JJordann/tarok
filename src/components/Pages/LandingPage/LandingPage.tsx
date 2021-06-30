@@ -21,7 +21,7 @@ const LandingPage = () => {
   return (
     <div className={landingPageStyles.wrapper}>
       <Header routes={[{route: LOBBY_LIST_ROUTE, name: 'Igraj'}]} />
-      <div className={landingPageStyles.content}>
+      <div className={landingPageStyles.container}>
         <div className={landingPageStyles.valatContainer}>
           <Hand cards={valatCards} />
         </div>
