@@ -1,0 +1,11 @@
+@import '../../../variables';
+
+.wrapper {
+  background: $light;
+  height: 100%;
+
+  .container {
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+}
