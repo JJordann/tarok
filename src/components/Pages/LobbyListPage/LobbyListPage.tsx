@@ -1,33 +1,36 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Lobby from '../../Lobby/Lobby'
-import CreateLobby from '../../Lobby/CreateLobby'
 import Header from '../../Header/Header'
 
 import lobbyListPageStyles from './LobbyListPage.module.scss'
 import PlayerCard from '../../PlayerCard/PlayerCard'
+import { createLobby, getLobbies, onCreateLobby, onGetLobbies } from '../../../services/APIWrapper/APIWrapper'
 
 const LobbyListPage = () => {
 
-  const lobbies = [
-    [
-      {player: 'Tilen', ready: false},
-      {player: 'Vid', ready: true},
-      {player: 'Jordan', ready: false},
-      {player: 'Matija', ready: false}
-    ],
-    [
-      {player: 'Vražji poba', ready: true},
-      {player: 'Štefka', ready: true},
-      {player: 'Mato211', ready: false},
-      {player: 'Serbo', ready: true}
-    ],
-    [
-      {player: 'Janez Novak', ready: false},
-      {player: 'Player69', ready: false},
-      {player: 'Dolorem ipsum', ready: false}
-    ]
-  ]
+  const [lobbies, setLobbies] = useState([])
+
+  useEffect(() => {
+    onGetLobbies(handleLobbies)
+    onCreateLobby(handleCreateLobby)
+    getLobbies()
+  }, [])
+
+  const handleLobbies = (lobbies => {
+    setLobbies(JSON.parse(lobbies))
+    console.log(lobbies)
+  })
+
+  const handleCreateLobby = (msg) => {
+    console.log('handleCreateLobby')
+    console.log(msg)
+  }
+
+  const handleClick = () => {
+    createLobby()
+  }
+  
 
   const Notice = (lobbies.length === 0) ?
     <PlayerCard name='Trenutno ni aktivnih sob' active={false} /> : ''
@@ -35,12 +38,12 @@ const LobbyListPage = () => {
   const CreateLobby = 
     <div className={lobbyListPageStyles.flex}>
       {Notice}
-      <PlayerCard name='Ustvari sobo' active={true} />
+      <PlayerCard name='Ustvari sobo' active={true} onClick={handleClick} />
     </div>
 
   const Lobbies = lobbies.map((lobby, index) =>
-      <Lobby players={lobby} key={index} />
-    )
+    <Lobby lobbyId={lobby.id} players={lobby.players} key={index} />
+  )
 
   return (
     <div className={lobbyListPageStyles.wrapper}>
