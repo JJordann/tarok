@@ -3,8 +3,6 @@ import { ALL_READY, CREATE_LOBBY, GET_LOBBIES, GET_USERS, JOIN, READY } from './
 
 export const createLobby = () => {
   socket.emit(CREATE_LOBBY)
-
-  console.log('CREATE LOBBY')
 }
 
 export const join = (name, lobbyId) => {
@@ -21,8 +19,6 @@ export const getUsers = (id) => {
 
 export const getLobbies = () => {
   socket.emit(GET_LOBBIES)
-
-  console.log('Getting lobbies')
 }
 
 export const onGetUsers = (callback) => {

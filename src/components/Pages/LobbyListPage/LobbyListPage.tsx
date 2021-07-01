@@ -8,7 +8,7 @@ import PlayerCard from '../../PlayerCard/PlayerCard'
 
 import lobbyListPageStyles from './LobbyListPage.module.scss'
 
-import { createLobby, getLobbies, join, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../../services/APIWrapper/APIWrapper'
+import { createLobby, getLobbies, getUsers, join, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../../services/APIWrapper/APIWrapper'
 import { LOGIN_ROUTE } from '../../../routes'
 import { getUser } from '../../../services/User/User'
 
@@ -36,7 +36,11 @@ const LobbyListPage = () => {
 
   const handleLobbies = (lobbies => {
     setLobbies(JSON.parse(lobbies))
-    console.log(lobbies)
+    const parsedLobbies = JSON.parse(lobbies)
+
+    parsedLobbies.forEach((lobby, index) => {
+      getUsers(lobby.id)
+    })
   })
 
   const handleCreateLobby = (lobbyId) => {

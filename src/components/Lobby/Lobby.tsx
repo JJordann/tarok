@@ -23,8 +23,6 @@ const Lobby = ({lobbyId}) => {
     onGetUsers((usersData) => {
       console.log(usersData)
       setUsers([...usersData])
-
-      console.log(users)
     })
 
     onAllReady(() => {
