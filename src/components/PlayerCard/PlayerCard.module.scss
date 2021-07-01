@@ -26,7 +26,6 @@
 
   div {
     width: 4px;
-    height: 50px;
 
     transition: width .2s ease-in-out;
   
@@ -45,6 +44,14 @@
 
     div {
       width: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .playerCard {
+    p {
+      font-size: 0.75em;
     }
   }
 }
