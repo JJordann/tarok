@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
-import { getLobbies, getUsers, join, onAllReady, onGetUsers, stopAllReady, stopGetUsers } from '../../services/APIWrapper/APIWrapper'
+import { getLobbies, getUsers, join, onAllReady, onGetUsers, setReady, stopAllReady, stopGetUsers } from '../../services/APIWrapper/APIWrapper'
+
+import { getUser } from '../../services/User/User'
 
 import Connection from './Connection'
 import PlayerCard from '../PlayerCard/PlayerCard'
 
 import lobbyStyles from './Lobby.module.scss'
 
-const Lobby = ({lobbyId, players}) => {
+const Lobby = ({lobbyId}) => {
 
   const [users, setUsers] = useState([])
 
@@ -31,14 +33,34 @@ const Lobby = ({lobbyId, players}) => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handlePlayerCardClick = (e) => {
+    // Super whacky way of doing this but it works...for now
+    if(e.target.innerHTML === getUser()) {
+      let currentReady = users[indexOfUser(getUser())][1]
+
+      setReady(!currentReady)
+    }
+  }
+
+  const indexOfUser = (name) => {
+    const usernames = users.map(user => user[0])
+
+    return usernames.indexOf(name)
+  }
+
+  const isConnected = () => {
+    return (indexOfUser(getUser()) !== -1)
+  }
+
   const Players = users.map((user, index) =>
-    <PlayerCard name={user[0]} active={user[1]} key={index} />
+    <PlayerCard name={user[0]} active={user[1]} key={index}
+      onClick={handlePlayerCardClick} data-id={`Interesting totally very much`} />
   )
 
   return (
     <div className={lobbyStyles.lobbyContainer}>
       {Players}
-      {(users.length < 4) ?
+      {(!isConnected() && users.length < 4) ?
           <Connection isConnected={false} lobbyId={lobbyId} />
         : ''}
     </div>

@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react'
 
-import NameForm from '../../NameForm/NameForm'
+import { useHistory } from 'react-router-dom'
+
 import Lobby from '../../Lobby/Lobby'
 import Header from '../../Header/Header'
 import PlayerCard from '../../PlayerCard/PlayerCard'
 
 import lobbyListPageStyles from './LobbyListPage.module.scss'
 
-import { createLobby, getLobbies, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../../services/APIWrapper/APIWrapper'
+import { createLobby, getLobbies, join, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../../services/APIWrapper/APIWrapper'
+import { LOGIN_ROUTE } from '../../../routes'
+import { getUser } from '../../../services/User/User'
 
 const LobbyListPage = () => {
-
   const [lobbies, setLobbies] = useState([])
+
+  const history = useHistory()
+
+  const name = getUser()
+
+  if(name === '') {
+    history.push(LOGIN_ROUTE)
+  }
 
   useEffect(() => {
     onGetLobbies(handleLobbies)
@@ -29,9 +39,8 @@ const LobbyListPage = () => {
     console.log(lobbies)
   })
 
-  const handleCreateLobby = (msg) => {
-    console.log('handleCreateLobby')
-    console.log(msg)
+  const handleCreateLobby = (lobbyId) => {
+    join(getUser(), lobbyId)
   }
 
   const handleClick = () => {
@@ -49,7 +58,7 @@ const LobbyListPage = () => {
     </div>
 
   const Lobbies = lobbies.map((lobby, index) =>
-    <Lobby lobbyId={lobby.id} players={lobby.players} key={index} />
+    <Lobby lobbyId={lobby.id} key={index} />
   )
 
   const Content =
@@ -65,7 +74,8 @@ const LobbyListPage = () => {
       <div className={lobbyListPageStyles.container}>
         <h1><span>Tarok sobe</span></h1>
 
-        <NameForm />
+        <PlayerCard className={lobbyListPageStyles.welcome}
+          name={`Pozdravljen, ${name}!`} active={true} />
 
         {Content}
 

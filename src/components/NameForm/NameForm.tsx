@@ -1,39 +1,43 @@
 import React, { useState } from 'react'
 
-import { useCookies } from 'react-cookie'
+import { Redirect, useHistory } from 'react-router-dom'
+
+import { LOBBY_LIST_ROUTE } from '../../routes'
+
+import { getUser, setUser } from '../../services/User/User'
 
 import nameFormStyles from './NameForm.module.scss'
 
 const NameForm = () => {
-  const [cookies, setCookie] = useCookies(['user'])
 
-  const [name, setName] = useState(cookies.name)
-  const [submitted, setSubmitted] = useState(false)
+  const [name, setName] = useState(getUser())
+
+  const history = useHistory()
 
   const saveName = (e) => {
     e.preventDefault()
 
-    setCookie('name', name, { path: '/' })
+    setUser(name)
 
-    setSubmitted(true)
+    history.push(LOBBY_LIST_ROUTE)
   }
 
   const onInputChange = (e) => {
     setName(e.target.value)
   }
 
-  const Form = 
-    <form className={nameFormStyles.form} onSubmit={saveName}>
-      <input type='text' placeholder='Vnesi ime' value={name}
-        onChange={onInputChange} />
-      <button type='submit'>Vstopi</button>
-    </form>
-
-  const LoggedInAs = <p>Pozdravljen, {name}</p>
-
   return (
-    <div className={nameFormStyles.wrapper}>
-      {(cookies.name !== undefined || submitted) ? LoggedInAs : Form}
+    <div className={nameFormStyles.container}>
+      {(getUser()) ? <Redirect to={LOBBY_LIST_ROUTE} /> : ''}
+
+      <form className={nameFormStyles.form} onSubmit={saveName}>
+        <input type='text' placeholder='Vnesi ime' value={name}
+          onChange={onInputChange} />
+
+        <div className={(name !== undefined && name.length > 2) ? nameFormStyles.active :
+          nameFormStyles.inactive}
+          onClick={saveName}></div>
+      </form>
     </div>
   )
 }

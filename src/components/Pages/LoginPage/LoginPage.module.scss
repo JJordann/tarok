@@ -22,21 +22,5 @@
         border-bottom: 5px solid $blue;
       }
     }
-
-    .welcome {
-      margin-bottom: 2em;
-    }
-
-    .flex {
-      display: flex;
-      flex-wrap: nowrap;
-      margin-bottom: 3.5em;
-    }
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .container {
-    padding: 0 1em;
   }
 }
