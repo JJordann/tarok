@@ -8,10 +8,14 @@ import Connection from './Connection'
 import PlayerCard from '../PlayerCard/PlayerCard'
 
 import lobbyStyles from './Lobby.module.scss'
+import { useHistory } from 'react-router-dom'
+import { GAME_ROUTE } from '../../routes'
 
 const Lobby = ({lobbyId}) => {
 
   const [users, setUsers] = useState([])
+
+  const history = useHistory()
 
   useEffect(() => {
     getUsers(lobbyId)
@@ -24,7 +28,7 @@ const Lobby = ({lobbyId}) => {
     })
 
     onAllReady(() => {
-      console.log('ALL READY')
+      history.push(GAME_ROUTE)
     })
 
     return () => {
