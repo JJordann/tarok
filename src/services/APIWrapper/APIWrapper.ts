@@ -1,5 +1,5 @@
 import { socket } from '../Socket/socket'
-import { ALL_READY, CREATE_LOBBY, GET_LOBBIES, GET_USERS, JOIN } from './actions'
+import { ALL_READY, CREATE_LOBBY, GET_LOBBIES, GET_USERS, JOIN, READY } from './actions'
 
 export const createLobby = () => {
   socket.emit(CREATE_LOBBY)
@@ -11,6 +11,10 @@ export const join = (name, lobbyId) => {
   socket.emit(JOIN, name, lobbyId)
 
   console.log('Joining ', name, lobbyId)
+}
+
+export const setReady = (flag) => {
+  socket.emit(READY, String(flag))
 }
 
 export const getUsers = (id) => {
@@ -37,4 +41,20 @@ export const onGetLobbies = (callback) => {
 
 export const onCreateLobby = (callback) => {
   socket.on(CREATE_LOBBY, callback)
+}
+
+export const stopGetUsers = () => {
+  socket.off(GET_USERS)
+}
+
+export const stopAllReady = () => {
+  socket.off(ALL_READY)
+}
+
+export const stopGetLobbies = () => {
+  socket.off(GET_LOBBIES)
+}
+
+export const stopCreateLobby = () => {
+  socket.off(CREATE_LOBBY)
 }
