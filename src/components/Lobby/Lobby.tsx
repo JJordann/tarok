@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
+
 import { getLobbies, getUsers, join, onAllReady, onGetUsers, stopAllReady, stopGetUsers } from '../../services/APIWrapper/APIWrapper'
 
+import Connection from './Connection'
 import PlayerCard from '../PlayerCard/PlayerCard'
 
 import lobbyStyles from './Lobby.module.scss'
@@ -14,7 +16,7 @@ const Lobby = ({lobbyId, players}) => {
 
     onGetUsers((usersData) => {
       console.log(usersData)
-      setUsers(usersData)
+      setUsers([...usersData])
 
       console.log(users)
     })
@@ -27,25 +29,17 @@ const Lobby = ({lobbyId, players}) => {
       stopGetUsers()
       stopAllReady()
     }
-  })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const Players = players.map((player, index) =>
-    <PlayerCard name={player} active={false} key={index} />
+  const Players = users.map((user, index) =>
+    <PlayerCard name={user[0]} active={user[1]} key={index} />
   )
-
-  const joinLobby = () => {
-    join('Tilen', lobbyId)
-
-    getLobbies()
-  }
 
   return (
     <div className={lobbyStyles.lobbyContainer}>
       {Players}
-      {(players.length < 4) ?
-          <PlayerCard className={lobbyStyles.joinCard} 
-            onClick={joinLobby}
-            name='Pridruži se' active={true} key={5}/>
+      {(users.length < 4) ?
+          <Connection isConnected={false} lobbyId={lobbyId} />
         : ''}
     </div>
   )

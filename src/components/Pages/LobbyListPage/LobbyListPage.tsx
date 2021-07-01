@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
+import NameForm from '../../NameForm/NameForm'
 import Lobby from '../../Lobby/Lobby'
 import Header from '../../Header/Header'
+import PlayerCard from '../../PlayerCard/PlayerCard'
 
 import lobbyListPageStyles from './LobbyListPage.module.scss'
-import PlayerCard from '../../PlayerCard/PlayerCard'
-import { createLobby, getLobbies, onCreateLobby, onGetLobbies } from '../../../services/APIWrapper/APIWrapper'
+
+import { createLobby, getLobbies, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../../services/APIWrapper/APIWrapper'
 
 const LobbyListPage = () => {
 
@@ -15,7 +17,12 @@ const LobbyListPage = () => {
     onGetLobbies(handleLobbies)
     onCreateLobby(handleCreateLobby)
     getLobbies()
-  }, [])
+
+    return () => {
+      stopGetLobbies()
+      stopCreateLobby()
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleLobbies = (lobbies => {
     setLobbies(JSON.parse(lobbies))
@@ -45,15 +52,22 @@ const LobbyListPage = () => {
     <Lobby lobbyId={lobby.id} players={lobby.players} key={index} />
   )
 
+  const Content =
+    <>
+      {CreateLobby}
+
+      {Lobbies}
+    </>
+
   return (
     <div className={lobbyListPageStyles.wrapper}>
       <Header />
       <div className={lobbyListPageStyles.container}>
         <h1><span>Tarok sobe</span></h1>
 
-        {CreateLobby}
+        <NameForm />
 
-        {Lobbies}
+        {Content}
 
 
       </div>

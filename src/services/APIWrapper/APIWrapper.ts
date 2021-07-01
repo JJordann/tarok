@@ -9,8 +9,6 @@ export const createLobby = () => {
 
 export const join = (name, lobbyId) => {
   socket.emit(JOIN, name, lobbyId)
-
-  console.log('Joining ', name, lobbyId)
 }
 
 export const setReady = (flag) => {
