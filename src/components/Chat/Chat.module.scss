@@ -1,0 +1,72 @@
+@import '../../variables';
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.chat {
+  display: border-box;
+  padding: 1em;
+
+  >li {
+    margin-bottom: 1em;
+    padding: 0.5em 1em;
+    border-bottom: 2px solid $darkGrey;
+    background: $white;
+
+    transition: all .2s ease-in-out;
+    
+    >.sender {
+      transition: all .2s ease-in-out;
+      font-family: $roboto;
+      font-size: 1em;
+      padding-bottom: 0.5em;
+      letter-spacing: 1px;
+    }
+
+    >ul.messages {
+      
+      >li {
+        >p {
+          margin: 0;
+          padding: 0.25em 0;
+          font-size: 1.2em;
+        }
+      }
+    }
+
+    &:last-child {
+      margin: 0;
+    }
+
+    &:nth-child(2n) {
+      border-right: 4px solid $red;
+      
+      >.sender {
+        text-align: right;
+      }
+    }
+
+    &:nth-child(2n + 1) {
+      border-left: 4px solid $blue;
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      &:nth-child(2n) {
+        border-right: 10px solid $red;
+      }
+  
+      &:nth-child(2n + 1) {
+        border-left: 10px solid $blue;
+      }
+
+      >.sender {
+        font-size: 1.2em;
+      }
+    }
+  }
+}
