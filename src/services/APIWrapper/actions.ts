@@ -9,3 +9,11 @@ export const ALL_READY = 'allReady'
 export const GET_LOBBIES = 'getLobbies'
 
 export const CREATE_LOBBY = 'createLobby'
+
+
+// Chat actions
+export const CHAT = 'chat'
+
+export const INFO = 'INFO'
+
+export const ERROR = 'ERROR'

@@ -39,6 +39,20 @@ ul.chat {
 
     &:last-child {
       margin: 0;
+      border: none !important;
+      padding: 0 !important;
+
+      // Does this know too much about the InputBox component?
+      div {
+        font-size: 0.75em;
+
+        >div {
+          max-width: 80px;
+
+          letter-spacing: 1px;
+          font-size: 0.9em;
+        }
+      }
     }
 
     &:nth-child(2n) {
