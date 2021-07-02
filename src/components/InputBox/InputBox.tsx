@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import inputBoxStyles from './InputBox.module.scss'
 
 const InputBox = ({initialValue = '', placeholder = '', onChange = undefined,
-                    onSubmit = undefined, minLength = 1}) => {
+                    onSubmit = undefined, minLength = 1, submitText = 'OK'}) => {
 
   const [value, setValue] = useState(initialValue)
 
@@ -35,7 +35,8 @@ const InputBox = ({initialValue = '', placeholder = '', onChange = undefined,
           onChange={handleChange} onKeyDown={handleKeyDown} />
 
         <div onClick={handleSubmit} className={(value && value.length >= minLength) ?
-            inputBoxStyles.active : inputBoxStyles.inactive}>
+            inputBoxStyles.active : inputBoxStyles.inactive}
+            data-content={submitText}>
         </div>
     </div>
   )
