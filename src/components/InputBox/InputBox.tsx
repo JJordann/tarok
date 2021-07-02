@@ -21,6 +21,8 @@ const InputBox = ({initialValue = '', placeholder = '', onChange = undefined,
     if(onSubmit !== undefined) {
       onSubmit(value)
     }
+
+    setValue(initialValue)
   }
 
   const handleKeyDown = (e) => {
