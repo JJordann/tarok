@@ -22,13 +22,14 @@
         "SidebarArea LeftPlayer GameArea GameArea GameArea GameArea GameArea RightPlayer"
         "SidebarArea . GameArea GameArea GameArea GameArea GameArea ."
         "SidebarArea . GameArea GameArea GameArea GameArea GameArea ."
-        "SidebarArea . GameArea GameArea GameArea GameArea GameArea .";
+        "SidebarArea . GameArea GameArea GameArea GameArea GameArea ."
+        "SidebarArea HandArea HandArea HandArea HandArea HandArea HandArea HandArea";
     }
     
     .SidebarArea {
       grid-area: SidebarArea;
 
-      margin-right: 1em;
+      //margin-right: 1em;
       padding: 0.5em;
       background: $lightBlue;
     }
@@ -39,6 +40,10 @@
 
     .TopRightPlayer, .RightPlayer {
       margin-right: 1em;
+    }
+
+    .TopLeftPlayer, .LeftPlayer {
+      margin-left: 1em;
     }
 
     .TopLeftPlayer {
@@ -63,20 +68,16 @@
     
     .GameArea {
       grid-area: GameArea;
-      display: flex;
-      flex-direction: column;
-      align-content: stretch;
       margin: 1em 1em 0 1em;
 
       .activity {
-        flex-grow: 1;
-        
+        height: 100%;
         border: 2px solid $blue;
       }
+    }
 
-      .handContainer {
-
-      }
+    .HandArea {
+      grid-area: HandArea;
     }
   }
 }

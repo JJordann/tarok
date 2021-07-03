@@ -41,11 +41,11 @@ const GamePage = () => {
           </div>
           <div className={gameStyles.GameArea}>
             <div className={gameStyles.activity}>
-
+              Hello
             </div>
-            <div className={gameStyles.handContainer}>
-              <Hand cards={dummyCards} />
-            </div>
+          </div>
+          <div className={gameStyles.HandArea}>
+            <Hand cards={dummyCards} />
           </div>
         </div>
 
