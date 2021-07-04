@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { onChat, onError, onInfo, send, stopChat, stopError, stopInfo } from '../../services/APIWrapper/ChatWrapper'
-import { getUser } from '../../services/User/User'
 
 import InputBox from '../InputBox/InputBox'
 
@@ -8,20 +7,7 @@ import chatStyles from './Chat.module.scss'
 
 const Chat = () => {
 
-  const dummyMessages = [
-    {sender: 'Tilen', message: 'Prav prijeten pozdrav vsem'},
-    {sender: 'Tilen', message: 'Tole je Berač.si'},
-    {sender: 'Gost', message: 'Tole smrdi'},
-    {sender: 'Tilen', message: ':('}
-  ]
-
-  const dummy = [
-    {sender: 'Tilen', messages: ['Prav prijeten pozdrav vsem', 'Tole je Berač.si']},
-    {sender: 'Gost', messages: ['Tole smrdi']},
-    {sender: 'Tilen', messages: [':(']}
-  ]
-
-  const [messages, setMessages] = useState(dummy)
+  const [messages, setMessages] = useState([])
 
   // This is used to force update
   const [numberOfMessages, setNumberOfMessages] = useState(0)
@@ -30,6 +16,8 @@ const Chat = () => {
 
     onChat((incoming) => {
       setMessages(old => mergeMessage(old, incoming.sender, incoming.message))
+
+      setNumberOfMessages(oldNumberOfMessages => oldNumberOfMessages + 1)
     })
 
     onInfo((message) => {
@@ -47,9 +35,9 @@ const Chat = () => {
     }
 
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  
 
   const mergeMessage = (messages, sender, message) => {
-    console.log('I HAVE BEEN CALLED')
     if(messages.length === 0) {
       return [{sender: sender, messages: [message]}]
     }
@@ -64,11 +52,7 @@ const Chat = () => {
   }
 
   const sendMessage = (message) => {
-    // send(message)
-
-    setMessages(old => mergeMessage(old, 'Vid', message))
-
-    setNumberOfMessages(oldNumberOfMessages => oldNumberOfMessages + 1)
+    send(message)
   }
 
   const Messages = messages.map((message, index) => 
@@ -85,14 +69,16 @@ const Chat = () => {
   )
 
   return (
-    <ul className={chatStyles.chat}>
-      {Messages}
-
-      <li>
+    <div className={chatStyles.container}>
+      <ul className={chatStyles.chat}>
+        {Messages}
+      </ul>
+      <div className={chatStyles.inputContainer}>
         <InputBox placeholder='Napiši sporočilo' onSubmit={sendMessage}
           submitText='Pošlji' minLength={1} />
-      </li>
-    </ul>
+      </div>
+    </div>
+    
   )
 }
 

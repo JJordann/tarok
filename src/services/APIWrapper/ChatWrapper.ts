@@ -6,7 +6,9 @@ export const send = (message) => {
 }
 
 export const onChat = (callback) => {
-  socket.on(CHAT, callback)
+  socket.on(CHAT, (incoming) => {
+    callback(JSON.parse(incoming))
+  })
 }
 
 export const onInfo = (callback) => {

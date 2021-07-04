@@ -6,9 +6,18 @@ ul {
   padding: 0;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 ul.chat {
   display: border-box;
   padding: 1em;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
 
   >li {
     margin-bottom: 1em;
@@ -39,20 +48,6 @@ ul.chat {
 
     &:last-child {
       margin: 0;
-      border: none !important;
-      padding: 0 !important;
-
-      // Does this know too much about the InputBox component?
-      div {
-        font-size: 0.75em;
-
-        >div {
-          max-width: 80px;
-
-          letter-spacing: 1px;
-          font-size: 0.9em;
-        }
-      }
     }
 
     &:nth-child(2n) {
@@ -81,6 +76,22 @@ ul.chat {
       >.sender {
         font-size: 1.2em;
       }
+    }
+  }
+}
+
+.inputContainer {
+  padding: 1em;
+
+  // Does this know too much about the InputBox component?
+  div {
+    font-size: 0.75em;
+
+    >div {
+      max-width: 80px;
+
+      letter-spacing: 1px;
+      font-size: 0.9em;
     }
   }
 }
