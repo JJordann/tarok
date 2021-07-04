@@ -17,3 +17,8 @@ export const CHAT = 'chat'
 export const INFO = 'INFO'
 
 export const ERROR = 'ERROR'
+
+// Game
+export const GET_STATE = 'getState'
+
+export const GAME_OVER = 'gameOver'

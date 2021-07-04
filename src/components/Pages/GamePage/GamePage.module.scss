@@ -28,7 +28,9 @@
     
     .SidebarArea {
       grid-area: SidebarArea;
-      
+
+      position: relative;
+
       background: $lightBlue;
     }
 
