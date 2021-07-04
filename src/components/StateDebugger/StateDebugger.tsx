@@ -28,17 +28,31 @@ const StateDebugger = ({state}) => {
         </div>
         break
 
-      case 'gameType': output =
-        <div className={stateDebuggerStyles.table}>
-          {value.map((gameType, index) => <div>
-            {Object.entries(gameType).map(([gameTypeKey, gameTypeValue]) =>
+      case 'gameType':
+        if(value.length !== undefined) {
+          output = 
+          <div className={stateDebuggerStyles.table}>
+            {value.map((gameType, index) => <div>
+              {Object.entries(gameType).map(([gameTypeKey, gameTypeValue]) =>
+                <div>
+                  <div>{gameTypeKey}</div>
+                  <div>{gameTypeValue}</div>
+                </div>
+              )}
+            </div>)}
+          </div>
+        } else {
+          output = 
+          <div className={stateDebuggerStyles.table}>
+            {Object.entries(value).map(([gameTypeKey, gameTypeValue], index) => <div>
               <div>
                 <div>{gameTypeKey}</div>
                 <div>{gameTypeValue}</div>
               </div>
-            )}
-          </div>)}
-        </div>
+            </div>)}
+          </div>
+        }
+        
         break
 
       case 'table': output = cardArrayOuput(value); break;

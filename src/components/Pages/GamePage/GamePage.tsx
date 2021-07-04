@@ -14,7 +14,7 @@ import { getUser } from '../../../services/User/User'
 
 const GamePage = () => {
 
-  const debug = false
+  const debug = true
 
   const [gameState, setGameState] = useState({
     stage: 'gameType',
