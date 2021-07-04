@@ -1,8 +1,12 @@
 import { socket } from '../Socket/socket'
-import { GAME_OVER, GAME_TYPE, GET_STATE } from './actions'
+import { CHOOSE_TALON, GAME_OVER, GAME_TYPE, GET_STATE } from './actions'
 
 export const chooseContract = (contract) => {
   socket.emit(GAME_TYPE, contract)
+}
+
+export const chooseTalon = (id) => {
+  socket.emit(CHOOSE_TALON, id)
 }
 
 export const getState = () => {
