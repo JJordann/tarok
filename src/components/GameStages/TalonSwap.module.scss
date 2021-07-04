@@ -1,0 +1,13 @@
+@import '../../variables';
+
+.container {
+
+  h2 {
+    font-family: $roboto;
+    font-size: 2em;
+    color: $darkGrey;
+    margin: 0;
+    padding: 1em;
+    text-align: center;
+  }
+}

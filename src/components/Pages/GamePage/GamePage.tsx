@@ -84,7 +84,8 @@ const GamePage = () => {
           </div>
 
           <div className={gameStyles.HandArea}>
-            <Hand cards={gameState.hand} />
+            <Hand cards={gameState.hand} playable={gameState.playable}
+              stage={gameState.stage} />
           </div>
         </div>
 

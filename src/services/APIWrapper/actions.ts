@@ -26,3 +26,7 @@ export const GAME_OVER = 'gameOver'
 export const GAME_TYPE = 'gameType'
 
 export const CHOOSE_TALON = 'chooseTalon'
+
+export const PLAY_CARD = 'playCard'
+
+export const TALON_SWAP = 'talonSwap'

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { chooseTalon } from '../../services/APIWrapper/GameWrapper'
 import { getPlayerHashRGB } from '../../services/Player/Player'
 

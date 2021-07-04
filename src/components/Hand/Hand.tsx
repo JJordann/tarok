@@ -1,4 +1,5 @@
 import React from 'react'
+import { playCard, swapCard } from '../../services/APIWrapper/GameWrapper';
 
 import Card from './Card'
 
@@ -21,7 +22,7 @@ const cardsOrdered = [
   'tarok_21', 'tarok_22'
 ];
 
-const Hand = ({cards}) => {
+const Hand = ({cards, playable = [], stage = ''}) => {
 
   // To "bend" the cards as one would in their physical hands
   const cardRotation = (index, length) => (-15 + (30 / length) * index)
@@ -40,12 +41,25 @@ const Hand = ({cards}) => {
     return 1
   }
 
+  const isCardPlayable = (card) => {
+    return (playable.indexOf(card) !== -1)
+  }
+
+  const handleCardClick = (card) => {
+    if(stage === 'talonSwap') {
+      swapCard(card)
+    }
+    else if(isCardPlayable(card)) {
+      playCard(card)
+    }
+  }
+
   const Hand = sortedCards().map((card, index) =>
   //
     <div className={handStyles.cardContainer}
       style={{transform: `rotate(${cardRotation(index, cards.length)}deg)`,
                 marginBottom: `${cardTranslation(index, cards.length)}px`}}>
-      <Card value={card} key={index} />
+      <Card value={card} key={index} onClick={() => handleCardClick(card)} />
     </div>
       
   )
