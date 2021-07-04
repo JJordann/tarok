@@ -55,6 +55,10 @@ const StateDebugger = ({state}) => {
         
         break
 
+      case 'talon': output =
+        value.map((cards, index) => <div>{cardArrayOuput(cards)}</div>)
+        break
+
       case 'table': output = cardArrayOuput(value); break;
 
       case 'hand': output = cardArrayOuput(value); break;
