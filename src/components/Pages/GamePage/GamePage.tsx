@@ -6,13 +6,15 @@ import Hand from '../../Hand/Hand'
 import PlayerCard from '../../PlayerCard/PlayerCard'
 import Chat from '../../Chat/Chat'
 import StateDebugger from '../../StateDebugger/StateDebugger'
+import GameActivity from '../../GameActivity/GameActivity'
 
 import gameStyles from './GamePage.module.scss'
 import { getState, onGetState, stopGameOver, stopGetState } from '../../../services/APIWrapper/GameWrapper'
+import { getUser } from '../../../services/User/User'
 
 const GamePage = () => {
 
-  const debug = true
+  const debug = false
 
   const [gameState, setGameState] = useState({
     stage: 'gameType',
@@ -52,7 +54,7 @@ const GamePage = () => {
   
   return (
     <div className={gameStyles.wrapper}>
-      <Header />
+      <Header routes={[{route: '', name: getUser()}]} />
       
       <div className={gameStyles.container}>
         <div className={gameStyles.gameContainer}>
@@ -76,13 +78,13 @@ const GamePage = () => {
           <div className={gameStyles.RightPlayer}>
             <PlayerCard name='Right' active={false} />
           </div>
+
           <div className={gameStyles.GameArea}>
-            <div className={gameStyles.activity}>
-              Hello
-            </div>
+            <GameActivity state={gameState} />
           </div>
+
           <div className={gameStyles.HandArea}>
-            <Hand cards={dummyCards} />
+            <Hand cards={gameState.hand} />
           </div>
         </div>
 

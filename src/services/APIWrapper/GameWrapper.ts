@@ -1,5 +1,9 @@
 import { socket } from '../Socket/socket'
-import { GAME_OVER, GET_STATE } from './actions'
+import { GAME_OVER, GAME_TYPE, GET_STATE } from './actions'
+
+export const chooseContract = (contract) => {
+  socket.emit(GAME_TYPE, contract)
+}
 
 export const getState = () => {
   socket.emit(GET_STATE)

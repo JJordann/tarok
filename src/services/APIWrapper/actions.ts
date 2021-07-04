@@ -22,3 +22,5 @@ export const ERROR = 'ERROR'
 export const GET_STATE = 'getState'
 
 export const GAME_OVER = 'gameOver'
+
+export const GAME_TYPE = 'gameType'
