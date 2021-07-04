@@ -28,7 +28,8 @@ const LoginPage = () => {
       <div className={loginPageStyles.container}>
         <h1><span>Prijava</span></h1>
 
-        <InputBox placeholder='Vnesi ime' onSubmit={saveName} minLength={3} />
+        <InputBox placeholder='Vnesi ime' onSubmit={saveName} minLength={3}
+          submitText='Prijava' />
       </div>
     </div>
   )
