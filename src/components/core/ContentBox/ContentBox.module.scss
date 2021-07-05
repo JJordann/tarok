@@ -1,6 +1,6 @@
-@import '../../variables';
+@import '../../../variables';
 
-.playerCard {
+.contentBox {
   position: relative;
   width: 100%;
   display: table;
@@ -49,7 +49,7 @@
 }
 
 @media only screen and (max-width: 768px) {
-  .playerCard {
+  .contentBox {
     p {
       font-size: 0.75em;
     }

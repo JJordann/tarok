@@ -1,6 +1,6 @@
 import React from 'react'
 
-import PlayerCard from '../PlayerCard/PlayerCard'
+import ContentBox from '../core/ContentBox/ContentBox'
 
 import { join } from '../../services/APIWrapper/APIWrapper'
 
@@ -12,7 +12,7 @@ const Connection = ({isConnected, lobbyId}) => {
     join(getUser(), lobbyId)
   }
 
-  const joinButton = <PlayerCard name='Pridruži se' active={true}
+  const joinButton = <ContentBox name='Pridruži se' active={true}
     onClick={connect} />
 
   return (

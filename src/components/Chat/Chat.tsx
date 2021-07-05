@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { onChat, onError, onInfo, send, stopChat, stopError, stopInfo } from '../../services/APIWrapper/ChatWrapper'
 
-import InputBox from '../InputBox/InputBox'
+import InputBox from '../core/InputBox/InputBox'
 
 import chatStyles from './Chat.module.scss'
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import Header from '../../Header/Header'
-import InputBox from '../../InputBox/InputBox'
+import InputBox from '../../core/InputBox/InputBox'
 
 import { getUser, setUser } from '../../../services/User/User'
 import { LOBBY_LIST_ROUTE } from '../../../routes'

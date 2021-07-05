@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import Lobby from '../../Lobby/Lobby'
 import Header from '../../Header/Header'
-import PlayerCard from '../../PlayerCard/PlayerCard'
+import ContentBox from '../../core/ContentBox/ContentBox'
 
 import lobbyListPageStyles from './LobbyListPage.module.scss'
 
@@ -53,12 +53,12 @@ const LobbyListPage = () => {
   
 
   const Notice = (lobbies.length === 0) ?
-    <PlayerCard name='Trenutno ni aktivnih sob' active={false} /> : ''
+    <ContentBox name='Trenutno ni aktivnih sob' active={false} /> : ''
 
   const CreateLobby = 
     <div className={lobbyListPageStyles.flex}>
       {Notice}
-      <PlayerCard name='Ustvari sobo' active={true} onClick={handleClick} />
+      <ContentBox name='Ustvari sobo' active={true} onClick={handleClick} />
     </div>
 
   const Lobbies = lobbies.map((lobby, index) =>
@@ -78,7 +78,7 @@ const LobbyListPage = () => {
       <div className={lobbyListPageStyles.container}>
         <h1><span>Tarok sobe</span></h1>
 
-        <PlayerCard className={lobbyListPageStyles.welcome}
+        <ContentBox className={lobbyListPageStyles.welcome}
           name={`Pozdravljen, ${name}!`} active={true} />
 
         {Content}

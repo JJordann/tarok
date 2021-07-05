@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Header from '../../Header/Header'
-import PlayerCard from '../../PlayerCard/PlayerCard'
+import ContentBox from '../../core/ContentBox/ContentBox'
 
 import error404PageStyles from './Error404Page.module.scss'
 
@@ -12,7 +12,7 @@ const Error404Page = () => {
       <Header />
 
       <div className={error404PageStyles.container}>
-        <PlayerCard name='Iskana stran ni bila najdena' active={false} />
+        <ContentBox name='Iskana stran ni bila najdena' active={false} />
       </div>
     </div>
   )

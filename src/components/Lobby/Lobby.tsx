@@ -5,7 +5,7 @@ import { getLobbies, getUsers, join, onAllReady, onGetUsers, setReady, stopAllRe
 import { getUser } from '../../services/User/User'
 
 import Connection from './Connection'
-import PlayerCard from '../PlayerCard/PlayerCard'
+import ContentBox from '../core/ContentBox/ContentBox'
 
 import lobbyStyles from './Lobby.module.scss'
 import { useHistory } from 'react-router-dom'
@@ -35,7 +35,7 @@ const Lobby = ({lobbyId}) => {
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handlePlayerCardClick = (e) => {
+  const handleContentBoxClick = (e) => {
     // Super whacky way of doing this but it works...for now
     if(e.target.innerHTML === getUser()) {
       let currentReady = users[indexOfUser(getUser())][1]
@@ -55,8 +55,8 @@ const Lobby = ({lobbyId}) => {
   }
 
   const Players = users.map((user, index) =>
-    <PlayerCard name={user[0]} active={user[1]} key={index}
-      onClick={handlePlayerCardClick} data-id={`Interesting totally very much`} />
+    <ContentBox name={user[0]} active={user[1]} key={index}
+      onClick={handleContentBoxClick} data-id={`Interesting totally very much`} />
   )
 
   return (

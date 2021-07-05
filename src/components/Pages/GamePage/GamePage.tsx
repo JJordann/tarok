@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import Header from '../../Header/Header'
 import Hand from '../../Hand/Hand'
-import PlayerCard from '../../PlayerCard/PlayerCard'
+import ContentBox from '../../core/ContentBox/ContentBox'
 import Chat from '../../Chat/Chat'
 import GameActivity from '../../GameActivity/GameActivity'
 
@@ -112,7 +112,7 @@ const GamePage = () => {
     getOtherPlayers().map((player) =>
       <section className={(gameState.players.length === 4) ?
           gamePageStyles.player : gamePageStyles.playerOfThree}>
-        <PlayerCard name={player.name} active={player.hasTurn} />
+        <ContentBox name={player.name} active={player.hasTurn} />
       </section>
     )
   
