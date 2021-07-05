@@ -14,21 +14,25 @@
   >div {
     transition: all .2s ease-in-out;
 
-    &:nth-child(1) {
+    &.children {
       flex-grow: 1;
     }
 
-    &:nth-child(2) {
+    &.show {
       width: 4px;
 
       background: var(--primary-color);
+    }
+
+    &.hide {
+      display: none;
     }
   }
 
   &:hover, &:active, &:focus {
     background: $translucentWhite;
     
-    >div:nth-child(2) {
+    .show {
       width: 10px;
 
       background: var(--secondary-color);

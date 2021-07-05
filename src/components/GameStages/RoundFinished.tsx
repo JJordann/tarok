@@ -3,6 +3,7 @@ import { send } from '../../services/APIWrapper/ChatWrapper'
 
 import Card from '../Hand/Card'
 import ContentBox from '../core/ContentBox'
+import Button from '../core/Button'
 
 import roundFinishedStyles from './RoundFinished.module.scss'
 
@@ -40,7 +41,7 @@ const RoundFinished = ({recentScores, myIndex, players}) => {
       {getRecentScore()}
 
       {(myIndex === 0) ?
-        <ContentBox onClick={handleClick}>Naslednja runda</ContentBox> : ''
+        <Button onClick={handleClick}>Naslednja runda</Button> : ''
       }
     </div>
   )

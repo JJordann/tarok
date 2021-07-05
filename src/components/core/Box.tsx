@@ -9,7 +9,7 @@ export interface VariableCSSProperties extends CSSProperties {
   '--secondary-color': string
 }
 
-const Box = ({color = COLORS.blue, secondaryColor = '', ...props}) => {
+const Box = ({color = COLORS.blue, secondaryColor = '', left = false, ...props}) => {
 
   if(color && secondaryColor === '') {
     secondaryColor = color
@@ -17,10 +17,18 @@ const Box = ({color = COLORS.blue, secondaryColor = '', ...props}) => {
 
   return (
     <div className={boxStyles.box} {...props}>
-      <div>
+      <div className={(left) ? boxStyles.show : boxStyles.hide} style={
+        {
+          '--primary-color': color,
+          '--secondary-color': secondaryColor
+        } as VariableCSSProperties
+      }></div>
+
+      <div className={boxStyles.children}>
         {props.children}
       </div>
-      <div style={
+
+      <div className={(left) ? boxStyles.hide : boxStyles.show} style={
         {
           '--primary-color': color,
           '--secondary-color': secondaryColor

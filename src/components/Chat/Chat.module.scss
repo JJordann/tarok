@@ -16,18 +16,19 @@ ul.chat {
   display: border-box;
   padding: 1em;
 
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 
   >li {
     margin-bottom: 1em;
-    padding: 0.5em 1em;
-    border-bottom: 2px solid $darkGrey;
-    background: $white;
 
     transition: all .2s ease-in-out;
+
+    .messageWrapper {
+      padding: 0.5em 1em;
+    }
     
-    >.sender {
+    .sender {
       transition: all .2s ease-in-out;
       font-family: $roboto;
       font-size: 1em;
@@ -35,7 +36,7 @@ ul.chat {
       letter-spacing: 1px;
     }
 
-    >ul.messages {
+    ul.messages {
       
       >li {
         >p {
@@ -51,29 +52,15 @@ ul.chat {
     }
 
     &:nth-child(2n) {
-      border-right: 4px solid $red;
-      
-      >.sender {
+      .sender {
         text-align: right;
       }
-    }
-
-    &:nth-child(2n + 1) {
-      border-left: 4px solid $blue;
     }
 
     &:hover {
       cursor: pointer;
 
-      &:nth-child(2n) {
-        border-right: 10px solid $red;
-      }
-  
-      &:nth-child(2n + 1) {
-        border-left: 10px solid $blue;
-      }
-
-      >.sender {
+      .sender {
         font-size: 1.2em;
       }
     }

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 
+import { faStar } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import Header from '../../Header/Header'
 import Hand from '../../Hand/Hand'
 import ContentBox from '../../core/ContentBox'
+import Box from '../../core/Box'
 import Chat from '../../Chat/Chat'
 import GameActivity from '../../GameActivity/GameActivity'
 
@@ -97,12 +101,27 @@ const GamePage = () => {
 
       otherPlayers.push({
         name: player.name,
+        score: getScore(player.scores),
         activity: getPlayerActivity(playerIndex),
         hasTurn: (gameState.turn === playerIndex) ? true : false
       })
     }
 
     return otherPlayers
+  }
+
+  const getScore = (scores) => {
+    let value = scores.reduce((accumulator, value) => accumulator + value)
+
+    return (value < 0) ? String(value) : `+${String(value)}`
+  }
+
+  const Radelci = (nRadelci) => {
+    if(nRadelci > 4)
+      return <>{nRadelci}<FontAwesomeIcon icon={faStar} /></>
+    
+    return Array(nRadelci).fill('').map((_, index) => 
+      <FontAwesomeIcon icon={faStar} key={index} />)
   }
 
   // Section used here so that :nth-of-type selector works correctly
@@ -113,9 +132,18 @@ const GamePage = () => {
     getOtherPlayers().map((player) =>
       <section className={(gameState.players.length === 4) ?
           gamePageStyles.player : gamePageStyles.playerOfThree}>
-        <ContentBox color={(player.hasTurn) ? COLORS.blue : COLORS.red}>
-          {player.name}
-        </ContentBox>
+        <Box color={(player.hasTurn) ? COLORS.blue : COLORS.red}>
+          <div className={gamePageStyles.playerWrapper}>
+            <p className={gamePageStyles.name}>{player.name}</p>
+            <p className={gamePageStyles.score}>{player.score}</p>
+            <p className={gamePageStyles.radelci}>{Radelci(player.radelci)}</p>
+          </div>
+          <p className={gamePageStyles.activity} style={{
+            display: (player.activity) ? 'block' : 'none'
+          }}>
+            {player.activity}
+          </p>
+        </Box>
       </section>
     )
   

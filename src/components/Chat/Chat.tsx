@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { onChat, onError, onInfo, send, stopChat, stopError, stopInfo } from '../../services/APIWrapper/ChatWrapper'
 
+import { onChat, onError, onInfo, send, stopChat, stopError, stopInfo } from '../../services/APIWrapper/ChatWrapper'
+import { getPlayerHashRGB } from '../../services/Player/Player'
+
+import Box from '../core/Box'
 import InputBox from '../core/InputBox'
 
 import chatStyles from './Chat.module.scss'
@@ -57,14 +60,18 @@ const Chat = () => {
 
   const Messages = messages.map((message, index) => 
     <li key={index}>
-      <div className={chatStyles.sender}>
-        {message.sender}
-      </div>
-      <ul className={chatStyles.messages}>
-        {message.messages.map((message, index) => 
-          <li key={index}><p>{message}</p></li>
-        )}
-      </ul>
+      <Box color={`#${getPlayerHashRGB(message.sender)}`}>
+        <div className={chatStyles.messageWrapper}>
+          <div className={chatStyles.sender}>
+            {message.sender}
+          </div>
+          <ul className={chatStyles.messages}>
+            {message.messages.map((message, index) => 
+              <li key={index}><p>{message}</p></li>
+            )}
+          </ul>
+        </div>
+      </Box>
     </li>
   )
 
