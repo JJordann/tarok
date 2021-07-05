@@ -112,7 +112,7 @@ const GamePage = () => {
   }
 
   const getScore = (scores) => {
-    let value = scores.reduce((accumulator, value) => accumulator + value)
+    let value = scores.reduce((accumulator, value) => accumulator + value, 0)
 
     return (value < 0) ? String(value) : `+${String(value)}`
   }
