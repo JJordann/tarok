@@ -1,0 +1,132 @@
+@import '../../../variables';
+
+.wrapper {
+  height: 100%;
+  overflow: hidden;
+
+  .container {
+    height: calc(100% - 62px); // Header height = 60px, +2px border-bottom
+
+    .gameContainer {
+      flex-grow: 1;
+      height: 100%;
+
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
+      grid-template-rows: 1fr 1fr 1fr 0.5fr 1fr 1fr 1fr; 
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "SidebarArea TopLeftPlayer . . TopPlayer . . TopRightPlayer"
+        "SidebarArea . GameArea GameArea GameArea GameArea GameArea ."
+        "SidebarArea . GameArea GameArea GameArea GameArea GameArea ."
+        "SidebarArea LeftPlayer GameArea GameArea GameArea GameArea GameArea RightPlayer"
+        "SidebarArea . GameArea GameArea GameArea GameArea GameArea ."
+        "SidebarArea . GameArea GameArea GameArea GameArea GameArea ."
+        "SidebarArea HandArea HandArea HandArea HandArea HandArea HandArea HandArea";
+    }
+    
+    .SidebarArea {
+      grid-area: SidebarArea;
+
+      position: relative;
+
+      background: $lightBlue;
+    }
+
+    .player {
+      &:nth-of-type(1) {
+        grid-area: LeftPlayer;
+
+        margin-left: 1em;
+      }
+
+      &:nth-of-type(2) {
+        grid-area: TopPlayer;
+
+        margin-top: 1em;
+      }
+
+      &:nth-of-type(3) {
+        grid-area: RightPlayer;
+
+        margin-right: 1em;
+      }
+    }
+
+    .playerOfThree {
+      margin-top: 1em;
+
+      &:nth-of-type(1) {
+        grid-area: TopLeftPlayer;
+
+        margin-left: 1em;
+      }
+
+      &:nth-of-type(2) {
+        grid-area: TopRightPlayer;
+
+        margin-right: 1em;
+      }
+    }
+
+    .playerWrapper {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+
+      padding: 1em;
+
+      >p {
+        flex-grow: 1;
+        margin: 0;
+
+        font-family: $roboto;
+
+        &.name {
+          font-size: 2em;
+          width: 100%;
+          padding-bottom: 0.25em;
+        }
+
+        &.radelci {
+          text-align: right;
+          font-size: 0.9em;
+        }
+
+        &.score {
+          font-size: 1.2em;
+        }
+      }
+    }
+
+    .activity {
+      box-sizing: border-box;
+      width: 100%;
+      color: $white;
+      background: $darkGrey;
+      text-transform: capitalize;
+      padding: 1em;
+      margin: 0;
+
+      font-family: $roboto;
+      letter-spacing: 1px;
+    }
+    
+    .GameArea {
+      grid-area: GameArea;
+      margin: 1em 1em 0 1em;
+
+      .activity {
+        height: 100%;
+        border: 2px solid $blue;
+      }
+    }
+
+    .HandArea {
+      grid-area: HandArea;
+    }
+  }
+}

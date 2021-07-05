@@ -1,0 +1,84 @@
+@import '../../variables';
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+ul.chat {
+  display: border-box;
+  padding: 1em;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  >li {
+    margin-bottom: 1em;
+
+    transition: all .2s ease-in-out;
+
+    .messageWrapper {
+      padding: 0.5em 1em;
+    }
+    
+    .sender {
+      transition: all .2s ease-in-out;
+      font-family: $roboto;
+      font-size: 1em;
+      padding-bottom: 0.5em;
+      letter-spacing: 1px;
+    }
+
+    ul.messages {
+      
+      >li {
+        >p {
+          margin: 0;
+          padding: 0.25em 0;
+          font-size: 1.2em;
+        }
+      }
+    }
+
+    &:last-child {
+      margin: 0;
+    }
+
+    &:nth-child(2n) {
+      .sender {
+        text-align: right;
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+
+      .sender {
+        font-size: 1.2em;
+      }
+    }
+  }
+}
+
+.inputContainer {
+  padding: 1em;
+
+  // Does this know too much about the InputBox component?
+  div {
+    font-size: 0.75em;
+
+    >div {
+      max-width: 80px;
+
+      letter-spacing: 1px;
+      font-size: 0.9em;
+    }
+  }
+}

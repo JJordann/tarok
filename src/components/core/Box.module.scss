@@ -1,0 +1,41 @@
+@import '../../variables';
+
+.box {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  background: $white;
+  border-bottom: 2px solid $darkGrey;
+
+  transition: background-color .2s ease-in-out;
+
+  >div {
+    transition: all .2s ease-in-out;
+
+    &.children {
+      flex-grow: 1;
+    }
+
+    &.show {
+      width: 4px;
+
+      background: var(--primary-color);
+    }
+
+    &.hide {
+      display: none;
+    }
+  }
+
+  &:hover, &:active, &:focus {
+    background: $translucentWhite;
+    
+    .show {
+      width: 10px;
+
+      background: var(--secondary-color);
+    }
+  }
+}

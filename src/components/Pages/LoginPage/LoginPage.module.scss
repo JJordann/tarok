@@ -1,0 +1,26 @@
+@import '../../../variables';
+
+.wrapper {
+  background: $light;
+  height: 100%;
+
+  .container {
+    margin: 0 auto;
+    max-width: 1200px;
+
+    h1 {
+      margin: 0;
+      padding: 0.75em 0;
+      margin-bottom: 0.5em;
+      text-align: center;
+      font-size: 3.5em;
+      color: $darkGrey;
+      text-transform: capitalize;
+      font-family: $roboto;
+
+      span {
+        border-bottom: 5px solid $blue;
+      }
+    }
+  }
+}

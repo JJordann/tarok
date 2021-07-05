@@ -1,0 +1,18 @@
+.container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  flex-direction: row;
+  
+  .cardContainer {
+    position: absolute;
+    margin-top: 220px;
+
+    >div {
+      max-width: 120px;
+      transform-origin: 50% 5%;
+    }
+  }
+}
