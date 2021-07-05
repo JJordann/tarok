@@ -14,13 +14,13 @@ import { getUser } from '../../../services/User/User'
 
 const GamePage = () => {
 
-  const debug = true
+  const debug = false
 
   const [gameState, setGameState] = useState({
     stage: 'gameType',
     gameType: [],
     myIndex: 0,
-    cards: [],
+    table: [],
     players: [],
     hand: [],
     playable: [],
@@ -51,6 +51,18 @@ const GamePage = () => {
     }
 
   }, []) //eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if(gameState.table.length >= gameState.players.length)
+      setTimeout(clearTable, 750)
+  }, [gameState.table.length, gameState.players.length])
+
+  const clearTable = () => {
+    setGameState(old => ({
+      ...old,
+      table: []
+    }))
+  }
   
   return (
     <div className={gameStyles.wrapper}>

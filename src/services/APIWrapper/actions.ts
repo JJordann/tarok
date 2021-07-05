@@ -30,3 +30,5 @@ export const CHOOSE_TALON = 'chooseTalon'
 export const PLAY_CARD = 'playCard'
 
 export const TALON_SWAP = 'talonSwap'
+
+export const CHOOSE_KING = 'chooseKing'

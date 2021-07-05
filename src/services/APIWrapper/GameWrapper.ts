@@ -1,5 +1,5 @@
 import { socket } from '../Socket/socket'
-import { CHOOSE_TALON, GAME_OVER, GAME_TYPE, GET_STATE, PLAY_CARD, TALON_SWAP } from './actions'
+import { CHOOSE_KING, CHOOSE_TALON, GAME_OVER, GAME_TYPE, GET_STATE, PLAY_CARD, TALON_SWAP } from './actions'
 
 export const playCard = (card) => {
   socket.emit(PLAY_CARD, card)
@@ -11,6 +11,10 @@ export const swapCard = (card) => {
 
 export const chooseContract = (contract) => {
   socket.emit(GAME_TYPE, contract)
+}
+
+export const chooseKing = (king) => {
+  socket.emit(CHOOSE_KING, king)
 }
 
 export const chooseTalon = (id) => {
