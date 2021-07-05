@@ -23,7 +23,7 @@ const LandingPage = () => {
       <Header routes={[{route: LOBBY_LIST_ROUTE, name: 'Igraj'}]} />
       <div className={landingPageStyles.container}>
         <div className={landingPageStyles.valatContainer}>
-          <Hand cards={valatCards} />
+          <Hand cards={valatCards} playable={valatCards} />
         </div>
 
         <div className={landingPageStyles.textBox}>
@@ -32,7 +32,7 @@ const LandingPage = () => {
         </div>
 
         <div className={landingPageStyles.beracContainer}>
-          <Hand cards={beracCards} />
+          <Hand cards={beracCards} playable={beracCards} />
         </div>
       </div>
     </div>
