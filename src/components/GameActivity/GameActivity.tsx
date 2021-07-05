@@ -5,6 +5,7 @@ import Talon from '../GameStages/Talon'
 import TalonSwap from '../GameStages/TalonSwap'
 import Active from '../GameStages/Active'
 import Kings from '../GameStages/Kings'
+import RoundFinished from '../GameStages/RoundFinished'
 
 import gameActivityStyles from './GameActivity.module.scss'
 
@@ -28,7 +29,9 @@ const GameActivity = ({state}) => {
       <Kings players={state.players} myIndex={state.myIndex}
         turn={state.turn} />
       break
-    case 'roundFinished': CurrentActivity = <>Round Finished</>
+    case 'roundFinished': CurrentActivity =
+      <RoundFinished recentScores={state.recentScores}
+        myIndex={state.myIndex} players={state.players} />
       break
 
     default: CurrentActivity = 
