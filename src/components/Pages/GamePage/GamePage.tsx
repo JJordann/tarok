@@ -6,13 +6,14 @@ import PlayerCard from '../../PlayerCard/PlayerCard'
 import Chat from '../../Chat/Chat'
 import GameActivity from '../../GameActivity/GameActivity'
 
-import gameStyles from './GamePage.module.scss'
+import gamePageStyles from './GamePage.module.scss'
 import { getState, onGetState, stopGameOver, stopGetState } from '../../../services/APIWrapper/GameWrapper'
 import { getUser } from '../../../services/User/User'
+import { GameTypes } from '../../GameStages/GameTypes'
 
 const emptyGameState = {
   stage: 'gameType',
-  gameType: [],
+  gameType: null,
   myIndex: 0,
   table: [],
   players: [],
@@ -57,38 +58,81 @@ const GamePage = () => {
       table: []
     }))
   }
+
+  const getPlayerActivity = (playerIndex) => {
+    const kingSuits = {
+      srce_kralj: '♥',
+      kara_kralj: '♦',
+      kriz_kralj: '♣',
+      pik_kralj: '♠'
+    }
+
+    if(gameState.stage === 'gameType')
+      return GameTypes[gameState.gameType
+        .filter(obj => obj.player === playerIndex)[0].name]
+
+    if(gameState.gameType.player === playerIndex 
+        && gameState.gameType.king === undefined)
+      return GameTypes[gameState.gameType.name]
+      
+    if(gameState.gameType.player === playerIndex)
+      return GameTypes[gameState.gameType.name] + ' '
+        + kingSuits[gameState.gameType.king]
+
+    if(gameState.gameType.with !== undefined
+        && gameState.gameType.with === playerIndex)
+      return GameTypes[gameState.gameType.name]
+
+    return ''
+  }
+
+  const getOtherPlayers = () => {
+    const otherPlayers = []
+
+    for(let i = 1; i < gameState.players.length; i++) {
+      const playerIndex = (gameState.myIndex + i) % gameState.players.length
+
+      const player = gameState.players[playerIndex]
+
+      otherPlayers.push({
+        name: player.name,
+        activity: getPlayerActivity(playerIndex),
+        hasTurn: (gameState.turn === playerIndex) ? true : false
+      })
+    }
+
+    return otherPlayers
+  }
+
+  // Section used here so that :nth-of-type selector works correctly
+  // <section> tag should not be used anywhere else on this page!
+  // It's an easy fix to just set specific class names based on position but
+  // this seems more elegant for now
+  const PlayerBoxes =
+    getOtherPlayers().map((player) =>
+      <section className={(gameState.players.length === 4) ?
+          gamePageStyles.player : gamePageStyles.playerOfThree}>
+        <PlayerCard name={player.name} active={player.hasTurn} />
+      </section>
+    )
   
   return (
-    <div className={gameStyles.wrapper}>
+    <div className={gamePageStyles.wrapper}>
       <Header routes={[{route: '', name: getUser()}]} />
       
-      <div className={gameStyles.container}>
-        <div className={gameStyles.gameContainer}>
-          <div className={gameStyles.SidebarArea}>
+      <div className={gamePageStyles.container}>
+        <div className={gamePageStyles.gameContainer}>
+          <div className={gamePageStyles.SidebarArea}>
             <Chat />
           </div>
 
-          <div className={gameStyles.TopLeftPlayer}>
-            <PlayerCard name='Top Left' active={false} />
-          </div>
-          <div className={gameStyles.TopPlayer}>
-            <PlayerCard name='Top' active={false} />
-          </div>
-          <div className={gameStyles.TopRightPlayer}>
-            <PlayerCard name='Top Right' active={false} />
-          </div>
-          <div className={gameStyles.LeftPlayer}>
-            <PlayerCard name='Left' active={false} />
-          </div>
-          <div className={gameStyles.RightPlayer}>
-            <PlayerCard name='Right' active={false} />
-          </div>
+          {PlayerBoxes}
 
-          <div className={gameStyles.GameArea}>
+          <div className={gamePageStyles.GameArea}>
             <GameActivity state={gameState} />
           </div>
 
-          <div className={gameStyles.HandArea}>
+          <div className={gamePageStyles.HandArea}>
             <Hand cards={gameState.hand} playable={gameState.playable}
               stage={gameState.stage} />
           </div>
