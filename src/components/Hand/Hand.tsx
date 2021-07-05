@@ -56,9 +56,11 @@ const Hand = ({cards, playable = [], stage = ''}) => {
 
   const Hand = sortedCards().map((card, index) =>
   //
-    <div className={handStyles.cardContainer}
-      style={{transform: `rotate(${cardRotation(index, cards.length)}deg)`,
-                marginBottom: `${cardTranslation(index, cards.length)}px`}}>
+    <div className={handStyles.cardContainer} style={{
+      transform: `rotate(${cardRotation(index, cards.length)}deg)`,
+      marginBottom: `${cardTranslation(index, cards.length)}px`,
+      filter: (isCardPlayable(card)) ? 'brightness(100%)' : 'brightness(80%)'
+    }}>
       <Card value={card} key={index} onClick={() => handleCardClick(card)} />
     </div>
       
