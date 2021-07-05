@@ -15,6 +15,7 @@ import { getState, onGetState, stopGameOver, stopGetState } from '../../../servi
 import { getUser } from '../../../services/User/User'
 import { GameTypes } from '../../GameStages/GameTypes'
 import { COLORS } from '../../../services/colors'
+import { getPlayerHashRGB } from '../../../services/Player/Player'
 
 const emptyGameState = {
   stage: 'gameType',
@@ -134,7 +135,11 @@ const GamePage = () => {
           gamePageStyles.player : gamePageStyles.playerOfThree}>
         <Box color={(player.hasTurn) ? COLORS.blue : COLORS.red}>
           <div className={gamePageStyles.playerWrapper}>
-            <p className={gamePageStyles.name}>{player.name}</p>
+            <p className={gamePageStyles.name} style={{
+              color: `#${getPlayerHashRGB(player.name)}`
+            }}>
+              {player.name}
+            </p>
             <p className={gamePageStyles.score}>{player.score}</p>
             <p className={gamePageStyles.radelci}>{Radelci(player.radelci)}</p>
           </div>

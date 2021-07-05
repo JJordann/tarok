@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import Sound from '../../services/soundEffects'
 
 import Card from '../Hand/Card'
 
 import activeStyles from './Active.module.scss'
 
 const Active = ({players, table, myIndex, stage}) => {
+
+  useEffect(() => {
+    Sound.putCard()
+  }, [table.length])
 
   const modulo = (n, mod) => (((n % mod) + mod) % mod)
 
@@ -18,7 +23,6 @@ const Active = ({players, table, myIndex, stage}) => {
   }
 
   const Cards = table.map((entry, index) => {
-    console.log(table)
     return (
       <div className={activeStyles.cardContainer} key={entry.card}>
         <div style={{transform: `rotate(${rotation(index, entry)}deg)`}}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { onChat, onError, onInfo, send, stopChat, stopError, stopInfo } from '../../services/APIWrapper/ChatWrapper'
 import { getPlayerHashRGB } from '../../services/Player/Player'
@@ -14,6 +14,8 @@ const Chat = () => {
 
   // This is used to force update
   const [numberOfMessages, setNumberOfMessages] = useState(0)
+
+  const historyRef = useRef(null)
 
   useEffect(() => {
 
@@ -38,6 +40,10 @@ const Chat = () => {
     }
 
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    historyRef.current.scrollTop = historyRef.current.scrollHeight
+  }, [numberOfMessages])
   
 
   const mergeMessage = (messages, sender, message) => {
@@ -60,7 +66,9 @@ const Chat = () => {
 
   const Messages = messages.map((message, index) => 
     <li key={index}>
-      <Box color={`#${getPlayerHashRGB(message.sender)}`}>
+      {console.log(`#${getPlayerHashRGB(message.sender)}`)}
+      <Box color={`#${getPlayerHashRGB(message.sender)}`}
+          left={(index % 2 == 0)}>
         <div className={chatStyles.messageWrapper}>
           <div className={chatStyles.sender}>
             {message.sender}
@@ -77,7 +85,7 @@ const Chat = () => {
 
   return (
     <div className={chatStyles.container}>
-      <ul className={chatStyles.chat}>
+      <ul className={chatStyles.chat} ref={historyRef}>
         {Messages}
       </ul>
       <div className={chatStyles.inputContainer}>

@@ -103,7 +103,7 @@ class Game:
                 "index": i,
                 "name": p["name"],
                 "sid": p["sid"],
-                "hand": hands[i],
+                "hand": hands[i][0:2],
                 "ready": True,
                 "cardsWon": [],
                 "boni": [],

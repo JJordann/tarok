@@ -10,5 +10,5 @@ export const getPlayerHash = (playerName) => {
 export const getPlayerHashRGB = (playerName) => {
   let color = (getPlayerHash(playerName) & 0x00FFFFFF).toString(16).toUpperCase()
 
-  return '00000'.substring(1, 6 - color.length) + color
+  return '00000'.substring(0, 6 - color.length) + color
 }
