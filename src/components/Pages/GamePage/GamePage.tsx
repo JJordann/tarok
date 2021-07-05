@@ -1,40 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 import Header from '../../Header/Header'
 import Hand from '../../Hand/Hand'
 import PlayerCard from '../../PlayerCard/PlayerCard'
 import Chat from '../../Chat/Chat'
-import StateDebugger from '../../StateDebugger/StateDebugger'
 import GameActivity from '../../GameActivity/GameActivity'
 
 import gameStyles from './GamePage.module.scss'
 import { getState, onGetState, stopGameOver, stopGetState } from '../../../services/APIWrapper/GameWrapper'
 import { getUser } from '../../../services/User/User'
 
+const emptyGameState = {
+  stage: 'gameType',
+  gameType: [],
+  myIndex: 0,
+  table: [],
+  players: [],
+  hand: [],
+  playable: [],
+  cardsWon: [],
+  turn: 0,
+  playableGames: [],
+  talon: [[]],
+  talonIndex: -1,
+  recentScores: [{}]
+}
+
 const GamePage = () => {
 
-  const debug = false
-
-  const [gameState, setGameState] = useState({
-    stage: 'gameType',
-    gameType: [],
-    myIndex: 0,
-    table: [],
-    players: [],
-    hand: [],
-    playable: [],
-    cardsWon: [],
-    turn: 0,
-    playableGames: [],
-    talon: [[]],
-    talonIndex: -1,
-    recentScores: [{}]
-  })
-
-  const dummyCards = ['pik_kralj', 'srce_kraljica', 'tarok_1', 'tarok_5',
-    'tarok_12', 'tarok_14', 'tarok_15', 'tarok_16', 'tarok_18', 'tarok_20',
-     'tarok_21', 'tarok_22']
+  const [gameState, setGameState] = useState(emptyGameState)
 
   useEffect(() => {
     getState()
@@ -72,7 +66,6 @@ const GamePage = () => {
         <div className={gameStyles.gameContainer}>
           <div className={gameStyles.SidebarArea}>
             <Chat />
-            {(debug && gameState !== undefined) ? <StateDebugger state={gameState} /> : <></>}
           </div>
 
           <div className={gameStyles.TopLeftPlayer}>
