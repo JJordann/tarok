@@ -1,0 +1,18 @@
+@import '../../variables';
+
+p.content {
+  transition: all .2s ease-in-out;
+  margin: 0;
+  padding: 1em;
+  font-size: 1.5em;
+  font-family: $roboto;
+  letter-spacing: 1px;
+
+  color: $darkGrey;
+}
+
+@media only screen and (max-width: 768px) {
+  p.content {
+    font-size: 0.75em;
+  }
+}

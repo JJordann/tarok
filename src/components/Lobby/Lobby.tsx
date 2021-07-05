@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 
-import { getLobbies, getUsers, join, onAllReady, onGetUsers, setReady, stopAllReady, stopGetUsers } from '../../services/APIWrapper/APIWrapper'
+import { getUsers, onAllReady, onGetUsers, setReady, stopAllReady, stopGetUsers } from '../../services/APIWrapper/APIWrapper'
 
 import { getUser } from '../../services/User/User'
 
 import Connection from './Connection'
-import ContentBox from '../core/ContentBox/ContentBox'
+
+import Button from '../core/Button'
 
 import lobbyStyles from './Lobby.module.scss'
 import { useHistory } from 'react-router-dom'
 import { GAME_ROUTE } from '../../routes'
+import { COLORS } from '../../services/colors'
 
 const Lobby = ({lobbyId}) => {
 
@@ -54,9 +56,14 @@ const Lobby = ({lobbyId}) => {
     return (indexOfUser(getUser()) !== -1)
   }
 
-  const Players = users.map((user, index) =>
-    <ContentBox name={user[0]} active={user[1]} key={index}
-      onClick={handleContentBoxClick} data-id={`Interesting totally very much`} />
+  const getColor = (ready) => {
+    return (ready) ? COLORS.blue : COLORS.red
+  }
+
+  const Players = users.map((user) =>
+    <Button color={getColor(user[1])} onClick={handleContentBoxClick} key={user}>
+      {user[0]}
+    </Button>
   )
 
   return (

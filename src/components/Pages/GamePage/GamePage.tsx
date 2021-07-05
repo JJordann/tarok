@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import Header from '../../Header/Header'
 import Hand from '../../Hand/Hand'
-import ContentBox from '../../core/ContentBox/ContentBox'
+import ContentBox from '../../core/ContentBox'
 import Chat from '../../Chat/Chat'
 import GameActivity from '../../GameActivity/GameActivity'
 
@@ -10,6 +10,7 @@ import gamePageStyles from './GamePage.module.scss'
 import { getState, onGetState, stopGameOver, stopGetState } from '../../../services/APIWrapper/GameWrapper'
 import { getUser } from '../../../services/User/User'
 import { GameTypes } from '../../GameStages/GameTypes'
+import { COLORS } from '../../../services/colors'
 
 const emptyGameState = {
   stage: 'gameType',
@@ -112,7 +113,9 @@ const GamePage = () => {
     getOtherPlayers().map((player) =>
       <section className={(gameState.players.length === 4) ?
           gamePageStyles.player : gamePageStyles.playerOfThree}>
-        <ContentBox name={player.name} active={player.hasTurn} />
+        <ContentBox color={(player.hasTurn) ? COLORS.blue : COLORS.red}>
+          {player.name}
+        </ContentBox>
       </section>
     )
   

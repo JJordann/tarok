@@ -18,11 +18,11 @@ const InputBox = ({initialValue = '', placeholder = '', onChange = undefined,
   }
 
   const handleSubmit = () => {
-    if(onSubmit !== undefined) {
+    if(onSubmit !== undefined && value.length >= minLength) {
       onSubmit(value)
+      
+      setValue(initialValue)
     }
-
-    setValue(initialValue)
   }
 
   const handleKeyDown = (e) => {

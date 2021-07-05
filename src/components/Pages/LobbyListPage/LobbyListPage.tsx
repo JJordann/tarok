@@ -4,13 +4,15 @@ import { useHistory } from 'react-router-dom'
 
 import Lobby from '../../Lobby/Lobby'
 import Header from '../../Header/Header'
-import ContentBox from '../../core/ContentBox/ContentBox'
+import ContentBox from '../../core/ContentBox'
+import Button from '../../core/Button'
 
 import lobbyListPageStyles from './LobbyListPage.module.scss'
 
 import { createLobby, getLobbies, getUsers, join, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../../services/APIWrapper/APIWrapper'
 import { LOGIN_ROUTE } from '../../../routes'
 import { getUser } from '../../../services/User/User'
+import { COLORS } from '../../../services/colors'
 
 const LobbyListPage = () => {
   const [lobbies, setLobbies] = useState([])
@@ -53,12 +55,12 @@ const LobbyListPage = () => {
   
 
   const Notice = (lobbies.length === 0) ?
-    <ContentBox name='Trenutno ni aktivnih sob' active={false} /> : ''
+    <ContentBox color={COLORS.red}>Trenutno ni aktivnih sob</ContentBox> : ''
 
   const CreateLobby = 
     <div className={lobbyListPageStyles.flex}>
       {Notice}
-      <ContentBox name='Ustvari sobo' active={true} onClick={handleClick} />
+      <Button color={COLORS.blue} onClick={handleClick}>Ustvari sobo</Button>
     </div>
 
   const Lobbies = lobbies.map((lobby, index) =>
@@ -78,12 +80,11 @@ const LobbyListPage = () => {
       <div className={lobbyListPageStyles.container}>
         <h1><span>Tarok sobe</span></h1>
 
-        <ContentBox className={lobbyListPageStyles.welcome}
-          name={`Pozdravljen, ${name}!`} active={true} />
+        <ContentBox>
+          Pozdravljen, {name}!
+        </ContentBox>
 
         {Content}
-
-
       </div>
     </div>
   )

@@ -2,7 +2,7 @@ import React from 'react'
 import { send } from '../../services/APIWrapper/ChatWrapper'
 
 import Card from '../Hand/Card'
-import ContentBox from '../core/ContentBox/ContentBox'
+import ContentBox from '../core/ContentBox'
 
 import roundFinishedStyles from './RoundFinished.module.scss'
 
@@ -14,7 +14,7 @@ const RoundFinished = ({recentScores, myIndex, players}) => {
 
   const getRecentScore = () => {
     const Players = recentScores[0].players.map((playerIndex) =>
-      <ContentBox name={players[playerIndex].name} active={true} />
+      <ContentBox>{players[playerIndex].name}</ContentBox>
     )
 
     const CardsWon = recentScores[0].cardsWon.map((card) =>
@@ -40,8 +40,7 @@ const RoundFinished = ({recentScores, myIndex, players}) => {
       {getRecentScore()}
 
       {(myIndex === 0) ?
-        <ContentBox name={'Naslednja runda'} active={true}
-          onClick={handleClick} /> : ''
+        <ContentBox onClick={handleClick}>Naslednja runda</ContentBox> : ''
       }
     </div>
   )
