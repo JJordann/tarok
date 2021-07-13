@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import Header from '../../Header/Header'
 import Hand from '../../Hand/Hand'
-import ContentBox from '../../core/ContentBox'
 import Box from '../../core/Box'
 import Chat from '../../Chat/Chat'
 import GameActivity from '../../GameActivity/GameActivity'

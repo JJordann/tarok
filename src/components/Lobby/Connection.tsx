@@ -1,6 +1,5 @@
 import React from 'react'
 
-import ContentBox from '../core/ContentBox'
 import Button from '../core/Button'
 
 import { join } from '../../services/APIWrapper/APIWrapper'

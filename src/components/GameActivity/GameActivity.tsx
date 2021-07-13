@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import Contracts from '../GameStages/Contracts'
 import Talon from '../GameStages/Talon'

@@ -4,5 +4,13 @@
     padding: 5em 1em;
     margin: 0 auto;
     max-width: 1200px;
+    
+    a {
+      text-decoration: none;
+    }
+
+    >div:first-child {
+      margin-bottom: 2em;
+    }
   }
 }

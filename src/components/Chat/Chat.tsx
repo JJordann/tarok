@@ -68,7 +68,7 @@ const Chat = () => {
     <li key={index}>
       {console.log(`#${getPlayerHashRGB(message.sender)}`)}
       <Box color={`#${getPlayerHashRGB(message.sender)}`}
-          left={(index % 2 == 0)}>
+          left={(index % 2 === 0)}>
         <div className={chatStyles.messageWrapper}>
           <div className={chatStyles.sender}>
             {message.sender}
