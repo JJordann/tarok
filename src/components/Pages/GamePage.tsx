@@ -3,18 +3,18 @@ import React, { useEffect, useState } from 'react'
 import { faStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import Header from '../../Header/Header'
-import Hand from '../../Hand/Hand'
-import Box from '../../core/Box'
-import Chat from '../../Chat/Chat'
-import GameActivity from '../../GameActivity/GameActivity'
+import Header from '../Header/Header'
+import Hand from '../Hand/Hand'
+import Box from '../core/Box'
+import Chat from '../Chat/Chat'
+import GameActivity from '../GameActivity/GameActivity'
 
 import gamePageStyles from './GamePage.module.scss'
-import { getState, onGetState, stopGameOver, stopGetState } from '../../../services/APIWrapper/GameWrapper'
-import { getUser } from '../../../services/User/User'
-import { GameTypes } from '../../GameStages/GameTypes'
-import { COLORS } from '../../../services/colors'
-import { getPlayerHashRGB } from '../../../services/Player/Player'
+import { getState, onGetState, stopGameOver, stopGetState } from '../../services/APIWrapper/GameWrapper'
+import { getUser } from '../../services/User/User'
+import { GameTypes } from '../GameStages/GameTypes'
+import { COLORS } from '../../services/colors'
+import { getPlayerHashRGB } from '../../services/Player/Player'
 
 const emptyGameState = {
   stage: 'gameType',

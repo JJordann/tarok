@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react'
 
 import { useHistory } from 'react-router-dom'
 
-import Lobby from '../../Lobby/Lobby'
-import Header from '../../Header/Header'
-import ContentBox from '../../core/ContentBox'
-import Button from '../../core/Button'
+import Lobby from '../Lobby/Lobby'
+import Header from '../Header/Header'
+import ContentBox from '../core/ContentBox'
+import Button from '../core/Button'
 
 import lobbyListPageStyles from './LobbyListPage.module.scss'
 
-import { createLobby, getLobbies, getUsers, join, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../../services/APIWrapper/APIWrapper'
-import { LOGIN_ROUTE } from '../../../routes'
-import { getUser } from '../../../services/User/User'
-import { COLORS } from '../../../services/colors'
+import { createLobby, getLobbies, getUsers, join, onCreateLobby, onGetLobbies, stopCreateLobby, stopGetLobbies } from '../../services/APIWrapper/APIWrapper'
+import { LOGIN_ROUTE } from '../../routes'
+import { getUser } from '../../services/User/User'
+import { COLORS } from '../../services/colors'
 
 const LobbyListPage = () => {
   const [lobbies, setLobbies] = useState([])

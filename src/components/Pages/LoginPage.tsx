@@ -1,11 +1,11 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-import Header from '../../Header/Header'
-import InputBox from '../../core/InputBox'
+import Header from '../Header/Header'
+import InputBox from '../core/InputBox'
 
-import { getUser, setUser } from '../../../services/User/User'
-import { LOBBY_LIST_ROUTE } from '../../../routes'
+import { getUser, setUser } from '../../services/User/User'
+import { LOBBY_LIST_ROUTE } from '../../routes'
 
 import loginPageStyles from './LoginPage.module.scss'
 

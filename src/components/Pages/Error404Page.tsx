@@ -1,14 +1,14 @@
 import React from 'react'
 
-import Header from '../../Header/Header'
-import ContentBox from '../../core/ContentBox'
+import Header from '../Header/Header'
+import ContentBox from '../core/ContentBox'
 
-import Button from '../../core/Button'
+import Button from '../core/Button'
 
-import { COLORS } from '../../../services/colors'
+import { COLORS } from '../../services/colors'
 
 import error404PageStyles from './Error404Page.module.scss'
-import { HOME_ROUTE } from '../../../routes'
+import { HOME_ROUTE } from '../../routes'
 import { Link } from 'react-router-dom'
 
 const Error404Page = () => {

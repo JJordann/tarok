@@ -1,4 +1,4 @@
-@import '../../../variables';
+@import '../../variables';
 
 .wrapper {
   background: $light;
@@ -22,5 +22,21 @@
         border-bottom: 5px solid $blue;
       }
     }
+
+    >div:first-of-type {
+      margin-bottom: 2em;
+    }
+
+    .flex {
+      display: flex;
+      flex-wrap: nowrap;
+      margin-bottom: 3.5em;
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .container {
+    padding: 0 1em;
   }
 }

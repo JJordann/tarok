@@ -4,11 +4,11 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import { GAME_ROUTE, HOME_ROUTE, LOBBY_LIST_ROUTE, LOGIN_ROUTE } from '../../routes'
 
-import GamePage from '../Pages/GamePage/GamePage'
-import LandingPage from '../Pages/LandingPage/LandingPage'
-import LobbyListPage from '../Pages/LobbyListPage/LobbyListPage'
-import Error404Page from '../Pages/Error404Page/Error404Page'
-import LoginPage from '../Pages/LoginPage/LoginPage'
+import GamePage from '../Pages/GamePage'
+import LandingPage from '../Pages/LandingPage'
+import LobbyListPage from '../Pages/LobbyListPage'
+import Error404Page from '../Pages/Error404Page'
+import LoginPage from '../Pages/LoginPage'
 
 const App = () => {
 
