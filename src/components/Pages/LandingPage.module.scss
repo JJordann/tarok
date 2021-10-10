@@ -1,22 +1,28 @@
 @import '../../variables';
 
-.wrapper {
-  background: $light;
-  height: 100%;
-}
-
 .card {
   margin: auto;
 }
 
 .container {
-  padding: 0 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: $light;
+  height: 100%;
 }
 
 .textBox {
   font-family: $roboto;
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 45px 0 -45px 0;
+  flex-wrap: nowrap;
   text-align: center;
-  margin-top: 50px;
 
   h2 {
     margin: 0;
@@ -42,5 +48,11 @@
         border-bottom: 5px solid $blue;
       }
     }
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .textBox h2 {
+    //font-size: 2.5em;
   }
 }

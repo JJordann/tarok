@@ -7,6 +7,7 @@ import Header from '../Header/Header'
 import landingPageStyles from './LandingPage.module.scss'
 
 import { LOBBY_LIST_ROUTE } from '../../routes'
+import Base from './Base'
 
 const LandingPage = () => {
 
@@ -19,8 +20,7 @@ const LandingPage = () => {
     'srce_3', 'srce_2', 'tarok_2', 'tarok_3']
   
   return (
-    <div className={landingPageStyles.wrapper}>
-      <Header routes={[{route: LOBBY_LIST_ROUTE, name: 'Igraj'}]} />
+    <Base routes={[{route: LOBBY_LIST_ROUTE, name: 'Igraj'}]}>
       <div className={landingPageStyles.container}>
         <div className={landingPageStyles.valatContainer}>
           <Hand cards={valatCards} playable={valatCards} />
@@ -31,11 +31,13 @@ const LandingPage = () => {
           <h1>To je <Link to={'/'}>Berač.si</Link></h1>
         </div>
 
+        <div className={landingPageStyles.pushToBottom}></div>
+
         <div className={landingPageStyles.beracContainer}>
           <Hand cards={beracCards} playable={beracCards} />
         </div>
       </div>
-    </div>
+    </Base>
   )
 }
 
