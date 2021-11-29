@@ -18,11 +18,11 @@ const CARDS = [
 const TALON_LENGTH = 6
 
 // Fisher-Yates
-const shuffleCards = (cards: string[]) => {
-  const shuffledCards = [...cards]
+const shuffleDeck = (deck: string[], ctx) => {
+  const shuffledCards = [...deck]
 
   for(let i = shuffledCards.length - 1; i >= 0; i--) {
-    let randomCard = Math.floor(Math.random() * shuffledCards.length)
+    let randomCard = Math.floor(ctx.random.Number() * shuffledCards.length)
     
     let tmp = shuffledCards[i]
     shuffledCards[i] = shuffledCards[randomCard]
@@ -32,35 +32,92 @@ const shuffleCards = (cards: string[]) => {
   return shuffledCards
 }
 
-const dealCards = (shuffledCards: string[], numberOfPlayers: number) => {
-  const hands = new Array(4).fill(null).map(hand => [])
+interface Dealt {
+  talon: string[],
+  hands: string[][]
+}
+
+// A hand is valid if it contains at least one tarok
+const validHand = (hand: string[]) => hand.some(card => card.startsWith('tarok'))
+
+const dealCards = (ctx): Dealt => {
+  const shuffledCards = shuffleDeck(CARDS, ctx)
+
+  const hands = new Array(ctx.numPlayers).fill(null).map(hand => [])
   const talon = shuffledCards.slice(0, TALON_LENGTH)
 
   for(let i = TALON_LENGTH; i < shuffledCards.length; i++) {
-    let playerIndex = i % numberOfPlayers
+    let playerIndex = i % ctx.numPlayers
 
     hands[playerIndex].push(shuffledCards[i])
   }
 
+  for(let hand of hands) {
+    if(!validHand(hand)) {
+      return dealCards(ctx.numPlayers)
+    }
+  }
+
   return {
-    hands: hands,
-    talon: talon
+    talon: talon,
+    hands: hands
+  }
+}
+
+const setupGameState = (ctx) => {
+  return {
+    table: [],
+    talon: [],
+    hands: [],
+    scores: []
   }
 }
 
 export const Tarok = {
-  setup: (ctx, setupData) => {
+  setup: setupGameState,
 
-    console.log(setupData)
+  phases: {
 
-    console.log(ctx)
-    const shuffledCards = shuffleCards(CARDS)
-    return dealCards(shuffledCards, ctx.numPlayers)
+    playMoreCheck: {
+      moves: {
+
+      },
+      next: 'bid'
+    },
+
+    bid: {
+      onBegin: (G, ctx) => {
+        const dealt = dealCards(ctx)
+
+        G.talon = dealt.talon
+        G.hands = dealt.hands
+      },
+      start: true
+    },
+
+    callKing: {
+      next: 'talon'
+    },
+
+    talon: {
+      next: 'announcements'
+    },
+
+    announcements: {
+      next: 'tricks'
+    },
+
+    tricks: {
+      moves: {
+        playCard: (cardId: string) => {
+          console.log('Hello')
+        }
+      },
+      next: 'playMoreCheck'
+    }
+
   },
 
-  moves: {
-    playCard: (G, ctx, id) => {
-      return G.cards[id]
-    }
-  }
+  minPlayers: 3,
+  maxPlayers: 4
 }
