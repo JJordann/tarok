@@ -1,5 +1,5 @@
 import { dealCards, shuffleDeck } from '../Deck'
-import { CARDS_ORDERED, GameState } from '../GameState'
+import { CARDS_ORDERED } from '../GameState'
 
 const startNewRound = (G: any, ctx: any) => {
   const dealt = dealCards(shuffleDeck(CARDS_ORDERED, ctx), ctx)
@@ -9,9 +9,11 @@ const startNewRound = (G: any, ctx: any) => {
   G.table = []
 }
 
-export default {
+const Bid = {
   onBegin: startNewRound,
 
   // This is the initial phase of the game
   start: true
 }
+
+export default Bid

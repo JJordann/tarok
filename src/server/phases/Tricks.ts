@@ -1,4 +1,4 @@
-export default {
+const Tricks = {
   moves: {
     playCard: (cardId: string) => {
       console.log('Hello')
@@ -6,3 +6,5 @@ export default {
   },
   next: 'playMoreCheck'
 }
+
+export default Tricks
