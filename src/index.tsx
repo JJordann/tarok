@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 
 import App from './components/App/App'
 
-import './index.css'
+import './index.scss'
 
 const container = document.getElementById('root')
 
