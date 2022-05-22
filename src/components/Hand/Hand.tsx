@@ -26,7 +26,7 @@ const Hand = ({ cards, ...props }) => {
     return (
       <div className='hand-card-container' style={rotationStyle(index)} tabIndex={1} key={index}
         onKeyDown={e => e.key === 'Enter' && handleCardClick(card)}>
-        <Card value={card} disabled={index < 5} onClick={() => handleCardClick(card)}  />
+        <Card value={card} onClick={() => handleCardClick(card)}  />
       </div>
     )
   })
