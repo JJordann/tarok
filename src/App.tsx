@@ -2,8 +2,9 @@ import React from 'react'
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import { HOME_ROUTE } from './routes'
+import { GAME_ROUTE, HOME_ROUTE } from './routes'
 import { Home } from './pages/Home'
+import { Game } from './pages/Game'
 
 const App = () => {
 
@@ -11,6 +12,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
           <Route path={HOME_ROUTE} element={<Home  />} />
+          <Route path={GAME_ROUTE} element={<Game />} />
       </Routes>
     </BrowserRouter>
   )
