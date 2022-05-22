@@ -1,7 +1,7 @@
 import React from 'react'
 import { playCard, swapCard } from '../../services/APIWrapper/GameWrapper';
 
-import Card from './Card'
+import { Card } from './Card'
 
 import handStyles from './Hand.module.scss'
 
@@ -75,4 +75,4 @@ const Hand = ({cards, playable = [], stage = ''}) => {
   )
 }
 
-export default Hand
+export { Hand }

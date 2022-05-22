@@ -13,4 +13,4 @@ const Card = ({value, onClick = () => {}}) => {
   )
 }
 
-export default Card
+export { Card }
