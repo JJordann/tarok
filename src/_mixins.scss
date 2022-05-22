@@ -1,0 +1,7 @@
+@import './variables';
+
+@mixin font($fontSize: $fontSizeRegular, $fontWeight: 400, $fontFamily: $lato) {
+  font-family: $fontFamily;
+  font-size: $fontSize;
+  font-weight: $fontWeight;
+}
