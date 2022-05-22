@@ -1,14 +1,22 @@
 import React from 'react'
 
-import cardStyles from './Card.module.scss'
+import './Card.scss'
 
-const Card = ({value, onClick = () => {}}) => {
+const Card = ({value, disabled = false, onClick = () => {}, ...props}) => {
 
   const imageSource = `${process.env.PUBLIC_URL}/cards/fmf/${value}.png`
 
+  const altValue = value.split('_').join(' ')
+
+  const wrapperClass = disabled ? 'card-wrapper disabled' : 'card-wrapper'
+
+  const handle = () => console.log('HI')
+
   return (
-    <div className={cardStyles.cardWrapper} onClick={onClick}>
-      <img src={imageSource} alt={value} />
+    <div className={wrapperClass} onClick={onClick} {...props}>
+      <div className='card-container'>
+        <img src={imageSource} alt={altValue} />
+      </div>
     </div>
   )
 }

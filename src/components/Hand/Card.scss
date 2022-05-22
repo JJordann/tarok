@@ -1,0 +1,26 @@
+.card-wrapper {
+  display: inline-block;
+
+  filter: brightness(95%);
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(100%);
+  }
+
+  &.disabled {
+    filter: brightness(70%);
+
+    &:hover {
+      filter: brightness(90%);
+    }
+  }
+
+  .card-container {
+    width: 100%;
+
+    img {
+      width: 100%;
+    }
+  }
+}

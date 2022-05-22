@@ -1,0 +1,78 @@
+@import '../../variables';
+
+
+.hand-wrapper {
+  overflow: hidden;
+  padding: 3% 3% 0 3%;
+  border: 1px dotted red;
+
+  .hand-container {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    width: 100%;
+    margin-bottom: -3%;
+
+    .hand-card-container {
+      transform-origin: center;
+      transition: all 0.2s ease-in-out;
+
+      >div {
+        transition: all 0.2s ease-in-out;
+      }
+
+      &:not(:first-child) {
+        margin-left: -$marginXXL;
+
+        &:hover,
+        &:active,
+        &:focus {
+          margin-left: -$marginXL;
+        }
+      }
+
+      &:last-child {
+        &:hover,
+        &:active,
+        &:focus {
+          margin-right: 0;
+        }
+        
+      }
+
+      &:hover,
+      &:active,
+      &:focus {
+        z-index: 1;
+        margin-right: $marginXL;
+
+        >div {
+          transform: scale(1.2);
+        }
+      }
+
+
+      @media screen and (max-width: #{$screenSmall}) {
+        &:not(:first-child) {
+          margin-left: -$marginDefault;
+  
+          &:hover,
+          &:active,
+          &:focus {
+            margin-left: -$marginSmall;
+          }
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+          margin-right: $marginSmall;
+        }
+
+        >div {
+          transition: none;
+        }
+      }
+    }
+  }
+}
