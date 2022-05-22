@@ -3,14 +3,14 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { HOME_ROUTE } from '../../routes'
-import Hand from '../Hand/Hand'
+import { Home } from '../../pages/Home'
 
 const App = () => {
 
   return (
     <BrowserRouter>
       <Routes>
-          <Route path={HOME_ROUTE} element={<Hand cards={['tarok_2']} />} />
+          <Route path={HOME_ROUTE} element={<Home  />} />
       </Routes>
     </BrowserRouter>
   )
