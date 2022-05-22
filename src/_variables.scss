@@ -1,20 +1,17 @@
-$black: #000000;
-$white: #FFFFFF;
-
-$dark: #070707;
-$light: #F6F3EE;
-
-$red: #F86863;
-$blue: #1FBCFF;
-
-$mint: #F7FFF7;
-$yellow: #FFE66D;
-
-$darkGrey: #474747;
-$lightBlue: #99E0FF;
-
-$translucentWhite: rgba(255, 255, 255, 0.5);
-$translucentBlack: rgba(0, 0, 0, 0.5);
+$black:    #000000;
+$white:    #FFFFFF;
+$blue:     #25CED1;
+$grey:     #FCEADE;
+$darkGrey: #323031;
+$orange:   #FF8A5B;
+$magento:  #EA526F;
+$red:      #DB3A34;
 
 $lato: 'Lato', sans-serif;
 $roboto: 'Roboto Slab', serif;
+
+$fontSizeSmall: 16px;
+$fontSizeRegular: 18px;
+$fontSizeLarge: 24px;
+$fontSizeXL: 30px;
+$fontSizeXXL: 36px;
